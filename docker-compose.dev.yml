@@ -1,5 +1,5 @@
 services:
-  # Frontend - Nuxt 3 приложение (режим разработки)
+  # Frontend - Nuxt 4 приложение (режим разработки)
   frontend:
     build:
       context: ./frontend

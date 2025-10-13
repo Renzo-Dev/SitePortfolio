@@ -2,14 +2,8 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-# Копируем package.json и package-lock.json
-COPY src/package*.json ./
-
-# Устанавливаем зависимости (включая TailwindCSS)
-RUN npm install
-
-# Генерируем типы Nuxt
-RUN npm run postinstall
+# Устанавливаем зависимости глобально для TailwindCSS
+RUN npm install -g @nuxtjs/tailwindcss tailwindcss postcss autoprefixer
 
 EXPOSE 3000
 

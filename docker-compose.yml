@@ -1,5 +1,5 @@
 services:
-  # Frontend - Nuxt 3 приложение
+  # Frontend - Nuxt 4 приложение
   frontend:
     build:
       context: ./frontend
