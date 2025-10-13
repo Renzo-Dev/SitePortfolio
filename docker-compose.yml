@@ -1,0 +1,53 @@
+services:
+  # Frontend - Nuxt 3 приложение
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: portfolio-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NUXT_HOST=0.0.0.0
+      - NUXT_PORT=3000
+    # Для разработки раскомментируйте volumes ниже
+    volumes:
+      - ./frontend/src:/app
+    # nodemon автоматически запускается через Dockerfile
+    networks:
+      - portfolio-network
+    restart: unless-stopped
+
+  # Nginx - реверс-прокси
+  nginx:
+    image: nginx:alpine
+    container_name: portfolio-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+    networks:
+      - portfolio-network
+    restart: unless-stopped
+
+  # SQLite база данных (файловая)
+  database:
+    image: alpine:latest
+    container_name: portfolio-db
+    volumes:
+      - ./data:/data
+    command: sh -c "mkdir -p /data && touch /data/portfolio.db && tail -f /dev/null"
+    networks:
+      - portfolio-network
+    restart: unless-stopped
+
+networks:
+  portfolio-network:
+    driver: bridge
+
+volumes:
+  data:

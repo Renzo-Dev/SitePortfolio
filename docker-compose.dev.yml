@@ -1,0 +1,35 @@
+services:
+  # Frontend - Nuxt 3 приложение (режим разработки)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: portfolio-frontend-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NUXT_HOST=0.0.0.0
+      - NUXT_PORT=3000
+    volumes:
+      - ./frontend:/app
+    networks:
+      - portfolio-network
+    # command: npm run dev  # убрано для ручного запуска
+
+  # Nginx - реверс-прокси
+  nginx:
+    image: nginx:alpine
+    container_name: portfolio-nginx-dev
+    ports:
+      - "80:80"
+    volumes:
+      - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+    networks:
+      - portfolio-network
+
+networks:
+  portfolio-network:
+    driver: bridge

@@ -1,0 +1,32 @@
+services:
+  # Nginx - статический сайт
+  nginx:
+    image: nginx:alpine
+    container_name: portfolio-nginx-static
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./frontend/dist:/usr/share/nginx/html:ro
+      - ./services/nginx/nginx-static.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - portfolio-network
+    restart: unless-stopped
+
+  # SQLite база данных (файловая)
+  database:
+    image: alpine:latest
+    container_name: portfolio-db-static
+    volumes:
+      - ./data:/data
+    command: sh -c "mkdir -p /data && touch /data/portfolio.db && tail -f /dev/null"
+    networks:
+      - portfolio-network
+    restart: unless-stopped
+
+networks:
+  portfolio-network:
+    driver: bridge
+
+volumes:
+  data:
