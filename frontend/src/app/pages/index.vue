@@ -1,75 +1,70 @@
 <template>
-	<div>
-		<!-- Hero секция -->
+	<div class="home">
+		<!-- Hero Section -->
 		<HeroSection />
 
-		<!-- Обо мне -->
+		<!-- Section Divider -->
+		<div class="section-divider"></div>
+
+		<!-- About Section -->
 		<AboutSection />
 
-		<!-- Услуги -->
+		<!-- Section Divider -->
+		<div class="section-divider"></div>
+
+		<!-- Services Section -->
 		<ServicesSection />
 
-		<!-- Портфолио -->
+		<!-- Section Divider -->
+		<div class="section-divider"></div>
+
+		<!-- Portfolio Section -->
 		<PortfolioSection />
 
-		<!-- Личные кейсы -->
+		<!-- Section Divider -->
+		<div class="section-divider"></div>
+
+		<!-- Case Studies Section -->
 		<CaseStudiesSection />
 
-		<!-- Отзывы -->
+		<!-- Section Divider -->
+		<div class="section-divider"></div>
+
+		<!-- Testimonials Section -->
 		<TestimonialsSection />
 
-		<!-- Контакты -->
+		<!-- Section Divider -->
+		<div class="section-divider"></div>
+
+		<!-- Contact Section -->
 		<ContactSection />
 	</div>
 </template>
 
 <script setup lang="ts">
-// SEO и мета-теги для главной страницы
+import HeroSection from '~/components/home/HeroSection.vue'
+import AboutSection from '~/components/home/AboutSection.vue'
+import ServicesSection from '~/components/home/ServicesSection.vue'
+import PortfolioSection from '~/components/home/PortfolioSection.vue'
+import CaseStudiesSection from '~/components/home/CaseStudiesSection.vue'
+import TestimonialsSection from '~/components/home/TestimonialsSection.vue'
+import ContactSection from '~/components/home/ContactSection.vue'
+
+// SEO метаданные
 useHead({
-	title: 'Дан Кошевой — Full-Stack разработчик | Vue, Nuxt, Laravel, Docker',
+	title: 'Dan Koshevoy - Full Stack разработчик',
 	meta: [
 		{
 			name: 'description',
 			content:
-				'Профессиональная разработка сайтов и веб-приложений. Опыт 3+ лет. Vue 3, Nuxt 4, Laravel, Docker, Redis, MySQL. Создаю современные решения под ключ.',
-		},
-		{
-			name: 'keywords',
-			content:
-				'fullstack разработчик, vue разработчик, nuxt разработчик, laravel разработчик, веб-разработка',
-		},
-		// Open Graph
-		{
-			property: 'og:title',
-			content: 'Дан Кошевой — Full-Stack разработчик',
-		},
-		{
-			property: 'og:description',
-			content:
-				'Профессиональная разработка сайтов и веб-приложений. Vue, Nuxt, Laravel, Docker.',
-		},
-		{
-			property: 'og:type',
-			content: 'website',
-		},
-		// Twitter Card
-		{
-			name: 'twitter:card',
-			content: 'summary_large_image',
-		},
-		{
-			name: 'twitter:title',
-			content: 'Дан Кошевой — Full-Stack разработчик',
-		},
-		{
-			name: 'twitter:description',
-			content:
-				'Профессиональная разработка сайтов и веб-приложений. Vue, Nuxt, Laravel, Docker.',
+				'Создаю современные сайты и веб-приложения. Frontend + Backend разработка на Vue, Laravel, Docker.',
 		},
 	],
 })
 </script>
 
-<style lang="scss" scoped>
-// Дополнительные стили для страницы (если нужны)
+<style scoped lang="scss">
+.home {
+	width: 100%;
+}
 </style>

@@ -5,8 +5,6 @@
 </template>
 
 <script setup lang="ts">
-// Глобальная настройка скролла
-onMounted(() => {
-	document.documentElement.classList.add('scroll-smooth')
-})
+// Глобальная инициализация smooth scroll
+useSmoothScroll()
 </script>

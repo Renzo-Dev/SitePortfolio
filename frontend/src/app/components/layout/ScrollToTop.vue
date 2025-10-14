@@ -1,0 +1,92 @@
+<template>
+	<Transition name="fade-scale">
+		<button
+			v-if="isVisible"
+			aria-label="Scroll to top"
+			class="scroll-to-top"
+			@click="scrollToTop"
+		>
+			<Icon name="mdi:arrow-up" size="24" />
+		</button>
+	</Transition>
+</template>
+
+<script setup lang="ts">
+// Используем Lenis smooth scroll из layout
+const scrollTo =
+	inject<(target: string | number, options?: Record<string, unknown>) => void>(
+		'scrollTo'
+	)
+
+// Показываем кнопку при скролле > 500px
+const isVisible = ref(false)
+
+const checkScroll = () => {
+	isVisible.value = window.scrollY > 500
+}
+
+onMounted(() => {
+	window.addEventListener('scroll', checkScroll)
+})
+
+onUnmounted(() => {
+	window.removeEventListener('scroll', checkScroll)
+})
+
+const scrollToTop = () => {
+	if (scrollTo) {
+		scrollTo(0) // Используем Lenis
+	} else {
+		window.scrollTo({ top: 0, behavior: 'smooth' }) // Fallback
+	}
+}
+</script>
+
+<style scoped lang="scss">
+@use '~/assets/styles/variables' as *;
+
+.scroll-to-top {
+	position: fixed;
+	bottom: $spacing-xl;
+	right: $spacing-xl;
+	width: 56px;
+	height: 56px;
+	background: $accent;
+	color: $bg-primary;
+	border: none;
+	border-radius: $radius-md;
+	cursor: pointer;
+	z-index: $z-fixed;
+	@include flex-center;
+	box-shadow: $shadow-lg;
+	transition: all $transition-base;
+
+	&:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 8px 32px rgba(255, 255, 255, 0.3);
+	}
+
+	&:active {
+		transform: translateY(-2px);
+	}
+
+	@include mobile {
+		width: 48px;
+		height: 48px;
+		bottom: $spacing-lg;
+		right: $spacing-lg;
+	}
+}
+
+// Transition анимации
+.fade-scale-enter-active,
+.fade-scale-leave-active {
+	transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.fade-scale-enter-from,
+.fade-scale-leave-to {
+	opacity: 0;
+	transform: scale(0.8);
+}
+</style>

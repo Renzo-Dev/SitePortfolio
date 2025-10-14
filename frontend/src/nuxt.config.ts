@@ -1,49 +1,20 @@
-import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
-
-const currentDir = dirname(fileURLToPath(import.meta.url))
-
 export default defineNuxtConfig({
 	compatibilityDate: '2025-07-15',
 	devtools: { enabled: true },
-	modules: ['@nuxt/eslint', '@nuxt/icon', '@nuxt/image'],
+	modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/icon', '@vueuse/nuxt'],
 
-	// Автоматический импорт компонентов
-	components: [
-		{ path: resolve(currentDir, 'app/components'), pathPrefix: false },
-		{ path: resolve(currentDir, 'app/components/base'), pathPrefix: false },
-		{ path: resolve(currentDir, 'app/components/sections'), pathPrefix: false },
-	],
+	css: ['~/assets/styles/main.scss'],
 
-	// Подключение глобальных стилей SCSS
-	css: [resolve(currentDir, 'app/assets/styles/main.scss')],
-
-	// Настройка Vite для SCSS
-	vite: {
-		css: {
-			preprocessorOptions: {
-				scss: {
-					additionalData: `
-						@use "sass:math";
-						@import "${resolve(currentDir, 'app/assets/styles/abstracts/_variables.scss')}";
-						@import "${resolve(currentDir, 'app/assets/styles/abstracts/_mixins.scss')}";
-					`,
-				},
-			},
-		},
-	},
-
-	// SEO и мета-теги
 	app: {
 		head: {
-			charset: 'utf-8',
-			viewport: 'width=device-width, initial-scale=1',
-			title: 'Дан Кошевой — Full-Stack разработчик',
+			title: 'Dan Koshevoy - Full Stack Developer',
 			meta: [
+				{ charset: 'utf-8' },
+				{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
 				{
 					name: 'description',
 					content:
-						'Профессиональная разработка сайтов и веб-приложений. Vue, Nuxt, Laravel, Docker. 3+ лет опыта.',
+						'Создаю современные сайты и веб-приложения. Frontend + Backend разработка на Vue, Laravel, Docker.',
 				},
 			],
 			link: [
@@ -54,13 +25,28 @@ export default defineNuxtConfig({
 				{
 					rel: 'preconnect',
 					href: 'https://fonts.gstatic.com',
-					crossorigin: '',
+					crossorigin: 'anonymous',
 				},
 				{
 					rel: 'stylesheet',
-					href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+					href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap',
 				},
 			],
 		},
+	},
+
+	vite: {
+		css: {
+			preprocessorOptions: {
+				scss: {
+					additionalData: '@use "~/assets/styles/variables.scss" as *;',
+				},
+			},
+		},
+	},
+
+	runtimeConfig: {
+		telegramBotToken: '',
+		telegramChatId: '',
 	},
 })
