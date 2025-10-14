@@ -1,0 +1,35 @@
+// 🎨 Главный файл стилей Portfolio
+
+// 1️⃣ Абстракции (переменные, миксины, функции)
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
+
+// 2️⃣ Базовые стили (reset, типографика, анимации)
+@import 'base/reset';
+@import 'base/typography';
+@import 'base/animations';
+
+// 3️⃣ Layout (общая структура)
+@import 'layout/container';
+@import 'layout/section';
+
+// 4️⃣ Компоненты (будут подключаться автоматически из компонентов Vue)
+// Стили компонентов используют scoped стили в .vue файлах
+
+// 5️⃣ Утилиты
+.scroll-smooth {
+	scroll-behavior: smooth;
+}
+
+// Accessibility
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}

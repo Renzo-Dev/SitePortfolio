@@ -1,66 +1,66 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const currentDir = dirname(fileURLToPath(import.meta.url))
+
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
+	compatibilityDate: '2025-07-15',
+	devtools: { enabled: true },
+	modules: ['@nuxt/eslint', '@nuxt/icon', '@nuxt/image'],
 
-  srcDir: 'app/',
+	// Автоматический импорт компонентов
+	components: [
+		{ path: resolve(currentDir, 'app/components'), pathPrefix: false },
+		{ path: resolve(currentDir, 'app/components/base'), pathPrefix: false },
+		{ path: resolve(currentDir, 'app/components/sections'), pathPrefix: false },
+	],
 
-  modules: ['@nuxtjs/tailwindcss'],
+	// Подключение глобальных стилей SCSS
+	css: [resolve(currentDir, 'app/assets/styles/main.scss')],
 
-  css: ['~/assets/styles/main.css'],
+	// Настройка Vite для SCSS
+	vite: {
+		css: {
+			preprocessorOptions: {
+				scss: {
+					additionalData: `
+						@use "sass:math";
+						@import "${resolve(currentDir, 'app/assets/styles/abstracts/_variables.scss')}";
+						@import "${resolve(currentDir, 'app/assets/styles/abstracts/_mixins.scss')}";
+					`,
+				},
+			},
+		},
+	},
 
-  runtimeConfig: {
-    telegramToken: '', // 🔒 Токен задаётся через переменные окружения
-    public: {
-      siteName: 'Dan Koshevoy · Fullstack & DevOps',
-      siteUrl: 'https://dankoshevoy.dev',
-      telegramChatId: ''
-    }
-  },
-
-  tailwindcss: {
-    exposeConfig: true,
-    viewer: false
-  },
-
-  app: {
-    head: {
-      title: 'Dan Koshevoy — Fullstack & DevOps',
-      htmlAttrs: { lang: 'ru' },
-      meta: [
-        { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        {
-          name: 'description',
-          content:
-            'Полный цикл разработки: архитектура, backend на Laravel, frontend на Nuxt 4, DevOps и CI/CD. Запуск MVP за 4–6 недель.'
-        },
-        { name: 'theme-color', content: '#05070d' },
-        { property: 'og:type', content: 'website' },
-        { property: 'og:title', content: 'Dan Koshevoy — Fullstack & DevOps' },
-        {
-          property: 'og:description',
-          content:
-            'Fullstack разработчик: Nuxt 4, Laravel, Docker, DevOps. Проекты под ключ и техническое руководство командами.'
-        },
-        { property: 'og:image', content: '/og-cover.jpg' } // 📌 Изображение добавлю на этапе медиа
-      ],
-      link: [
-        { rel: 'icon', type: 'image/png', href: '/favicon.png' },
-        {
-          rel: 'preconnect',
-          href: 'https://fonts.googleapis.com'
-        },
-        {
-          rel: 'preconnect',
-          href: 'https://fonts.gstatic.com',
-          crossorigin: ''
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap'
-        }
-      ]
-    }
-  }
+	// SEO и мета-теги
+	app: {
+		head: {
+			charset: 'utf-8',
+			viewport: 'width=device-width, initial-scale=1',
+			title: 'Дан Кошевой — Full-Stack разработчик',
+			meta: [
+				{
+					name: 'description',
+					content:
+						'Профессиональная разработка сайтов и веб-приложений. Vue, Nuxt, Laravel, Docker. 3+ лет опыта.',
+				},
+			],
+			link: [
+				{
+					rel: 'preconnect',
+					href: 'https://fonts.googleapis.com',
+				},
+				{
+					rel: 'preconnect',
+					href: 'https://fonts.gstatic.com',
+					crossorigin: '',
+				},
+				{
+					rel: 'stylesheet',
+					href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+				},
+			],
+		},
+	},
 })

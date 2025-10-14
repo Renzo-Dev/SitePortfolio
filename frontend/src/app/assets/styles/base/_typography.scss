@@ -1,0 +1,97 @@
+// 📝 Типографика
+
+// Заголовки
+h1 {
+	font-size: $text-4xl;
+	font-weight: 700;
+
+	@include respond-to('md') {
+		font-size: $text-5xl;
+	}
+
+	@include respond-to('lg') {
+		font-size: $text-6xl;
+	}
+}
+
+h2 {
+	font-size: $text-3xl;
+	font-weight: 600;
+
+	@include respond-to('md') {
+		font-size: $text-4xl;
+	}
+}
+
+h3 {
+	font-size: $text-2xl;
+	font-weight: 600;
+
+	@include respond-to('md') {
+		font-size: $text-3xl;
+	}
+}
+
+h4 {
+	font-size: $text-xl;
+	font-weight: 600;
+
+	@include respond-to('md') {
+		font-size: $text-2xl;
+	}
+}
+
+h5 {
+	font-size: $text-lg;
+	font-weight: 600;
+}
+
+h6 {
+	font-size: $text-base;
+	font-weight: 600;
+}
+
+// Базовый текст
+body {
+	font-size: $text-base;
+	line-height: 1.7;
+
+	@include respond-to('md') {
+		font-size: $text-lg;
+	}
+}
+
+// Малый текст
+.text-sm {
+	font-size: $text-sm;
+}
+
+.text-xs {
+	font-size: $text-xs;
+}
+
+// Цвета текста
+.text-muted {
+	color: $gray;
+}
+
+.text-primary {
+	color: $primary;
+}
+
+.text-secondary {
+	color: $secondary;
+}
+
+// Выравнивание
+.text-center {
+	text-align: center;
+}
+
+.text-left {
+	text-align: left;
+}
+
+.text-right {
+	text-align: right;
+}

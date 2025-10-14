@@ -4,17 +4,6 @@ Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduct
 
 ## Setup
 
-### Переменные окружения
-
-Создайте `.env` рядом с `nuxt.config.ts` и заполните:
-
-```
-TELEGRAM_TOKEN=xxx
-NUXT_PUBLIC_TELEGRAM_CHAT_ID=xxx
-```
-
-Эти значения используются `server/api/order.post.ts` для отправки заявок в Telegram.
-
 Make sure to install dependencies:
 
 ```bash

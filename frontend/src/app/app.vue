@@ -1,11 +1,12 @@
 <template>
-  <div class="min-h-screen bg-[var(--color-bg)] text-[var(--color-text-primary)] noise-layer">
-    <NuxtRouteAnnouncer />
-    <SiteHeader />
-    <main class="pt-28 md:pt-32">
-      <NuxtPage />
-    </main>
-    <SiteFooter />
-    <BackToTop />
-  </div>
+	<NuxtLayout name="default">
+		<NuxtPage />
+	</NuxtLayout>
 </template>
+
+<script setup lang="ts">
+// Глобальная настройка скролла
+onMounted(() => {
+	document.documentElement.classList.add('scroll-smooth')
+})
+</script>
