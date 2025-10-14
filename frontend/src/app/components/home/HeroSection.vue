@@ -1,5 +1,8 @@
 <template>
-	<section class="hero" id="hero">
+	<section id="hero" class="hero">
+		<!-- Canvas для particles -->
+		<canvas ref="particlesCanvas" class="hero__particles" />
+
 		<div class="container">
 			<div class="hero__content">
 				<!-- Главный заголовок -->
@@ -31,18 +34,39 @@
 <script setup lang="ts">
 import Button from '~/components/ui/Button.vue'
 
-// Используем Lenis smooth scroll из layout
-const scrollTo = inject<(target: string, options?: any) => void>('scrollTo')
+// Используем smooth scroll из layout
+const scrollTo =
+	inject<(target: string, options?: Record<string, unknown>) => void>(
+		'scrollTo'
+	)
 
 const scrollToSection = (id: string) => {
 	if (scrollTo) {
-		scrollTo(`#${id}`, { offset: -80 }) // Offset для header
+		scrollTo(`#${id}`, { offset: -80 })
 	} else {
-		// Fallback на нативный скролл
 		const element = document.getElementById(id)
 		element?.scrollIntoView({ behavior: 'smooth' })
 	}
 }
+
+// Canvas Particles
+const particlesCanvas = ref<HTMLCanvasElement>()
+const { initParticles } = useParticles(particlesCanvas)
+
+onMounted(() => {
+	const cleanup = initParticles({
+		numberOfParticles: 50,
+		connectionDistance: 150,
+		mouseRadius: 100,
+		particleColor: 'rgba(255, 255, 255, 0.3)',
+		lineColor: 'rgba(255, 255, 255, 0.11)',
+		opacity: 1,
+	})
+
+	onUnmounted(() => {
+		cleanup?.()
+	})
+})
 </script>
 
 <style scoped lang="scss">
@@ -55,6 +79,17 @@ const scrollToSection = (id: string) => {
 	align-items: center;
 	justify-content: center;
 	padding-top: 80px;
+	overflow: hidden;
+
+	&__particles {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		opacity: 0.6;
+	}
 
 	&__content {
 		position: relative;
