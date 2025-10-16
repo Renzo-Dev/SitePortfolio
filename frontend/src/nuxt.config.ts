@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
 	compatibilityDate: '2025-07-15',
-	devtools: { enabled: true },
+	devtools: { enabled: false },
 	modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/icon', '@vueuse/nuxt'],
 
 	css: ['~/assets/styles/main.scss'],

@@ -14,8 +14,19 @@ html {
 	font-size: 16px;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	scroll-behavior: smooth;
 	overflow-x: hidden;
+}
+
+// Плавный нативный скролл
+html {
+	scroll-behavior: smooth;
+}
+
+// Отключаем для пользователей с motion sickness
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
 }
 
 body {
@@ -209,10 +220,6 @@ img {
 		animation-duration: 0.01ms !important;
 		animation-iteration-count: 1 !important;
 		transition-duration: 0.01ms !important;
-	}
-
-	html {
-		scroll-behavior: auto;
 	}
 }
 

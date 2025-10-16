@@ -12,21 +12,15 @@
 </template>
 
 <script setup lang="ts">
-// Используем Lenis smooth scroll из layout
-const scrollTo =
-	inject<(target: string | number, options?: Record<string, unknown>) => void>(
-		'scrollTo'
-	)
-
-// Показываем кнопку при скролле > 500px
+// Показываем кнопку при скролле > 300px
 const isVisible = ref(false)
 
 const checkScroll = () => {
-	isVisible.value = window.scrollY > 500
+	isVisible.value = window.scrollY > 300
 }
 
 onMounted(() => {
-	window.addEventListener('scroll', checkScroll)
+	window.addEventListener('scroll', checkScroll, { passive: true })
 })
 
 onUnmounted(() => {
@@ -34,11 +28,7 @@ onUnmounted(() => {
 })
 
 const scrollToTop = () => {
-	if (scrollTo) {
-		scrollTo(0) // Используем Lenis
-	} else {
-		window.scrollTo({ top: 0, behavior: 'smooth' }) // Fallback
-	}
+	window.scrollTo({ top: 0, behavior: 'smooth' }) // Плавный скролл наверх
 }
 </script>
 

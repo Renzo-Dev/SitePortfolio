@@ -1,31 +1,41 @@
 <template>
-	<section class="about section" id="about">
+	<section id="about" class="about section">
 		<div class="container">
 			<div class="about__grid">
-				<!-- Левая часть - фото -->
-				<div class="about__image-wrapper">
-					<NuxtImg
-						src="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?w=600&h=800&fit=crop"
-						alt="Dan Koshevoy"
-						class="about__image"
-						loading="lazy"
-					/>
+				<!-- Левая часть - фото с 3D эффектом -->
+				<div
+					ref="imageWrapper"
+					class="about__image-wrapper"
+					@mousemove="handleImageHover"
+					@mouseleave="resetImageHover"
+				>
+					<div class="about__image-glow" />
+					<div ref="imageContainer" class="about__image-container">
+						<img
+							src="/images/photo-1571171637578-41bc2dd41cd2.jpg"
+							alt="Dan Koshevoy"
+							class="about__image"
+							width="600"
+							height="800"
+							loading="lazy"
+						/>
+					</div>
 				</div>
 
 				<!-- Правая часть - контент -->
 				<div class="about__content">
-					<h2 class="about__title">
+					<h2 ref="titleRef" class="about__title">
 						<Icon name="ph:user-circle-duotone" size="32" />
 						Обо мне
 					</h2>
-					<p class="about__text">
+					<p ref="textRef" class="about__text">
 						Я — разработчик полного стека с опытом более
 						<strong>3 лет коммерческой разработки</strong>. Люблю продумывать
 						архитектуру и создавать чистый, поддерживаемый код.
 					</p>
 
 					<!-- Сильные стороны -->
-					<div class="about__strengths">
+					<div ref="strengthsRef" class="about__strengths">
 						<h3 class="about__subtitle">
 							<Icon name="ph:star-duotone" size="24" />
 							Мои сильные стороны
@@ -35,6 +45,7 @@
 								v-for="(strength, index) in strengths"
 								:key="index"
 								class="about__list-item"
+								:style="{ '--item-index': index }"
 							>
 								<Icon :name="strength.icon" size="20" />
 								<span>{{ strength.text }}</span>
@@ -42,21 +53,16 @@
 						</ul>
 					</div>
 
-					<!-- Технологии бегущей строкой -->
-					<div class="about__tech">
+					<!-- Технологии -->
+					<div ref="techRef" class="about__tech">
 						<h3 class="about__subtitle">
 							<Icon name="ph:code-duotone" size="24" />
 							Технологии
 						</h3>
-						<div class="about__tech-marquee">
-							<div class="about__tech-track">
-								<Badge
-									v-for="(tech, index) in [...technologies, ...technologies]"
-									:key="index"
-								>
-									{{ tech }}
-								</Badge>
-							</div>
+						<div class="about__tech-grid">
+							<Badge v-for="(tech, index) in technologies" :key="index">
+								{{ tech }}
+							</Badge>
 						</div>
 					</div>
 				</div>
@@ -91,129 +97,101 @@ const technologies = [
 	'Pinia',
 ]
 
-// Без анимаций - статичный контент
+// Refs для элементов
+const imageWrapper = ref<HTMLElement>()
+const imageContainer = ref<HTMLElement>()
+const titleRef = ref<HTMLElement>()
+const textRef = ref<HTMLElement>()
+const strengthsRef = ref<HTMLElement>()
+const techRef = ref<HTMLElement>()
+
+// Проверка на мобильные устройства
+const isMobile = () => {
+	return window.innerWidth <= 768 || 'ontouchstart' in window
+}
+
+// 3D эффект для фото при наведении мыши
+const handleImageHover = (event: MouseEvent) => {
+	if (!imageWrapper.value || !imageContainer.value) return
+
+	// Отключаем 3D эффект на мобильных устройствах
+	if (isMobile()) {
+		console.log('📱 Mobile detected - 3D effect disabled')
+		return
+	}
+
+	const rect = imageWrapper.value.getBoundingClientRect()
+	const x = event.clientX - rect.left
+	const y = event.clientY - rect.top
+
+	const centerX = rect.width / 2
+	const centerY = rect.height / 2
+
+	const rotateX = ((y - centerY) / centerY) * -10 // max 10deg
+	const rotateY = ((x - centerX) / centerX) * 10 // max 10deg
+
+	// Применяем transform к внутреннему контейнеру (не к wrapper с анимацией)
+	imageContainer.value.style.transition = 'transform 0.1s ease-out'
+	imageContainer.value.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`
+
+	console.log('🎯 3D effect active:', {
+		rotateX: rotateX.toFixed(1),
+		rotateY: rotateY.toFixed(1),
+	})
+}
+
+const resetImageHover = () => {
+	if (!imageContainer.value) return
+
+	// Отключаем сброс 3D эффекта на мобильных устройствах
+	if (isMobile()) {
+		console.log('📱 Mobile detected - 3D reset disabled')
+		return
+	}
+
+	// Плавный возврат в исходное положение
+	imageContainer.value.style.transition =
+		'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+	imageContainer.value.style.transform =
+		'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
+
+	console.log('🔄 3D effect reset - фото вернулось в исходное положение')
+}
+
+// Scroll reveal анимации
+onMounted(() => {
+	// Используем Intersection Observer для анимаций при скролле
+	const observerOptions = {
+		threshold: 0.2,
+		rootMargin: '0px 0px -100px 0px',
+	}
+
+	const observer = new IntersectionObserver((entries) => {
+		entries.forEach((entry) => {
+			if (entry.isIntersecting) {
+				entry.target.classList.add('is-visible')
+				console.log('✓ Element revealed:', entry.target.className)
+			}
+		})
+	}, observerOptions)
+
+	// Наблюдаем за элементами
+	if (imageWrapper.value) {
+		observer.observe(imageWrapper.value)
+		console.log('✓ Observing image wrapper')
+	}
+	if (titleRef.value) observer.observe(titleRef.value)
+	if (textRef.value) observer.observe(textRef.value)
+	if (strengthsRef.value) observer.observe(strengthsRef.value)
+	if (techRef.value) observer.observe(techRef.value)
+
+	// Cleanup
+	onUnmounted(() => {
+		observer.disconnect()
+	})
+})
 </script>
 
 <style scoped lang="scss">
-@use '~/assets/styles/variables' as *;
-
-.about {
-	&__grid {
-		display: grid;
-		grid-template-columns: 40% 60%;
-		gap: $spacing-3xl;
-		align-items: center;
-
-		@include tablet {
-			grid-template-columns: 1fr;
-			gap: $spacing-2xl;
-		}
-	}
-
-	&__image-wrapper {
-		position: relative;
-		border-radius: $radius-lg;
-		overflow: hidden;
-		aspect-ratio: 3/4;
-
-		&::after {
-			content: '';
-			position: absolute;
-			inset: 0;
-			background: linear-gradient(
-				180deg,
-				transparent 0%,
-				rgba(10, 10, 10, 0.5) 100%
-			);
-			pointer-events: none;
-		}
-	}
-
-	&__image {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		filter: grayscale(100%);
-		transition: all $transition-slow;
-
-		&:hover {
-			filter: grayscale(0%);
-			transform: scale(1.05);
-		}
-	}
-
-	&__content {
-		display: flex;
-		flex-direction: column;
-		gap: $spacing-lg;
-	}
-
-	&__title {
-		font-size: $text-h2;
-		margin-bottom: $spacing-md;
-	}
-
-	&__text {
-		color: $text-secondary;
-		line-height: $line-body;
-
-		strong {
-			color: $text-primary;
-			font-weight: 600;
-		}
-	}
-
-	&__subtitle {
-		font-size: $text-h4;
-		margin-bottom: $spacing-md;
-	}
-
-	&__strengths {
-		margin-top: $spacing-md;
-	}
-
-	&__list {
-		list-style: none;
-		display: flex;
-		flex-direction: column;
-		gap: $spacing-md;
-	}
-
-	&__list-item {
-		display: flex;
-		align-items: center;
-		gap: $spacing-sm;
-		color: $text-secondary;
-		transition: all $transition-base;
-
-		&:hover {
-			color: $text-primary;
-			transform: translateX(8px);
-
-			:deep(svg) {
-				transform: rotate(5deg) scale(1.1);
-			}
-		}
-
-		:deep(svg) {
-			color: $accent;
-			transition: all $transition-base;
-		}
-	}
-
-	&__tech {
-		margin-top: $spacing-lg;
-	}
-
-	&__tech-marquee {
-		overflow: hidden;
-		margin-top: $spacing-md;
-	}
-
-	&__tech-track {
-		display: flex;
-		gap: $spacing-sm;
-		width: fit-content;
-	}
-}
+@use '~/assets/styles/components/about-section';
 </style>

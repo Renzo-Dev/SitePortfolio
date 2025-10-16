@@ -1,0 +1,614 @@
+@use '../variables' as *;
+
+// ============================================
+// Keyframes для анимаций
+// ============================================
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(40px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeInLeft {
+	from {
+		opacity: 0;
+		transform: translateX(-60px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes fadeInRight {
+	from {
+		opacity: 0;
+		transform: translateX(60px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes slideItem {
+	from {
+		opacity: 0;
+		transform: translateX(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes marquee {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(-50%);
+	}
+}
+
+@keyframes glowPulse {
+	0%,
+	100% {
+		opacity: 0.3;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 0.6;
+		transform: scale(1.05);
+	}
+}
+
+// ============================================
+// About Section Styles
+// ============================================
+
+.about {
+	&__grid {
+		display: grid;
+		grid-template-columns: 40% 60%;
+		gap: $spacing-3xl;
+		align-items: center;
+
+		@include tablet {
+			grid-template-columns: 1fr;
+			gap: $spacing-2xl;
+		}
+	}
+
+	// ============================================
+	// Image с 3D эффектом
+	// ============================================
+	&__image-wrapper {
+		position: relative;
+		border-radius: $radius-lg;
+		aspect-ratio: 3/4;
+		opacity: 0;
+		transform: translateX(-60px);
+		will-change: transform;
+
+		// Scroll reveal анимация
+		&.is-visible {
+			animation: fadeInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+		}
+
+		// Свечение вокруг фото
+		&::before {
+			content: '';
+			position: absolute;
+			inset: -20px;
+			background: radial-gradient(
+				circle at center,
+				rgba(255, 255, 255, 0.15) 0%,
+				transparent 70%
+			);
+			opacity: 0;
+			transition: opacity 0.5s ease;
+			pointer-events: none;
+			z-index: -1;
+			animation: glowPulse 3s ease-in-out infinite;
+		}
+
+		&:hover {
+			&::before {
+				opacity: 1;
+			}
+
+			.about__image {
+				filter: grayscale(0%);
+			}
+
+			.about__image-container::after {
+				opacity: 0;
+			}
+		}
+	}
+
+	&__image-glow {
+		position: absolute;
+		inset: -40px;
+		background: radial-gradient(
+			circle at 50% 50%,
+			rgba(255, 255, 255, 0.2) 0%,
+			transparent 60%
+		);
+		opacity: 0;
+		transition: opacity 0.6s ease;
+		pointer-events: none;
+		z-index: -1;
+		filter: blur(30px);
+	}
+
+	&__image-wrapper:hover &__image-glow {
+		opacity: 1;
+	}
+
+	&__image-container {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		border-radius: $radius-lg;
+		overflow: hidden;
+		transform-style: preserve-3d;
+		will-change: transform;
+
+		// Градиент сверху
+		&::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(
+				180deg,
+				transparent 0%,
+				rgba(10, 10, 10, 0.3) 100%
+			);
+			pointer-events: none;
+			transition: opacity 0.5s ease;
+			z-index: 1;
+		}
+	}
+
+	&__image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		filter: grayscale(100%);
+		transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+			transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	// ============================================
+	// Content с анимациями
+	// ============================================
+	&__content {
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-lg;
+	}
+
+	&__title {
+		font-size: $text-h2;
+		margin-bottom: $spacing-md;
+		opacity: 0;
+		transform: translateX(60px);
+
+		&.is-visible {
+			animation: fadeInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+		}
+
+		:deep(.icon) {
+			vertical-align: middle;
+			margin-right: $spacing-xs;
+			transition: transform 0.3s ease;
+		}
+
+		&:hover :deep(.icon) {
+			transform: rotate(360deg) scale(1.1);
+		}
+	}
+
+	&__text {
+		color: $text-secondary;
+		line-height: $line-body;
+		opacity: 0;
+		transform: translateX(60px);
+
+		&.is-visible {
+			animation: fadeInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+		}
+
+		strong {
+			color: $text-primary;
+			font-weight: 600;
+			background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+	}
+
+	&__subtitle {
+		font-size: $text-h4;
+		margin-bottom: $spacing-md;
+		display: flex;
+		align-items: center;
+		gap: $spacing-xs;
+
+		:deep(.icon) {
+			flex-shrink: 0;
+		}
+	}
+
+	// ============================================
+	// Сильные стороны с stagger анимацией
+	// ============================================
+	&__strengths {
+		margin-top: $spacing-md;
+		opacity: 0;
+		transform: translateX(60px);
+
+		&.is-visible {
+			animation: fadeInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+		}
+	}
+
+	&__list {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-md;
+	}
+
+	&__list-item {
+		display: flex;
+		align-items: center;
+		gap: $spacing-sm;
+		color: $text-secondary;
+		padding: $spacing-sm $spacing-md;
+		border-radius: $radius-md;
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(255, 255, 255, 0.05);
+		opacity: 0;
+		transform: translateX(-20px);
+		transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+		user-select: none;
+
+		// Stagger animation
+		.about__strengths.is-visible & {
+			animation: slideItem 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+			animation-delay: calc(var(--item-index) * 0.1s + 0.4s);
+		}
+
+		&:hover {
+			color: $text-primary;
+			background: rgba(255, 255, 255, 0.05);
+			border-color: rgba(255, 255, 255, 0.15);
+			transform: translateX(8px) scale(1.02);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+			:deep(svg) {
+				transform: rotate(5deg) scale(1.2);
+			}
+		}
+
+		:deep(svg) {
+			color: $accent;
+			transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+			flex-shrink: 0;
+		}
+	}
+
+	// ============================================
+	// Технологии - grid с переносом
+	// ============================================
+	&__tech {
+		margin-top: $spacing-md;
+		opacity: 0;
+		transform: translateX(60px);
+
+		&.is-visible {
+			animation: fadeInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+
+			.about__tech-grid :deep(.badge) {
+				animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+				animation-delay: calc(var(--badge-index, 0) * 0.05s + 0.6s);
+			}
+		}
+	}
+
+	&__tech-grid {
+		display: flex;
+		flex-wrap: wrap;
+		gap: $spacing-sm;
+		margin-top: $spacing-sm;
+
+		:deep(.badge) {
+			opacity: 0;
+			transform: translateY(10px);
+			user-select: none;
+
+			@for $i from 0 through 20 {
+				&:nth-child(#{$i + 1}) {
+					--badge-index: #{$i};
+				}
+			}
+		}
+	}
+}
+
+// ============================================
+// Адаптивность
+// ============================================
+
+// Tablet (до 1024px)
+@media (max-width: 1024px) {
+	.about {
+		&__grid {
+			grid-template-columns: 1fr;
+			gap: $spacing-2xl;
+		}
+
+		&__image-wrapper {
+			max-width: 400px;
+			margin: 0 auto;
+		}
+
+		&__title {
+			font-size: $text-h3;
+			text-align: center;
+		}
+
+		&__text {
+			text-align: center;
+		}
+
+		&__subtitle {
+			justify-content: center;
+			text-align: center;
+		}
+
+		&__content {
+			gap: $spacing-md;
+		}
+	}
+}
+
+// Mobile (до 768px)
+@media (max-width: 768px) {
+	.about {
+		&__grid {
+			display: block;
+			gap: 0;
+		}
+
+		&__image-wrapper {
+			max-width: 320px;
+			aspect-ratio: 3/4;
+
+			// Отключаем 3D эффект и серую картинку на мобильных
+			&:hover {
+				.about__image-container {
+					transform: none;
+				}
+
+				.about__image {
+					filter: grayscale(0%);
+				}
+
+				.about__image-container::after {
+					opacity: 0;
+				}
+			}
+		}
+
+		&__image {
+			filter: grayscale(0%);
+		}
+
+		&__image-container::after {
+			opacity: 0;
+		}
+
+		&__title {
+			font-size: $text-h3;
+			margin-bottom: $spacing-sm;
+
+			:deep(.icon) {
+				display: block;
+				margin: 0 auto $spacing-xs;
+			}
+		}
+
+		&__text {
+			font-size: $text-body;
+		}
+
+		&__subtitle {
+			font-size: 18px;
+			margin-bottom: $spacing-sm;
+			justify-content: center;
+			text-align: center;
+
+			:deep(.icon) {
+				display: inline-block;
+			}
+		}
+
+		&__strengths {
+			margin-top: $spacing-sm;
+		}
+
+		&__list {
+			gap: $spacing-sm;
+		}
+
+		&__list-item {
+			padding: $spacing-xs $spacing-sm;
+			font-size: $text-body-sm;
+
+			&:hover {
+				transform: translateX(4px) scale(1.01);
+			}
+
+			:deep(svg) {
+				width: 18px;
+				height: 18px;
+			}
+		}
+
+		&__tech {
+			margin-top: $spacing-sm;
+		}
+
+		&__tech-grid {
+			gap: $spacing-xs;
+			justify-content: center;
+		}
+
+		&__content {
+			gap: $spacing-sm;
+		}
+	}
+}
+
+// Small Mobile (до 480px)
+@media (max-width: 480px) {
+	.about {
+		&__grid {
+			display: block;
+			gap: 0;
+		}
+
+		&__image-wrapper {
+			max-width: 280px;
+
+			// Отключаем 3D эффект и серую картинку на маленьких мобильных
+			&:hover {
+				.about__image-container {
+					transform: none;
+				}
+
+				.about__image {
+					filter: grayscale(0%);
+				}
+
+				.about__image-container::after {
+					opacity: 0;
+				}
+			}
+		}
+
+		&__image {
+			filter: grayscale(0%);
+		}
+
+		&__image-container::after {
+			opacity: 0;
+		}
+
+		&__title {
+			font-size: $text-h4;
+
+			:deep(.icon) {
+				width: 28px;
+				height: 28px;
+			}
+		}
+
+		&__text {
+			font-size: $text-body-sm;
+		}
+
+		&__subtitle {
+			font-size: 16px;
+			justify-content: center;
+			text-align: center;
+
+			:deep(.icon) {
+				width: 20px;
+				height: 20px;
+			}
+		}
+
+		&__list-item {
+			padding: 6px $spacing-sm;
+			font-size: 13px;
+
+			:deep(svg) {
+				width: 16px;
+				height: 16px;
+			}
+		}
+
+		&__tech-grid {
+			gap: 6px;
+
+			:deep(.badge) {
+				font-size: 12px;
+				padding: 3px 10px;
+			}
+		}
+	}
+}
+
+// Large Desktop (от 1440px)
+@media (min-width: 1440px) {
+	.about {
+		&__grid {
+			gap: $spacing-4xl;
+		}
+
+		&__title {
+			font-size: $text-h1;
+		}
+
+		&__text {
+			font-size: 18px;
+			line-height: 1.8;
+		}
+
+		&__list-item {
+			padding: $spacing-md $spacing-lg;
+			font-size: 16px;
+		}
+	}
+}
+
+// ============================================
+// Accessibility
+// ============================================
+
+@media (prefers-reduced-motion: reduce) {
+	.about {
+		&__image-wrapper,
+		&__title,
+		&__text,
+		&__strengths,
+		&__tech,
+		&__list-item {
+			animation: none !important;
+			opacity: 1 !important;
+			transform: none !important;
+		}
+
+		&__tech-grid :deep(.badge) {
+			animation: none !important;
+			opacity: 1 !important;
+			transform: none !important;
+		}
+
+		&__image-glow {
+			display: none;
+		}
+	}
+}

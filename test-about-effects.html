@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test About Section Effects</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: white;
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+        }
+
+        .spacer {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .test-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            gap: 60px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* 3D Image Effect */
+        .image-wrapper {
+            position: relative;
+            aspect-ratio: 3/4;
+            border-radius: 16px;
+            transform-style: preserve-3d;
+            transition: transform 0.15s ease-out;
+            cursor: pointer;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .image-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(10, 10, 10, 0.3) 100%);
+            transition: opacity 0.5s ease;
+        }
+
+        .image-wrapper:hover .image-container::after {
+            opacity: 0;
+        }
+
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateX(-60px);
+        }
+
+        .reveal.is-visible {
+            animation: fadeInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Stagger List */
+        .list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .list-item {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s ease;
+        }
+
+        .list.is-visible .list-item {
+            animation: slideItem 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.1s; }
+        .list-item:nth-child(2) { animation-delay: 0.2s; }
+        .list-item:nth-child(3) { animation-delay: 0.3s; }
+        .list-item:nth-child(4) { animation-delay: 0.4s; }
+
+        .list-item:hover {
+            transform: translateX(8px) scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes slideItem {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Marquee */
+        .marquee {
+            overflow: hidden;
+            margin-top: 20px;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 12px;
+            width: fit-content;
+            animation: marquee 20s linear infinite;
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .badge {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .badge:hover {
+            transform: translateY(-4px) scale(1.1);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+        .status div {
+            margin: 5px 0;
+        }
+
+        .check {
+            color: #4ade80;
+        }
+
+        .cross {
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="spacer">↓ Прокрути вниз ↓</div>
+
+    <div class="test-section">
+        <div class="grid">
+            <!-- 3D Image -->
+            <div class="image-wrapper reveal" id="imageWrapper">
+                <div class="image-container"></div>
+            </div>
+
+            <!-- Content -->
+            <div>
+                <h2 style="margin-bottom: 20px;">Тестирование эффектов</h2>
+                
+                <ul class="list reveal" id="list">
+                    <li class="list-item">✓ Scroll reveal анимация</li>
+                    <li class="list-item">✓ 3D tilt эффект</li>
+                    <li class="list-item">✓ Stagger анимация</li>
+                    <li class="list-item">✓ Бегущая строка</li>
+                </ul>
+
+                <div class="reveal" id="marquee" style="margin-top: 40px;">
+                    <h3 style="margin-bottom: 10px;">Технологии</h3>
+                    <div class="marquee">
+                        <div class="marquee-track">
+                            <span class="badge">Vue 3</span>
+                            <span class="badge">Nuxt 4</span>
+                            <span class="badge">TypeScript</span>
+                            <span class="badge">Laravel</span>
+                            <span class="badge">Docker</span>
+                            <span class="badge">Vue 3</span>
+                            <span class="badge">Nuxt 4</span>
+                            <span class="badge">TypeScript</span>
+                            <span class="badge">Laravel</span>
+                            <span class="badge">Docker</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status" id="status">
+        <div>Статус эффектов:</div>
+        <div id="status-3d" class="cross">⨯ 3D эффект: не активен</div>
+        <div id="status-scroll" class="cross">⨯ Scroll reveal: не активен</div>
+        <div id="status-marquee" class="check">✓ Marquee: работает</div>
+        <div id="status-stagger" class="cross">⨯ Stagger: не активен</div>
+    </div>
+
+    <script>
+        // 3D Tilt Effect
+        const imageWrapper = document.getElementById('imageWrapper');
+        let is3DActive = false;
+
+        imageWrapper.addEventListener('mousemove', (event) => {
+            const rect = imageWrapper.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -10;
+            const rotateY = ((x - centerX) / centerX) * 10;
+
+            imageWrapper.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+            
+            if (!is3DActive) {
+                is3DActive = true;
+                document.getElementById('status-3d').className = 'check';
+                document.getElementById('status-3d').textContent = '✓ 3D эффект: работает!';
+            }
+        });
+
+        imageWrapper.addEventListener('mouseleave', () => {
+            imageWrapper.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+            imageWrapper.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
+
+        // Scroll Reveal with Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    
+                    if (entry.target.id === 'imageWrapper' || entry.target.id === 'list') {
+                        document.getElementById('status-scroll').className = 'check';
+                        document.getElementById('status-scroll').textContent = '✓ Scroll reveal: работает!';
+                    }
+                    
+                    if (entry.target.id === 'list') {
+                        document.getElementById('status-stagger').className = 'check';
+                        document.getElementById('status-stagger').textContent = '✓ Stagger: работает!';
+                    }
+                }
+            });
+        }, {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

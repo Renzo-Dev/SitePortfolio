@@ -1,86 +1,84 @@
-// Scroll reveal анимации
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+// Scroll reveal анимации (работает с Lenis)
+export const useScrollReveal = (
+	elements: Ref<HTMLElement | HTMLElement[] | undefined>,
+	options: {
+		threshold?: number // Когда запускать (0.1 = 10% элемента видно)
+		rootMargin?: string // Отступ триггера
+		once?: boolean // Запускать только один раз
+	} = {}
+) => {
+	const { threshold = 0.1, rootMargin = '0px', once = true } = options
 
-export const useScrollReveal = () => {
-	// Базовая анимация появления секции
-	const revealSection = (
-		selector: string,
-		options: {
-			delay?: number
-			stagger?: number
-			y?: number
-			duration?: number
-		} = {}
-	) => {
-		const { delay = 0, stagger = 0.2, y = 60, duration = 0.8 } = options
+	let observer: IntersectionObserver | null = null
 
-		gsap.from(selector, {
-			opacity: 0,
-			y,
-			duration,
-			stagger,
-			delay,
-			ease: 'power3.out',
-			scrollTrigger: {
-				trigger: selector,
-				start: 'top 80%',
-				toggleActions: 'play none none reverse',
-			},
+	// Callback для Intersection Observer
+	const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+		entries.forEach((entry) => {
+			if (entry.isIntersecting) {
+				// Добавляем класс для CSS анимации
+				entry.target.classList.add('is-visible')
+
+				// Если once = true, перестаём наблюдать
+				if (once && observer) {
+					observer.unobserve(entry.target)
+				}
+			} else if (!once) {
+				// Если once = false, убираем класс при уходе из viewport
+				entry.target.classList.remove('is-visible')
+			}
 		})
 	}
 
-	// Fade-in анимация
-	const fadeIn = (selector: string, delay = 0) => {
-		gsap.from(selector, {
-			opacity: 0,
-			duration: 0.8,
-			delay,
-			ease: 'power2.out',
-			scrollTrigger: {
-				trigger: selector,
-				start: 'top 80%',
-				toggleActions: 'play none none reverse',
-			},
+	// Инициализация
+	const init = () => {
+		if (!import.meta.client) return
+
+		// Создаём IntersectionObserver
+		observer = new IntersectionObserver(handleIntersection, {
+			threshold,
+			rootMargin,
+		})
+
+		// Наблюдаем за элементами
+		const elementArray = Array.isArray(elements.value)
+			? elements.value
+			: elements.value
+			? [elements.value]
+			: []
+
+		elementArray.forEach((el) => {
+			if (el) {
+				// Добавляем начальный класс
+				el.classList.add('scroll-reveal')
+				observer?.observe(el)
+			}
 		})
 	}
 
-	// Slide-in слева
-	const slideInLeft = (selector: string, delay = 0) => {
-		gsap.from(selector, {
-			opacity: 0,
-			x: -60,
-			duration: 0.8,
-			delay,
-			ease: 'power3.out',
-			scrollTrigger: {
-				trigger: selector,
-				start: 'top 80%',
-				toggleActions: 'play none none reverse',
-			},
-		})
+	// Очистка
+	const destroy = () => {
+		if (observer) {
+			observer.disconnect()
+			observer = null
+		}
+		window.removeEventListener('smoothscroll', handleSmoothScroll)
+		window.removeEventListener('scroll', handleNativeScroll)
 	}
 
-	// Slide-in справа
-	const slideInRight = (selector: string, delay = 0) => {
-		gsap.from(selector, {
-			opacity: 0,
-			x: 60,
-			duration: 0.8,
-			delay,
-			ease: 'power3.out',
-			scrollTrigger: {
-				trigger: selector,
-				start: 'top 80%',
-				toggleActions: 'play none none reverse',
-			},
+	// Auto init/destroy
+	onMounted(() => {
+		// Небольшая задержка чтобы элементы точно были в DOM
+		nextTick(() => {
+			init()
 		})
-	}
+	})
+
+	onUnmounted(() => {
+		destroy()
+	})
 
 	return {
-		revealSection,
-		fadeIn,
-		slideInLeft,
-		slideInRight,
+		init,
+		destroy,
 	}
 }

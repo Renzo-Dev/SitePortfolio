@@ -84,10 +84,17 @@ const navLinks = [
 ]
 
 // Скролл к контактам
-const { scrollTo } = useSmoothScroll()
 const scrollToContact = () => {
 	closeMobileMenu()
-	scrollTo('#contact')
+	const element = document.getElementById('contact')
+	if (element) {
+		const offset = 80
+		const elementPosition = element.getBoundingClientRect().top + window.scrollY
+		window.scrollTo({
+			top: elementPosition - offset,
+			behavior: 'smooth', // Плавный нативный скролл
+		})
+	}
 }
 
 // Закрываем меню при ресайзе
