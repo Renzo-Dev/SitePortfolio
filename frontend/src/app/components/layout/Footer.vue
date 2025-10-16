@@ -1,6 +1,6 @@
 <template>
 	<footer class="footer">
-		<div class="footer__divider"></div>
+		<div class="footer__divider" />
 		<div class="container">
 			<div class="footer__content">
 				<!-- Колонка 1: О проекте -->
@@ -60,6 +60,19 @@
 			<div class="footer__bottom">
 				<p class="footer__copyright">
 					© {{ currentYear }} Dan Koshevoy — Built with Nuxt & Vue
+				</p>
+				<p class="footer__made-with-love">
+					Сделано с душой
+					<svg
+						class="footer__heart"
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="currentColor"
+					>
+						<path
+							d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+						/>
+					</svg>
 				</p>
 			</div>
 		</div>
@@ -173,11 +186,57 @@ const navLinks = [
 		padding-top: $spacing-lg;
 		border-top: 1px solid $border;
 		text-align: center;
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-sm;
 	}
 
 	&__copyright {
 		color: $text-muted;
 		font-size: $text-caption;
+	}
+
+	&__made-with-love {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: $spacing-xs;
+		color: $text-muted;
+		font-size: $text-caption;
+	}
+
+	&__heart {
+		display: inline-block;
+		width: 16px;
+		height: 16px;
+		color: #ff4444;
+		filter: drop-shadow(0 0 4px rgba(255, 68, 68, 0.5));
+		animation: heartbeat 1.5s ease-in-out infinite;
+		transform-origin: center center;
+		will-change: transform;
+		vertical-align: middle;
+	}
+}
+
+// Анимация сердцебиения
+@keyframes heartbeat {
+	0% {
+		transform: scale(1);
+	}
+	7% {
+		transform: scale(1.3);
+	}
+	14% {
+		transform: scale(1);
+	}
+	21% {
+		transform: scale(1.3);
+	}
+	28% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(1);
 	}
 }
 </style>

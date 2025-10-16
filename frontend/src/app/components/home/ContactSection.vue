@@ -26,6 +26,17 @@
 						required
 					/>
 					<Input
+						v-model="form.phone"
+						type="tel"
+						label="Телефон"
+						placeholder="+7 (999) 123-45-67"
+					/>
+					<Input
+						v-model="form.telegram"
+						label="Telegram"
+						placeholder="@username или ссылка"
+					/>
+					<Input
 						v-model="form.message"
 						type="textarea"
 						label="Сообщение"
@@ -114,6 +125,8 @@ import Button from '~/components/ui/Button.vue'
 const form = reactive({
 	name: '',
 	email: '',
+	phone: '',
+	telegram: '',
 	message: '',
 })
 
@@ -148,6 +161,8 @@ const handleSubmit = async () => {
 			body: {
 				name: form.name,
 				email: form.email,
+				phone: form.phone,
+				telegram: form.telegram,
 				message: form.message,
 			},
 		})
@@ -158,6 +173,8 @@ const handleSubmit = async () => {
 		// Очистка формы
 		form.name = ''
 		form.email = ''
+		form.phone = ''
+		form.telegram = ''
 		form.message = ''
 
 		// Скрываем сообщение через 5 секунд

@@ -109,7 +109,7 @@
 			inset: -20px;
 			background: radial-gradient(
 				circle at center,
-				rgba(255, 255, 255, 0.15) 0%,
+				rgba(0, 0, 0, 0.2) 0%,
 				transparent 70%
 			);
 			opacity: 0;
@@ -139,7 +139,7 @@
 		inset: -40px;
 		background: radial-gradient(
 			circle at 50% 50%,
-			rgba(255, 255, 255, 0.2) 0%,
+			rgba(0, 0, 0, 0.3) 0%,
 			transparent 60%
 		);
 		opacity: 0;
@@ -239,7 +239,7 @@
 
 	&__subtitle {
 		font-size: $text-h4;
-		margin-bottom: $spacing-md;
+		margin-bottom: $spacing-lg;
 		display: flex;
 		align-items: center;
 		gap: $spacing-xs;
@@ -394,6 +394,7 @@
 		&__image-wrapper {
 			max-width: 320px;
 			aspect-ratio: 3/4;
+			margin-bottom: $spacing-xl;
 
 			// Отключаем 3D эффект и серую картинку на мобильных
 			&:hover {
@@ -422,6 +423,7 @@
 		&__title {
 			font-size: $text-h3;
 			margin-bottom: $spacing-sm;
+			margin-top: $spacing-lg;
 
 			:deep(.icon) {
 				display: block;
@@ -491,6 +493,7 @@
 
 		&__image-wrapper {
 			max-width: 280px;
+			margin-bottom: $spacing-lg;
 
 			// Отключаем 3D эффект и серую картинку на маленьких мобильных
 			&:hover {
@@ -518,6 +521,7 @@
 
 		&__title {
 			font-size: $text-h4;
+			margin-top: $spacing-md;
 
 			:deep(.icon) {
 				width: 28px;

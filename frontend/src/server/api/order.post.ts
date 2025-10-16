@@ -22,11 +22,13 @@ export default defineEventHandler(async (event) => {
 	}
 
 	// Формирование сообщения для Telegram
+	const phoneInfo = body.phone ? `\n📞 Телефон: ${body.phone}` : ''
+	const telegramInfo = body.telegram ? `\n📱 Telegram: ${body.telegram}` : ''
 	const message = `
 🔔 Новый заказ с сайта!
 
 👤 Имя: ${body.name}
-📧 Email: ${body.email}
+📧 Email: ${body.email}${phoneInfo}${telegramInfo}
 
 💬 Сообщение:
 ${body.message}
@@ -51,7 +53,7 @@ ${body.message}
 			success: true,
 			message: 'Сообщение успешно отправлено',
 		}
-	} catch (error: any) {
+	} catch (error: unknown) {
 		console.error('Telegram API Error:', error)
 
 		throw createError({

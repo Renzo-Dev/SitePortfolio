@@ -41,12 +41,12 @@
 				<button
 					class="header__burger"
 					:class="{ 'header__burger--open': isMobileMenuOpen }"
-					@click="toggleMobileMenu"
 					aria-label="Toggle menu"
+					@click="toggleMobileMenu"
 				>
-					<span></span>
-					<span></span>
-					<span></span>
+					<span />
+					<span />
+					<span />
 				</button>
 			</div>
 		</div>
@@ -108,146 +108,5 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@use '~/assets/styles/variables' as *;
-
-.header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	z-index: $z-sticky;
-	padding: $spacing-lg 0;
-	transition: all $transition-base;
-
-	&--scrolled {
-		@include glass;
-		box-shadow: $shadow-md;
-		padding: $spacing-md 0;
-	}
-
-	&__content {
-		@include flex-between;
-	}
-
-	&__logo {
-		font-size: $text-body-lg;
-		font-weight: 700;
-		color: $text-primary;
-		text-decoration: none;
-		transition: color $transition-base;
-
-		&:hover {
-			color: $text-secondary;
-		}
-	}
-
-	&__nav {
-		display: flex;
-		align-items: center;
-		gap: $spacing-xl;
-
-		@include mobile {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100vh;
-			background: $bg-primary;
-			flex-direction: column;
-			justify-content: center;
-			gap: $spacing-lg;
-			opacity: 0;
-			visibility: hidden;
-			transition: all $transition-base;
-			z-index: -1;
-
-			&--open {
-				opacity: 1;
-				visibility: visible;
-			}
-		}
-	}
-
-	&__link {
-		position: relative;
-		color: $text-secondary;
-		font-weight: 500;
-		transition: color $transition-base;
-
-		&::after {
-			content: '';
-			position: absolute;
-			bottom: -4px;
-			left: 50%;
-			transform: translateX(-50%);
-			width: 0;
-			height: 1px;
-			background: $text-primary;
-			transition: width $transition-base;
-		}
-
-		&:hover {
-			color: $text-primary;
-
-			&::after {
-				width: 100%;
-			}
-		}
-
-		@include mobile {
-			font-size: $text-h4;
-		}
-	}
-
-	&__cta {
-		@include mobile {
-			display: none;
-		}
-	}
-
-	&__cta-mobile {
-		display: none;
-
-		@include mobile {
-			display: inline-flex;
-		}
-	}
-
-	&__burger {
-		display: none;
-		flex-direction: column;
-		gap: 6px;
-		width: 30px;
-		height: 24px;
-		background: none;
-		border: none;
-		cursor: pointer;
-		z-index: 1;
-
-		@include mobile {
-			display: flex;
-		}
-
-		span {
-			width: 100%;
-			height: 2px;
-			background: $text-primary;
-			transition: all $transition-base;
-		}
-
-		&--open {
-			span:nth-child(1) {
-				transform: rotate(45deg) translate(8px, 8px);
-			}
-
-			span:nth-child(2) {
-				opacity: 0;
-			}
-
-			span:nth-child(3) {
-				transform: rotate(-45deg) translate(8px, -8px);
-			}
-		}
-	}
-}
+@use '~/assets/styles/components/header';
 </style>

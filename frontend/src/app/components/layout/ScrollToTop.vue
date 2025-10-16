@@ -49,7 +49,8 @@ const scrollToTop = () => {
 	z-index: $z-fixed;
 	@include flex-center;
 	box-shadow: $shadow-lg;
-	transition: all $transition-base;
+	transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+		box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
 	&:hover {
 		transform: translateY(-4px);
@@ -71,12 +72,13 @@ const scrollToTop = () => {
 // Transition анимации
 .fade-scale-enter-active,
 .fade-scale-leave-active {
-	transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+	transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+		transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .fade-scale-enter-from,
 .fade-scale-leave-to {
 	opacity: 0;
-	transform: scale(0.8);
+	transform: scale(0.7) translateY(20px);
 }
 </style>
