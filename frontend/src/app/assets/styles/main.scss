@@ -17,17 +17,17 @@ html {
 	overflow-x: hidden;
 }
 
-// Плавный нативный скролл
-html {
-	scroll-behavior: smooth;
-}
+// Плавная прокрутка отключена (удалено по требованию)
+// html {
+// 	scroll-behavior: smooth;
+// }
 
-// Отключаем для пользователей с motion sickness
-@media (prefers-reduced-motion: reduce) {
-	html {
-		scroll-behavior: auto;
-	}
-}
+// Без smooth прокрутки отдельная настройка для prefers-reduced-motion не требуется
+// @media (prefers-reduced-motion: reduce) {
+// 	html {
+// 		scroll-behavior: auto;
+// 	}
+// }
 
 body {
 	font-family: $font-body;
