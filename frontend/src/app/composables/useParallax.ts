@@ -1,4 +1,4 @@
-// Composable для parallax эффекта (оптимизирован для плавности)
+// Composable для parallax эффекта (оптимизирован для плавности через CSS-переменные)
 export const useParallax = (
 	element: Ref<HTMLElement | undefined>,
 	options: {
@@ -10,6 +10,7 @@ export const useParallax = (
 	const { speed = 0.5, fadeOut = false, maxDistance = 0 } = options
 
 	let ticking = false
+	let lastScroll = 0
 
 	// Обработчик скролла с throttle через RAF
 	const handleScroll = () => {
@@ -22,11 +23,15 @@ export const useParallax = (
 		}
 	}
 
-	// Обновление parallax эффекта
+	// Обновление parallax эффекта через CSS-переменные
 	const updateParallax = () => {
 		if (!element.value) return
 
 		const currentScroll = window.scrollY
+
+		// Оптимизация: обновляем только если скролл изменился значимо
+		if (Math.abs(currentScroll - lastScroll) < 1) return
+		lastScroll = currentScroll
 
 		// Вычисляем границы эффекта
 		const windowHeight = window.innerHeight
@@ -43,11 +48,11 @@ export const useParallax = (
 				opacity = Math.max(0, 1 - currentScroll / maxScroll)
 			}
 
-			// Применяем трансформации с will-change для оптимизации
-			// Используем translate3d для GPU acceleration
-			element.value.style.transform = `translate3d(0, ${translateY}px, 0)`
+			// Используем CSS-переменные вместо прямого style.transform
+			// Это позволяет браузеру оптимизировать рендеринг
+			element.value.style.setProperty('--parallax-y', `${translateY}px`)
 			if (fadeOut) {
-				element.value.style.opacity = `${opacity}`
+				element.value.style.setProperty('--parallax-opacity', `${opacity}`)
 			}
 		}
 	}
@@ -56,9 +61,15 @@ export const useParallax = (
 	const init = () => {
 		if (!import.meta.client) return
 
-		// Добавляем will-change для оптимизации
+		// Устанавливаем начальные CSS-переменные и стили для плавности
 		if (element.value) {
+			element.value.style.setProperty('--parallax-y', '0px')
+			element.value.style.setProperty('--parallax-opacity', '1')
+			element.value.style.transform = 'translate3d(0, var(--parallax-y), 0)'
+			element.value.style.opacity = 'var(--parallax-opacity)'
 			element.value.style.willChange = 'transform, opacity'
+			// Добавляем небольшую задержку для сглаживания рывков
+			element.value.style.transition = 'transform 0.05s ease-out, opacity 0.1s ease-out'
 		}
 
 		// Слушаем скролл с passive для лучшей производительности
