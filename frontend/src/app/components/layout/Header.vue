@@ -54,73 +54,26 @@
 </template>
 
 <script setup lang="ts">
-import { useScroll } from '@vueuse/core'
 import Button from '~/components/ui/Button.vue'
 
 // Отслеживание скролла
-const { y } = useScroll(window)
-const isScrolled = computed(() => y.value > 100)
+const { isScrolled } = useHeaderScroll(100)
 
 // Мобильное меню
-const isMobileMenuOpen = ref(false)
-
-const toggleMobileMenu = () => {
-	isMobileMenuOpen.value = !isMobileMenuOpen.value
-	// Блокируем скролл при открытом меню
-	document.body.style.overflow = isMobileMenuOpen.value ? 'hidden' : ''
-}
-
-const closeMobileMenu = () => {
-	isMobileMenuOpen.value = false
-	document.body.style.overflow = ''
-}
+const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useMobileMenu()
 
 // Навигация
-const navLinks = [
-	{ id: 'about', label: 'Обо мне', href: '#about' },
-	{ id: 'portfolio', label: 'Портфолио', href: '#portfolio' },
-	{ id: 'services', label: 'Услуги', href: '#services' },
-	{ id: 'contact', label: 'Контакты', href: '#contact' },
-]
-
-// Плавный скролл через Lenis (fallback на нативный)
-const scrollToSection = inject<(id: string, offset?: number) => void>(
-	'scrollToSection',
-	(id: string) => {
-		// Fallback на нативный скролл
-		const element = document.getElementById(id)
-		if (element) {
-			const offset = 80
-			const elementPosition =
-				element.getBoundingClientRect().top + window.scrollY
-			window.scrollTo({
-				top: elementPosition - offset,
-				behavior: 'smooth',
-			})
-		}
-	}
-)
+const { navLinks, navigateToSection } = useNavigation()
 
 // Обработчик клика по навигации
 const handleNavClick = (id: string) => {
-	closeMobileMenu()
-	scrollToSection(id, -80)
+	navigateToSection(id, -80, closeMobileMenu)
 }
 
 // Скролл к контактам
 const scrollToContact = () => {
-	closeMobileMenu()
-	scrollToSection('contact', -80)
+	navigateToSection('contact', -80, closeMobileMenu)
 }
-
-// Закрываем меню при ресайзе
-onMounted(() => {
-	window.addEventListener('resize', () => {
-		if (window.innerWidth >= 1024) {
-			closeMobileMenu()
-		}
-	})
-})
 </script>
 
 <style scoped lang="scss">
