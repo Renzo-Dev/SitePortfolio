@@ -27,10 +27,7 @@ export const useNavigation = () => {
 	)
 
 	// Скролл к секции (упрощенная версия без callback)
-	const navigateToSection = (
-		sectionId: string,
-		offset: number = -80
-	) => {
+	const navigateToSection = (sectionId: string, offset: number = -80) => {
 		// Просто скроллим к секции
 		scrollToSection(sectionId, offset)
 	}
