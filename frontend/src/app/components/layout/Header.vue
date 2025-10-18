@@ -93,7 +93,8 @@ import Button from '~/components/ui/Button.vue'
 const { isScrolled } = useHeaderScroll(100)
 
 // Мобильное меню
-const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useMobileMenu()
+const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu, unlockScroll } =
+	useMobileMenu()
 
 // Навигация
 const { navLinks, navigateToSection } = useNavigation()
@@ -105,8 +106,18 @@ const handleNavClick = (id: string) => {
 
 // Обработчик клика по навигации (mobile)
 const handleMobileNavClick = (id: string) => {
-	// Закрываем меню и передаем callback для скролла после закрытия
-	navigateToSection(id, -80, closeMobileMenu)
+	// Закрываем меню
+	closeMobileMenu()
+
+	// Разблокируем скролл через 100ms (меню начало закрываться)
+	setTimeout(() => {
+		unlockScroll()
+	}, 100)
+
+	// Начинаем скролл через 400ms (меню почти закрылось)
+	setTimeout(() => {
+		navigateToSection(id, -80)
+	}, 400)
 }
 
 // Скролл к контактам

@@ -26,25 +26,13 @@ export const useNavigation = () => {
 		}
 	)
 
-	// Скролл к секции с закрытием меню
+	// Скролл к секции (упрощенная версия без callback)
 	const navigateToSection = (
 		sectionId: string,
-		offset: number = -80,
-		onNavigate?: () => void
+		offset: number = -80
 	) => {
-		// Если есть callback (закрытие меню)
-		if (onNavigate) {
-			// Сначала закрываем меню
-			onNavigate()
-
-			// Ждём завершения анимации закрытия меню (300ms) перед скроллом
-			setTimeout(() => {
-				scrollToSection(sectionId, offset)
-			}, 350)
-		} else {
-			// Если нет callback - скроллим сразу
-			scrollToSection(sectionId, offset)
-		}
+		// Просто скроллим к секции
+		scrollToSection(sectionId, offset)
 	}
 
 	return {

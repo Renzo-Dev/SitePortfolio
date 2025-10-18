@@ -105,5 +105,6 @@ export const useMobileMenu = () => {
 		isClosing,
 		toggleMobileMenu,
 		closeMobileMenu,
+		unlockScroll, // Экспортируем для ручной разблокировки
 	}
 }
