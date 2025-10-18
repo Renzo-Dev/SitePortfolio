@@ -9,7 +9,6 @@
 					@mousemove="handleImageHover"
 					@mouseleave="resetImageHover"
 				>
-					<div class="about__image-glow" />
 					<div ref="imageContainer" class="about__image-container">
 						<img
 							src="/images/photo-1571171637578-41bc2dd41cd2.jpg"
@@ -171,6 +170,16 @@ onMounted(() => {
 			if (entry.isIntersecting) {
 				entry.target.classList.add('is-visible')
 				console.log('✓ Element revealed:', entry.target.className)
+
+				// Для image wrapper - сбрасываем transform после анимации для работы 3D эффекта
+				if (entry.target === imageWrapper.value) {
+					setTimeout(() => {
+						if (imageWrapper.value) {
+							imageWrapper.value.style.transform = 'none'
+							console.log('✓ 3D effect enabled - transform reset')
+						}
+					}, 800) // Длительность анимации fadeInLeft
+				}
 			}
 		})
 	}, observerOptions)

@@ -22,7 +22,7 @@
 	}
 	to {
 		opacity: 1;
-		transform: translateX(0);
+		transform: translateX(0) translateY(0);
 	}
 }
 
@@ -96,61 +96,21 @@
 		opacity: 0;
 		transform: translateX(-60px);
 		will-change: transform;
+		transform-style: preserve-3d;
+		perspective: 1000px;
 
 		// Scroll reveal анимация
 		&.is-visible {
 			animation: fadeInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-		}
-
-		// Свечение вокруг фото
-		&::before {
-			content: '';
-			position: absolute;
-			inset: -20px;
-			background: radial-gradient(
-				circle at center,
-				rgba(0, 0, 0, 0.2) 0%,
-				transparent 70%
-			);
-			opacity: 0;
-			transition: opacity 0.5s ease;
-			pointer-events: none;
-			z-index: -1;
-			animation: glowPulse 3s ease-in-out infinite;
+			// После анимации сбрасываем transform для работы 3D эффекта
+			animation-fill-mode: forwards;
 		}
 
 		&:hover {
-			&::before {
-				opacity: 1;
-			}
-
 			.about__image {
 				filter: grayscale(0%);
 			}
-
-			.about__image-container::after {
-				opacity: 0;
-			}
 		}
-	}
-
-	&__image-glow {
-		position: absolute;
-		inset: -40px;
-		background: radial-gradient(
-			circle at 50% 50%,
-			rgba(0, 0, 0, 0.3) 0%,
-			transparent 60%
-		);
-		opacity: 0;
-		transition: opacity 0.6s ease;
-		pointer-events: none;
-		z-index: -1;
-		filter: blur(30px);
-	}
-
-	&__image-wrapper:hover &__image-glow {
-		opacity: 1;
 	}
 
 	&__image-container {
@@ -161,21 +121,8 @@
 		overflow: hidden;
 		transform-style: preserve-3d;
 		will-change: transform;
-
-		// Градиент сверху
-		&::after {
-			content: '';
-			position: absolute;
-			inset: 0;
-			background: linear-gradient(
-				180deg,
-				transparent 0%,
-				rgba(10, 10, 10, 0.3) 100%
-			);
-			pointer-events: none;
-			transition: opacity 0.5s ease;
-			z-index: 1;
-		}
+		// Базовый transform для 3D
+		transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);
 	}
 
 	&__image {
@@ -504,19 +451,11 @@
 				.about__image {
 					filter: grayscale(0%);
 				}
-
-				.about__image-container::after {
-					opacity: 0;
-				}
 			}
 		}
 
 		&__image {
 			filter: grayscale(0%);
-		}
-
-		&__image-container::after {
-			opacity: 0;
 		}
 
 		&__title {
@@ -609,10 +548,6 @@
 			animation: none !important;
 			opacity: 1 !important;
 			transform: none !important;
-		}
-
-		&__image-glow {
-			display: none;
 		}
 	}
 }
