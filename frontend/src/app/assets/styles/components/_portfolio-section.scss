@@ -1,0 +1,264 @@
+@use '../variables' as *;
+
+// ============================================
+// Portfolio Section Styles - Modern UX 2025
+// ============================================
+
+.portfolio {
+	&__title {
+		font-size: clamp(32px, 5vw, $text-h2);
+		margin-bottom: $spacing-md;
+		line-height: 1.2;
+		transition: font-size 0.3s ease;
+
+		:deep(.icon) {
+			vertical-align: middle;
+			margin-right: $spacing-xs;
+			transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+		}
+
+		&:hover :deep(.icon) {
+			transform: rotate(360deg) scale(1.1);
+		}
+	}
+
+	&__subtitle {
+		margin-bottom: $spacing-3xl;
+		font-size: clamp(16px, 2.5vw, $text-body-lg);
+		line-height: 1.6;
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	&__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: $spacing-2xl;
+		margin-top: $spacing-2xl;
+	}
+}
+
+// ============================================
+// Адаптивность - Modern UX 2025
+// ============================================
+
+// Large Tablet / iPad Pro (до 1200px)
+@media (max-width: 1200px) {
+	.portfolio {
+		&__title {
+			font-size: clamp(28px, 5vw, 40px);
+			margin-bottom: $spacing-md;
+		}
+
+		&__subtitle {
+			font-size: clamp(15px, 2.5vw, 18px);
+			margin-bottom: $spacing-2xl;
+			max-width: 550px;
+		}
+
+		&__grid {
+			grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+			gap: $spacing-xl;
+			margin-top: $spacing-xl;
+		}
+	}
+}
+
+// Tablet (до 1024px)
+@media (max-width: 1024px) {
+	.portfolio {
+		&__title {
+			font-size: clamp(26px, 5vw, 36px);
+			margin-bottom: $spacing-sm;
+
+			:deep(.icon) {
+				width: 28px;
+				height: 28px;
+			}
+		}
+
+		&__subtitle {
+			font-size: clamp(15px, 2.5vw, 17px);
+			margin-bottom: $spacing-xl;
+			max-width: 500px;
+			padding: 0 $spacing-md;
+		}
+
+		&__grid {
+			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+			gap: $spacing-lg;
+			margin-top: $spacing-lg;
+		}
+	}
+}
+
+// Mobile (до 768px)
+@media (max-width: 768px) {
+	.portfolio {
+		&__title {
+			font-size: clamp(24px, 6vw, 32px);
+			margin-bottom: $spacing-sm;
+			padding: 0 $spacing-md;
+
+			:deep(.icon) {
+				width: 26px;
+				height: 26px;
+				display: inline-block;
+				vertical-align: middle;
+			}
+		}
+
+		&__subtitle {
+			font-size: clamp(14px, 3.5vw, 16px);
+			margin-bottom: $spacing-xl;
+			max-width: 100%;
+			padding: 0 $spacing-md;
+			line-height: 1.7;
+		}
+
+		&__grid {
+			grid-template-columns: 1fr;
+			gap: $spacing-lg;
+			margin-top: $spacing-lg;
+			padding: 0 $spacing-md;
+		}
+	}
+}
+
+// Small Mobile (до 480px)
+@media (max-width: 480px) {
+	.portfolio {
+		&__title {
+			font-size: clamp(22px, 6vw, 28px);
+			margin-bottom: $spacing-xs;
+			padding: 0 $spacing-sm;
+
+			:deep(.icon) {
+				width: 24px;
+				height: 24px;
+			}
+		}
+
+		&__subtitle {
+			font-size: clamp(13px, 3.8vw, 15px);
+			margin-bottom: $spacing-lg;
+			padding: 0 $spacing-sm;
+			line-height: 1.65;
+		}
+
+		&__grid {
+			grid-template-columns: 1fr;
+			gap: $spacing-md;
+			margin-top: $spacing-md;
+			padding: 0 $spacing-sm;
+		}
+	}
+}
+
+// Extra Small Mobile (до 375px) - iPhone SE
+@media (max-width: 375px) {
+	.portfolio {
+		&__title {
+			font-size: 20px;
+			margin-bottom: 10px;
+			padding: 0 $spacing-xs;
+
+			:deep(.icon) {
+				width: 22px;
+				height: 22px;
+			}
+		}
+
+		&__subtitle {
+			font-size: 13px;
+			margin-bottom: $spacing-md;
+			padding: 0 $spacing-xs;
+			line-height: 1.6;
+		}
+
+		&__grid {
+			grid-template-columns: 1fr;
+			gap: $spacing-sm;
+			margin-top: $spacing-sm;
+			padding: 0 $spacing-xs;
+		}
+	}
+}
+
+// Large Desktop (от 1440px) - 2K
+@media (min-width: 1440px) {
+	.portfolio {
+		&__title {
+			font-size: clamp(40px, 4vw, 52px);
+			margin-bottom: $spacing-lg;
+
+			:deep(.icon) {
+				width: 36px;
+				height: 36px;
+			}
+		}
+
+		&__subtitle {
+			font-size: clamp(18px, 1.5vw, 22px);
+			margin-bottom: $spacing-4xl;
+			max-width: 700px;
+			line-height: 1.7;
+		}
+
+		&__grid {
+			grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+			gap: $spacing-3xl;
+			margin-top: $spacing-3xl;
+		}
+	}
+}
+
+// Ultra Wide / 4K (от 1920px)
+@media (min-width: 1920px) {
+	.portfolio {
+		&__title {
+			font-size: 56px;
+			margin-bottom: $spacing-xl;
+
+			:deep(.icon) {
+				width: 40px;
+				height: 40px;
+			}
+		}
+
+		&__subtitle {
+			font-size: 24px;
+			margin-bottom: 80px;
+			max-width: 800px;
+			line-height: 1.75;
+		}
+
+		&__grid {
+			grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+			gap: 48px;
+			margin-top: 64px;
+		}
+	}
+}
+
+// ============================================
+// Accessibility
+// ============================================
+
+@media (prefers-reduced-motion: reduce) {
+	.portfolio {
+		&__title,
+		&__subtitle {
+			transition: none !important;
+		}
+
+		&__title :deep(.icon) {
+			transition: none !important;
+
+			&:hover {
+				transform: none !important;
+			}
+		}
+	}
+}

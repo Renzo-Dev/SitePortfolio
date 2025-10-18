@@ -579,23 +579,85 @@
 }
 
 // ============================================
-// Адаптивность
+// Адаптивность - Modern UX 2025
 // ============================================
 
-// Tablet (до 1024px)
-@media (max-width: 1024px) {
+// Large Tablet / iPad Pro (до 1200px)
+@media (max-width: 1200px) {
 	.hero {
+		&__content {
+			max-width: 800px;
+			padding: 0 $spacing-lg;
+		}
+
 		&__title {
-			font-size: clamp(36px, 8vw, 56px);
+			font-size: clamp(40px, 7vw, 56px);
+			line-height: 1.15;
 		}
 
 		&__subtitle {
-			font-size: $text-body;
-			max-width: 500px;
+			font-size: clamp(16px, 2.5vw, 18px);
+			max-width: 550px;
+			line-height: 1.6;
 		}
 
 		&__cta {
 			gap: $spacing-md;
+
+			:deep(button) {
+				padding: 18px 48px;
+				font-size: 16px;
+			}
+		}
+
+		&__shapes .shape {
+			&--1 {
+				width: 280px;
+				height: 280px;
+			}
+
+			&--2 {
+				width: 200px;
+				height: 200px;
+			}
+
+			&--3 {
+				width: 220px;
+				height: 220px;
+			}
+		}
+	}
+}
+
+// Tablet (до 1024px)
+@media (max-width: 1024px) {
+	.hero {
+		min-height: 90vh;
+		padding-top: 70px;
+
+		&__content {
+			max-width: 700px;
+			padding: 0 $spacing-md;
+		}
+
+		&__title {
+			font-size: clamp(36px, 8vw, 52px);
+			margin-bottom: $spacing-md;
+		}
+
+		&__subtitle {
+			font-size: clamp(15px, 2.5vw, 17px);
+			max-width: 500px;
+			margin-bottom: $spacing-xl;
+		}
+
+		&__cta {
+			gap: $spacing-md;
+
+			:deep(button) {
+				padding: 16px 44px;
+				font-size: 15px;
+			}
 		}
 
 		&__shapes .shape {
@@ -617,6 +679,14 @@
 
 		&__scroll {
 			margin-top: 50px;
+
+			.scroll-text {
+				font-size: 11px;
+			}
+
+			.scroll-line {
+				height: 35px;
+			}
 		}
 	}
 }
@@ -624,28 +694,77 @@
 // Mobile (до 768px)
 @media (max-width: 768px) {
 	.hero {
-		padding-top: 60px;
+		min-height: 100vh;
+		min-height: 100dvh;
+		padding-top: 80px;
+		padding-bottom: $spacing-2xl;
+
+		&__content {
+			max-width: 100%;
+			padding: 0 $spacing-md;
+		}
 
 		&__title {
-			font-size: clamp(32px, 10vw, 48px);
+			font-size: clamp(32px, 9vw, 44px);
 			line-height: 1.2;
 			margin-bottom: $spacing-md;
+
+			.word {
+				display: inline-block;
+				margin-right: 0.2em;
+			}
 		}
 
 		&__subtitle {
-			font-size: $text-body;
+			font-size: clamp(14px, 3.5vw, 16px);
+			line-height: 1.7;
 			margin-bottom: $spacing-xl;
 			max-width: 100%;
+			padding: 0 $spacing-xs;
 		}
 
 		&__cta {
 			flex-direction: column;
 			align-items: stretch;
 			gap: $spacing-md;
+			margin-bottom: $spacing-xl;
+			padding: 0 $spacing-xs;
 
 			:deep(button) {
-				padding: 14px 32px;
+				width: 100%;
+				padding: 16px 32px;
 				font-size: 15px;
+				justify-content: center;
+
+				// Убираем сложные hover эффекты на touch
+				&:hover {
+					transform: none;
+
+					&::after {
+						opacity: 0;
+					}
+				}
+
+				// Оптимизируем тени для мобильных
+				&.btn--primary {
+					box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1),
+						0 8px 24px rgba(0, 0, 0, 0.08);
+
+					&:active {
+						transform: scale(0.98);
+					}
+				}
+
+				&.btn--secondary {
+					box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
+						0 8px 24px rgba(0, 0, 0, 0.1),
+						inset 0 1px 1px rgba(255, 255, 255, 0.25),
+						inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+
+					&:active {
+						transform: scale(0.98);
+					}
+				}
 			}
 		}
 
@@ -656,6 +775,7 @@
 
 		&__gradient {
 			animation: none;
+			opacity: 0.5;
 		}
 
 		&__shapes .shape {
@@ -667,7 +787,16 @@
 		}
 
 		&__scroll {
-			margin-top: 40px;
+			margin-top: $spacing-2xl;
+
+			.scroll-text {
+				font-size: 10px;
+				letter-spacing: 1.5px;
+			}
+
+			.scroll-line {
+				height: 35px;
+			}
 		}
 	}
 }
@@ -675,32 +804,55 @@
 // Small Mobile (до 480px)
 @media (max-width: 480px) {
 	.hero {
-		padding-top: 50px;
+		padding-top: 70px;
+		padding-bottom: $spacing-xl;
+
+		&__content {
+			padding: 0 $spacing-sm;
+		}
 
 		&__title {
-			font-size: clamp(28px, 10vw, 40px);
+			font-size: clamp(28px, 9vw, 36px);
+			line-height: 1.15;
 			margin-bottom: $spacing-sm;
+			letter-spacing: -0.02em;
+
+			.word {
+				margin-right: 0.15em;
+			}
 		}
 
 		&__subtitle {
-			font-size: $text-body-sm;
+			font-size: clamp(13px, 3.8vw, 15px);
+			line-height: 1.65;
 			margin-bottom: $spacing-lg;
+			padding: 0 $spacing-xs;
 		}
 
 		&__cta {
 			gap: $spacing-sm;
+			padding: 0;
+			margin-bottom: $spacing-lg;
 
 			:deep(button) {
-				padding: 12px 24px;
+				width: 100%;
+				padding: 14px 28px;
 				font-size: 14px;
+				border-radius: 14px;
+
+				:deep(.icon) {
+					width: 18px;
+					height: 18px;
+				}
 			}
 		}
 
 		&__scroll {
-			margin-top: 30px;
+			margin-top: $spacing-xl;
 
 			.scroll-text {
-				font-size: 11px;
+				font-size: 10px;
+				letter-spacing: 1.2px;
 			}
 
 			.scroll-line {
@@ -710,25 +862,183 @@
 	}
 }
 
-// Large Desktop (от 1440px)
-@media (min-width: 1440px) {
+// Extra Small Mobile (до 375px) - iPhone SE
+@media (max-width: 375px) {
 	.hero {
+		padding-top: 60px;
+
 		&__content {
-			max-width: 1000px;
+			padding: 0 $spacing-xs;
 		}
 
 		&__title {
-			font-size: clamp(48px, 8vw, 72px);
+			font-size: clamp(24px, 8vw, 32px);
+			margin-bottom: 12px;
+
+			.word {
+				margin-right: 0.12em;
+			}
 		}
 
 		&__subtitle {
-			font-size: 20px;
-			max-width: 700px;
+			font-size: 13px;
+			line-height: 1.6;
+			margin-bottom: $spacing-md;
+			padding: 0;
+		}
+
+		&__cta {
+			gap: 12px;
+			margin-bottom: $spacing-md;
+
+			:deep(button) {
+				padding: 13px 24px;
+				font-size: 13px;
+				border-radius: 12px;
+
+				:deep(.icon) {
+					width: 16px;
+					height: 16px;
+				}
+			}
+		}
+
+		&__scroll {
+			margin-top: $spacing-lg;
+
+			.scroll-text {
+				font-size: 9px;
+			}
+
+			.scroll-line {
+				height: 25px;
+			}
+		}
+	}
+}
+
+// Large Desktop (от 1440px) - 2K
+@media (min-width: 1440px) {
+	.hero {
+		&__content {
+			max-width: 1100px;
+			padding: 0 $spacing-2xl;
+		}
+
+		&__title {
+			font-size: clamp(52px, 5vw, 72px);
+			line-height: 1.1;
+			margin-bottom: $spacing-xl;
+			letter-spacing: -0.02em;
+		}
+
+		&__subtitle {
+			font-size: clamp(18px, 1.5vw, 22px);
+			max-width: 750px;
+			line-height: 1.7;
+			margin-bottom: $spacing-3xl;
+		}
+
+		&__cta {
+			gap: $spacing-xl;
+
+			:deep(button) {
+				padding: 22px 64px;
+				font-size: 18px;
+
+				:deep(.icon) {
+					width: 22px;
+					height: 22px;
+				}
+			}
+		}
+
+		&__shapes .shape {
+			&--1 {
+				width: 350px;
+				height: 350px;
+			}
+
+			&--2 {
+				width: 250px;
+				height: 250px;
+			}
+
+			&--3 {
+				width: 300px;
+				height: 300px;
+			}
+		}
+
+		&__scroll {
+			margin-top: 80px;
+
+			.scroll-text {
+				font-size: 13px;
+			}
+
+			.scroll-line {
+				height: 50px;
+			}
+		}
+	}
+}
+
+// Ultra Wide / 4K (от 1920px)
+@media (min-width: 1920px) {
+	.hero {
+		&__content {
+			max-width: 1300px;
+		}
+
+		&__title {
+			font-size: clamp(64px, 4vw, 80px);
+			margin-bottom: $spacing-2xl;
+		}
+
+		&__subtitle {
+			font-size: 24px;
+			max-width: 900px;
+			line-height: 1.75;
 		}
 
 		&__cta :deep(button) {
-			padding: 18px 48px;
-			font-size: 17px;
+			padding: 24px 72px;
+			font-size: 19px;
+
+			:deep(.icon) {
+				width: 24px;
+				height: 24px;
+			}
+		}
+
+		&__shapes .shape {
+			&--1 {
+				width: 400px;
+				height: 400px;
+			}
+
+			&--2 {
+				width: 300px;
+				height: 300px;
+			}
+
+			&--3 {
+				width: 350px;
+				height: 350px;
+			}
+		}
+
+		&__scroll {
+			margin-top: 100px;
+
+			.scroll-text {
+				font-size: 14px;
+			}
+
+			.scroll-line {
+				height: 60px;
+			}
 		}
 	}
 }

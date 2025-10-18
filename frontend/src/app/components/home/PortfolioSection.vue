@@ -1,18 +1,19 @@
 <template>
-	<section class="portfolio section" id="portfolio">
+	<section id="portfolio" class="portfolio section">
 		<div class="container">
-			<h2 class="portfolio__title text-center">
+			<h2 class="portfolio__title text-gradient text-center">
 				<Icon name="ph:briefcase-duotone" size="32" />
 				Портфолио
 			</h2>
-			<p class="portfolio__subtitle text-center text-secondary">
-				Реализованные проекты и коммерческий опыт
+			<p class="portfolio__subtitle text-secondary text-center">
+				Избранные проекты, над которыми я работал
 			</p>
 
-			<div class="portfolio__grid grid grid--3">
+			<!-- Grid проектов -->
+			<div class="portfolio__grid">
 				<ProjectCard
-					v-for="(project, index) in projects"
-					:key="index"
+					v-for="project in projects"
+					:key="project.id"
 					:project="project"
 				/>
 			</div>
@@ -25,30 +26,41 @@ import ProjectCard from '~/components/portfolio/ProjectCard.vue'
 
 const projects = [
 	{
+		id: 1,
 		title: 'HouseSeeker',
 		description:
-			'Микросервисная платформа для мониторинга аренды жилья с автоматическими уведомлениями',
-		technologies: ['Laravel', 'Node.js', 'Docker', 'Nginx', 'RabbitMQ'],
-		role: 'Архитектура, Backend, DevOps',
-		image: '/HouseSeeker.jpg',
+			'Платформа для поиска и аренды недвижимости с расширенными фильтрами и системой бронирования',
+		technologies: ['Vue 3', 'Laravel', 'PostgreSQL', 'Redis', 'Docker'],
+		role: 'Full-stack разработчик',
+		image: '/images/HouseSeeker.jpg',
 	},
 	{
-		title: 'Kremlin Neurology',
+		id: 2,
+		title: 'E-commerce платформа',
 		description:
-			'Веб-платформа для клиницистов и пациентов в сфере неврологии с интеграцией систем',
-		technologies: ['Vue 3', 'SCSS', 'PHP', 'Docker', 'MySQL'],
-		role: 'Fullstack разработка, автоматизация процессов',
-		image:
-			'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&h=600&fit=crop',
-	},
-	{
-		title: 'Marketplace Platform',
-		description:
-			'Мультисервисная торговая платформа с микросервисной архитектурой',
-		technologies: ['Vue 3', 'TypeScript', 'Laravel', 'RabbitMQ', 'Redis'],
-		role: 'Full-stack разработка и поддержка',
+			'Современный интернет-магазин с корзиной, оплатой и личным кабинетом',
+		technologies: ['Vue 3', 'Laravel', 'Stripe'],
+		role: 'Full-stack разработчик',
 		image:
 			'https://images.unsplash.com/photo-1557821552-17105176677c?w=800&h=600&fit=crop',
+	},
+	{
+		id: 3,
+		title: 'CRM система',
+		description: 'Система управления клиентами с аналитикой и отчётами',
+		technologies: ['Nuxt', 'PostgreSQL', 'Docker'],
+		role: 'Backend разработчик',
+		image:
+			'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
+	},
+	{
+		id: 4,
+		title: 'Финтех приложение',
+		description: 'Мобильное приложение для управления финансами',
+		technologies: ['Vue', 'Node.js', 'MongoDB'],
+		role: 'Frontend разработчик',
+		image:
+			'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
 	},
 ]
 
@@ -56,21 +68,5 @@ const projects = [
 </script>
 
 <style scoped lang="scss">
-@use '~/assets/styles/variables' as *;
-
-.portfolio {
-	&__title {
-		font-size: $text-h2;
-		margin-bottom: $spacing-md;
-	}
-
-	&__subtitle {
-		margin-bottom: $spacing-3xl;
-		font-size: $text-body-lg;
-	}
-
-	&__grid {
-		margin-top: $spacing-2xl;
-	}
-}
+@use '~/assets/styles/components/portfolio-section';
 </style>

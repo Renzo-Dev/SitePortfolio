@@ -74,6 +74,9 @@
 // ============================================
 
 .about {
+	// Адаптивный padding для секции
+	padding: clamp(40px, 8vw, 80px) 0;
+
 	&__grid {
 		display: grid;
 		grid-template-columns: 40% 60%;
@@ -144,10 +147,11 @@
 	}
 
 	&__title {
-		font-size: $text-h2;
+		font-size: clamp(32px, 5vw, $text-h2);
 		margin-bottom: $spacing-md;
 		opacity: 0;
 		transform: translateX(60px);
+		line-height: 1.2;
 
 		&.is-visible {
 			animation: fadeInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
@@ -166,6 +170,7 @@
 
 	&__text {
 		color: $text-secondary;
+		font-size: clamp(15px, 2vw, 16px);
 		line-height: $line-body;
 		opacity: 0;
 		transform: translateX(60px);
@@ -185,11 +190,12 @@
 	}
 
 	&__subtitle {
-		font-size: $text-h4;
+		font-size: clamp(20px, 3vw, $text-h4);
 		margin-bottom: $spacing-lg;
 		display: flex;
 		align-items: center;
 		gap: $spacing-xs;
+		line-height: 1.3;
 
 		:deep(.icon) {
 			flex-shrink: 0;
@@ -221,6 +227,7 @@
 		align-items: center;
 		gap: $spacing-sm;
 		color: $text-secondary;
+		font-size: clamp(14px, 2vw, 15px);
 		padding: $spacing-sm $spacing-md;
 		border-radius: $radius-md;
 		background: rgba(255, 255, 255, 0.02);
@@ -229,6 +236,7 @@
 		transform: translateX(-20px);
 		transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 		user-select: none;
+		line-height: 1.6;
 
 		// Stagger animation
 		.about__strengths.is-visible & {
@@ -294,8 +302,26 @@
 }
 
 // ============================================
-// Адаптивность
+// Адаптивность - Modern UX 2025
 // ============================================
+
+// Large Tablet / iPad Pro (до 1200px)
+@media (max-width: 1200px) {
+	.about {
+		&__grid {
+			grid-template-columns: 45% 55%;
+			gap: $spacing-2xl;
+		}
+
+		&__title {
+			font-size: clamp(28px, 4vw, 36px);
+		}
+
+		&__text {
+			font-size: clamp(15px, 2vw, 17px);
+		}
+	}
+}
 
 // Tablet (до 1024px)
 @media (max-width: 1024px) {
@@ -306,26 +332,35 @@
 		}
 
 		&__image-wrapper {
-			max-width: 400px;
+			max-width: 450px;
 			margin: 0 auto;
+			aspect-ratio: 3/4;
+		}
+
+		&__content {
+			gap: $spacing-lg;
 		}
 
 		&__title {
-			font-size: $text-h3;
+			font-size: clamp(26px, 5vw, 32px);
 			text-align: center;
 		}
 
 		&__text {
 			text-align: center;
+			font-size: clamp(15px, 2.5vw, 16px);
+			max-width: 600px;
+			margin: 0 auto;
 		}
 
 		&__subtitle {
 			justify-content: center;
 			text-align: center;
+			font-size: clamp(18px, 3vw, 22px);
 		}
 
-		&__content {
-			gap: $spacing-md;
+		&__list-item {
+			font-size: clamp(14px, 2vw, 15px);
 		}
 	}
 }
@@ -334,67 +369,67 @@
 @media (max-width: 768px) {
 	.about {
 		&__grid {
-			display: block;
-			gap: 0;
+			display: flex;
+			flex-direction: column;
+			gap: $spacing-xl;
 		}
 
 		&__image-wrapper {
-			max-width: 320px;
+			max-width: min(340px, 90vw);
 			aspect-ratio: 3/4;
-			margin-bottom: $spacing-xl;
+			margin: 0 auto $spacing-lg;
+			border-radius: $radius-md;
 
-			// Отключаем 3D эффект и серую картинку на мобильных
+			// Убираем 3D эффект на мобильных - показываем цветное фото
+			.about__image {
+				filter: grayscale(0%);
+			}
+
+			// Отключаем hover эффекты
 			&:hover {
 				.about__image-container {
 					transform: none;
 				}
-
-				.about__image {
-					filter: grayscale(0%);
-				}
-
-				.about__image-container::after {
-					opacity: 0;
-				}
 			}
 		}
 
-		&__image {
-			filter: grayscale(0%);
-		}
-
-		&__image-container::after {
-			opacity: 0;
+		&__content {
+			gap: $spacing-md;
+			padding: 0 $spacing-xs;
 		}
 
 		&__title {
-			font-size: $text-h3;
-			margin-bottom: $spacing-sm;
-			margin-top: $spacing-lg;
-
-			:deep(.icon) {
-				display: block;
-				margin: 0 auto $spacing-xs;
-			}
-		}
-
-		&__text {
-			font-size: $text-body;
-		}
-
-		&__subtitle {
-			font-size: 18px;
-			margin-bottom: $spacing-sm;
-			justify-content: center;
+			font-size: clamp(24px, 6vw, 28px);
+			margin-bottom: $spacing-xs;
 			text-align: center;
 
 			:deep(.icon) {
 				display: inline-block;
+				vertical-align: middle;
+			}
+		}
+
+		&__text {
+			font-size: clamp(14px, 3.5vw, 15px);
+			line-height: 1.7;
+			text-align: center;
+			max-width: 100%;
+			padding: 0 $spacing-xs;
+		}
+
+		&__subtitle {
+			font-size: clamp(17px, 4vw, 20px);
+			margin-bottom: $spacing-sm;
+			justify-content: center;
+
+			:deep(.icon) {
+				width: 22px;
+				height: 22px;
 			}
 		}
 
 		&__strengths {
-			margin-top: $spacing-sm;
+			margin-top: $spacing-xs;
 		}
 
 		&__list {
@@ -402,80 +437,80 @@
 		}
 
 		&__list-item {
-			padding: $spacing-xs $spacing-sm;
-			font-size: $text-body-sm;
+			padding: $spacing-sm;
+			font-size: clamp(13px, 3vw, 14px);
+			border-radius: $radius-sm;
+			gap: $spacing-xs;
 
+			// Убираем hover transform на мобильных
 			&:hover {
-				transform: translateX(4px) scale(1.01);
+				transform: scale(1.02);
 			}
 
 			:deep(svg) {
-				width: 18px;
-				height: 18px;
+				width: 20px;
+				height: 20px;
+				flex-shrink: 0;
+			}
+
+			span {
+				line-height: 1.5;
 			}
 		}
 
 		&__tech {
-			margin-top: $spacing-sm;
+			margin-top: $spacing-xs;
 		}
 
 		&__tech-grid {
 			gap: $spacing-xs;
 			justify-content: center;
-		}
 
-		&__content {
-			gap: $spacing-sm;
+			:deep(.badge) {
+				font-size: clamp(12px, 3vw, 13px);
+				padding: 6px 12px;
+			}
 		}
 	}
 }
 
-// Small Mobile (до 480px)
+// Small Mobile (до 480px) - iPhone SE, малые устройства
 @media (max-width: 480px) {
 	.about {
 		&__grid {
-			display: block;
-			gap: 0;
+			gap: $spacing-lg;
 		}
 
 		&__image-wrapper {
-			max-width: 280px;
-			margin-bottom: $spacing-lg;
-
-			// Отключаем 3D эффект и серую картинку на маленьких мобильных
-			&:hover {
-				.about__image-container {
-					transform: none;
-				}
-
-				.about__image {
-					filter: grayscale(0%);
-				}
-			}
+			max-width: min(300px, 85vw);
+			margin-bottom: $spacing-md;
+			border-radius: $radius-sm;
 		}
 
-		&__image {
-			filter: grayscale(0%);
+		&__content {
+			padding: 0;
 		}
 
 		&__title {
-			font-size: $text-h4;
-			margin-top: $spacing-md;
+			font-size: clamp(22px, 5.5vw, 26px);
+			margin-bottom: 0;
+			margin-top: 0;
 
 			:deep(.icon) {
-				width: 28px;
-				height: 28px;
+				width: 26px;
+				height: 26px;
 			}
 		}
 
 		&__text {
-			font-size: $text-body-sm;
+			font-size: clamp(13px, 3.2vw, 14px);
+			line-height: 1.65;
+			padding: 0;
 		}
 
 		&__subtitle {
-			font-size: 16px;
-			justify-content: center;
-			text-align: center;
+			font-size: clamp(16px, 4vw, 18px);
+			margin-bottom: $spacing-xs;
 
 			:deep(.icon) {
 				width: 20px;
@@ -483,9 +518,69 @@
 			}
 		}
 
+		&__strengths,
+		&__tech {
+			margin-top: 0;
+		}
+
+		&__list {
+			gap: 10px;
+		}
+
 		&__list-item {
-			padding: 6px $spacing-sm;
+			padding: 10px 12px;
+			font-size: clamp(12px, 3vw, 13px);
+			gap: 10px;
+
+			:deep(svg) {
+				width: 18px;
+				height: 18px;
+			}
+		}
+
+		&__tech-grid {
+			gap: 8px;
+
+			:deep(.badge) {
+				font-size: clamp(11px, 2.8vw, 12px);
+				padding: 5px 10px;
+			}
+		}
+	}
+}
+
+// Extra Small Mobile (до 375px) - iPhone SE (1st gen), малые экраны
+@media (max-width: 375px) {
+	.about {
+		&__image-wrapper {
+			max-width: min(280px, 90vw);
+		}
+
+		&__title {
+			font-size: 20px;
+
+			:deep(.icon) {
+				width: 24px;
+				height: 24px;
+			}
+		}
+
+		&__text {
 			font-size: 13px;
+		}
+
+		&__subtitle {
+			font-size: 16px;
+
+			:deep(.icon) {
+				width: 18px;
+				height: 18px;
+			}
+		}
+
+		&__list-item {
+			padding: 8px 10px;
+			font-size: 12px;
 
 			:deep(svg) {
 				width: 16px;
@@ -497,32 +592,74 @@
 			gap: 6px;
 
 			:deep(.badge) {
-				font-size: 12px;
-				padding: 3px 10px;
+				font-size: 11px;
+				padding: 4px 8px;
 			}
 		}
 	}
 }
 
-// Large Desktop (от 1440px)
+// Large Desktop (от 1440px) - 2K экраны
 @media (min-width: 1440px) {
 	.about {
 		&__grid {
 			gap: $spacing-4xl;
+			max-width: 1400px;
+			margin: 0 auto;
 		}
 
 		&__title {
-			font-size: $text-h1;
+			font-size: clamp(36px, 3vw, 48px);
 		}
 
 		&__text {
-			font-size: 18px;
+			font-size: clamp(17px, 1.2vw, 19px);
 			line-height: 1.8;
+		}
+
+		&__subtitle {
+			font-size: clamp(20px, 1.5vw, 24px);
 		}
 
 		&__list-item {
 			padding: $spacing-md $spacing-lg;
-			font-size: 16px;
+			font-size: clamp(15px, 1.1vw, 17px);
+
+			:deep(svg) {
+				width: 24px;
+				height: 24px;
+			}
+		}
+
+		&__tech-grid {
+			:deep(.badge) {
+				font-size: clamp(13px, 1vw, 15px);
+				padding: 8px 16px;
+			}
+		}
+	}
+}
+
+// Ultra Wide / 4K (от 1920px)
+@media (min-width: 1920px) {
+	.about {
+		&__grid {
+			max-width: 1600px;
+			gap: 120px;
+		}
+
+		&__title {
+			font-size: 52px;
+		}
+
+		&__text {
+			font-size: 20px;
+			line-height: 1.9;
+		}
+
+		&__list-item {
+			padding: 18px 24px;
+			font-size: 18px;
 		}
 	}
 }

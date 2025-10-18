@@ -29,7 +29,8 @@
 
 				<!-- Подзаголовок -->
 				<p class="hero__subtitle">
-					Frontend + Backend разработка на Vue, Laravel, Docker, Redis и MySQL
+					Превращаю бизнес-идеи в быстрые и масштабируемые веб-решения с
+					премиальным UX
 				</p>
 
 				<!-- CTA кнопки -->

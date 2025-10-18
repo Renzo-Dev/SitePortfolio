@@ -1,9 +1,5 @@
 <template>
-	<article
-		class="project-card"
-		@mouseenter="handleMouseEnter"
-		@mouseleave="handleMouseLeave"
-	>
+	<article class="project-card">
 		<div class="project-card__image-wrapper">
 			<img
 				:src="project.image"
@@ -31,7 +27,6 @@
 </template>
 
 <script setup lang="ts">
-import { gsap } from 'gsap'
 import Badge from '~/components/ui/Badge.vue'
 
 interface Project {
@@ -45,54 +40,6 @@ interface Project {
 const props = defineProps<{
 	project: Project
 }>()
-
-const handleMouseEnter = (e: MouseEvent) => {
-	const card = e.currentTarget as HTMLElement
-
-	gsap.to(card, {
-		y: -12,
-		scale: 1.02,
-		duration: 0.4,
-		ease: 'power2.out',
-	})
-
-	const img = card.querySelector('.project-img')
-	if (img) {
-		gsap.to(img, {
-			scale: 1.1,
-			duration: 0.6,
-			ease: 'power2.out',
-		})
-	}
-
-	gsap.to(card, {
-		borderColor: 'rgba(255,255,255,0.3)',
-		boxShadow: '0 20px 60px rgba(255,255,255,0.1)',
-		duration: 0.3,
-	})
-}
-
-const handleMouseLeave = (e: MouseEvent) => {
-	const card = e.currentTarget as HTMLElement
-
-	gsap.to(card, {
-		y: 0,
-		scale: 1,
-		borderColor: 'rgba(42,42,42,1)',
-		boxShadow: 'none',
-		duration: 0.4,
-		ease: 'power2.inOut',
-	})
-
-	const img = card.querySelector('.project-img')
-	if (img) {
-		gsap.to(img, {
-			scale: 1,
-			duration: 0.6,
-			ease: 'power2.inOut',
-		})
-	}
-}
 </script>
 
 <style scoped lang="scss">
@@ -103,8 +50,25 @@ const handleMouseLeave = (e: MouseEvent) => {
 	border: 1px solid $border;
 	border-radius: $radius-lg;
 	overflow: hidden;
-	transition: all $transition-base;
+	transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 	cursor: pointer;
+	will-change: transform;
+
+	// Hover эффекты
+	&:hover {
+		transform: translateY(-12px) scale(1.02);
+		border-color: rgba(255, 255, 255, 0.3);
+		box-shadow: 0 20px 60px rgba(255, 255, 255, 0.1),
+			0 10px 30px rgba(0, 0, 0, 0.3);
+
+		.project-card__image {
+			transform: scale(1.1);
+		}
+	}
+
+	&:active {
+		transform: translateY(-8px) scale(1.01);
+	}
 
 	&__image-wrapper {
 		position: relative;
@@ -118,6 +82,8 @@ const handleMouseLeave = (e: MouseEvent) => {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+		will-change: transform;
 	}
 
 	&__content {
