@@ -74,14 +74,26 @@ export const useParticles = (canvasRef: Ref<HTMLCanvasElement | undefined>) => {
 			lineColor = 'rgba(255, 255, 255, 0.15)',
 		} = customOptions || {}
 
-		if (!canvasRef.value) return
+		if (!canvasRef.value) {
+			console.warn('⚠️ Canvas ref not available')
+			return
+		}
 
 		const canvas = canvasRef.value
 		const ctx = canvas.getContext('2d')
-		if (!ctx) return
+		if (!ctx) {
+			console.warn('⚠️ Canvas context not available')
+			return
+		}
 
 		// Получаем настройки для текущего устройства
 		let settings = getDeviceSettings()
+		console.log('🎨 Particles initialized:', {
+			device: getDeviceType(),
+			particles: settings.numberOfParticles,
+			canvasSize: { width: canvas.width, height: canvas.height },
+		})
+		
 		const particlesArray: Particle[] = []
 		const mouse = { x: 0, y: 0 }
 		let animationId: number | null = null
