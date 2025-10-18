@@ -11,14 +11,21 @@ export const useMobileMenu = () => {
 			'--scrollbar-compensation',
 			`${scrollbarWidth}px`
 		)
+		// Блокируем скролл на body и html
 		document.body.style.overflow = 'hidden'
+		document.body.style.position = 'fixed'
+		document.body.style.width = '100%'
 		document.body.style.paddingRight = `${scrollbarWidth}px`
+		document.documentElement.style.overflow = 'hidden'
 	}
 
 	// Разблокировка скролла
 	const unlockScroll = () => {
 		document.body.style.overflow = ''
+		document.body.style.position = ''
+		document.body.style.width = ''
 		document.body.style.paddingRight = ''
+		document.documentElement.style.overflow = ''
 		document.documentElement.style.removeProperty('--scrollbar-compensation')
 	}
 
@@ -38,16 +45,16 @@ export const useMobileMenu = () => {
 		lockScroll()
 	}
 
-	// Закрыть меню с анимацией (увеличено время для более плавной анимации)
+	// Закрыть меню с анимацией
 	const closeWithAnimation = () => {
 		isClosing.value = true
 
-		// Ждём завершения анимации закрытия (600ms)
+		// Ждём завершения анимации закрытия (300ms - время slide transition)
 		setTimeout(() => {
 			isMobileMenuOpen.value = false
 			isClosing.value = false
 			unlockScroll()
-		}, 600)
+		}, 300)
 	}
 
 	// Публичный метод для закрытия (используется при клике на ссылку)

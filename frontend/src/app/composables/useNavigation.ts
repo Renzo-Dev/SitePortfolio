@@ -32,13 +32,19 @@ export const useNavigation = () => {
 		offset: number = -80,
 		onNavigate?: () => void
 	) => {
-		// Вызываем callback (например, закрытие меню)
+		// Если есть callback (закрытие меню)
 		if (onNavigate) {
+			// Сначала закрываем меню
 			onNavigate()
-		}
 
-		// Скроллим к секции
-		scrollToSection(sectionId, offset)
+			// Ждём завершения анимации закрытия меню (300ms) перед скроллом
+			setTimeout(() => {
+				scrollToSection(sectionId, offset)
+			}, 350)
+		} else {
+			// Если нет callback - скроллим сразу
+			scrollToSection(sectionId, offset)
+		}
 	}
 
 	return {
@@ -47,4 +53,3 @@ export const useNavigation = () => {
 		navigateToSection,
 	}
 }
-

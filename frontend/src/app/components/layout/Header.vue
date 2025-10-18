@@ -105,11 +105,8 @@ const handleNavClick = (id: string) => {
 
 // Обработчик клика по навигации (mobile)
 const handleMobileNavClick = (id: string) => {
-	closeMobileMenu()
-	// Небольшая задержка для плавного закрытия меню перед скроллом
-	setTimeout(() => {
-		navigateToSection(id, -80)
-	}, 300)
+	// Закрываем меню и передаем callback для скролла после закрытия
+	navigateToSection(id, -80, closeMobileMenu)
 }
 
 // Скролл к контактам
