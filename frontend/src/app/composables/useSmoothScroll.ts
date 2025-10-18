@@ -1,27 +1,15 @@
 import Lenis from 'lenis'
 
-// Composable для плавного скролла через Lenis (только для desktop)
+// Composable для плавного скролла через Lenis (для всех устройств)
 export const useSmoothScroll = () => {
 	let lenis: Lenis | null = null
 	let rafId: number | null = null
-
-	// Проверка на desktop устройство
-	const isDesktop = () => {
-		if (!import.meta.client) return false
-		return window.innerWidth > 1024 && !('ontouchstart' in window)
-	}
 
 	// Инициализация Lenis
 	const init = () => {
 		if (!import.meta.client) return
 
-		// Применяем только на desktop
-		if (!isDesktop()) {
-			console.log('📱 Mobile/Tablet detected - Lenis disabled')
-			return
-		}
-
-		// Создаем экземпляр Lenis
+		// Создаем экземпляр Lenis для всех устройств
 		lenis = new Lenis({
 			duration: 1.2, // Длительность плавности (1.2 = средняя плавность)
 			easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easeOutExpo
@@ -41,7 +29,7 @@ export const useSmoothScroll = () => {
 
 		rafId = requestAnimationFrame(raf)
 
-		console.log('✨ Lenis smooth scroll initialized')
+		console.log('✨ Lenis smooth scroll initialized for all devices')
 	}
 
 	// Уничтожение экземпляра
@@ -59,7 +47,10 @@ export const useSmoothScroll = () => {
 	}
 
 	// Скролл к элементу
-	const scrollTo = (target: string | number | HTMLElement, options?: any) => {
+	const scrollTo = (
+		target: string | number | HTMLElement,
+		options?: Record<string, unknown>
+	) => {
 		if (!lenis) return
 
 		lenis.scrollTo(target, {
@@ -73,19 +64,25 @@ export const useSmoothScroll = () => {
 	// Скролл к секции по ID
 	const scrollToSection = (id: string, offset: number = -80) => {
 		const element = document.getElementById(id)
+
 		if (element && lenis) {
+			// Используем Lenis для плавного скролла
+			console.log('🎯 Lenis scroll to:', id, 'offset:', offset)
 			lenis.scrollTo(element, {
 				offset,
 				duration: 1.5,
 			})
 		} else if (element && !lenis) {
-			// Fallback для мобильных
+			// Fallback если Lenis не инициализирован
+			console.log('📱 Native scroll to:', id, 'offset:', offset)
 			const elementPosition =
 				element.getBoundingClientRect().top + window.scrollY
 			window.scrollTo({
 				top: elementPosition + offset,
 				behavior: 'smooth',
 			})
+		} else {
+			console.warn('⚠️ Element not found:', id)
 		}
 	}
 
@@ -99,29 +96,12 @@ export const useSmoothScroll = () => {
 		lenis?.start()
 	}
 
-	// Реинициализация при ресайзе (переход desktop <-> mobile)
-	const handleResize = () => {
-		const shouldBeActive = isDesktop()
-
-		if (shouldBeActive && !lenis) {
-			// Desktop и Lenis не активен - инициализируем
-			init()
-		} else if (!shouldBeActive && lenis) {
-			// Мобильный и Lenis активен - уничтожаем
-			destroy()
-		}
-	}
-
 	// Auto init/destroy при монтировании
 	onMounted(() => {
 		init()
-
-		// Слушаем ресайз для адаптивности
-		window.addEventListener('resize', handleResize)
 	})
 
 	onUnmounted(() => {
-		window.removeEventListener('resize', handleResize)
 		destroy()
 	})
 
@@ -135,4 +115,3 @@ export const useSmoothScroll = () => {
 		destroy,
 	}
 }
-
