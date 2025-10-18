@@ -23,6 +23,13 @@
 import Footer from '~/components/layout/Footer.vue'
 import Header from '~/components/layout/Header.vue'
 import ScrollToTop from '~/components/layout/ScrollToTop.vue'
+
+// Плавный скролл через Lenis (только для desktop)
+const { scrollToSection, scrollTo } = useSmoothScroll()
+
+// Предоставляем функции скролла для дочерних компонентов
+provide('scrollToSection', scrollToSection)
+provide('scrollTo', scrollTo)
 </script>
 
 <style scoped lang="scss">

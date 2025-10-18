@@ -27,8 +27,20 @@ onUnmounted(() => {
 	window.removeEventListener('scroll', checkScroll)
 })
 
+// Плавный скролл наверх через Lenis (fallback на нативный)
+const scrollToFn = inject<(target: string | number | HTMLElement, options?: any) => void>(
+	'scrollTo',
+	null
+)
+
 const scrollToTop = () => {
-	window.scrollTo({ top: 0, behavior: 'smooth' }) // Плавный скролл наверх
+	// Используем Lenis если доступен
+	if (scrollToFn) {
+		scrollToFn(0, { duration: 1.5 })
+	} else {
+		// Fallback на нативный скролл
+		window.scrollTo({ top: 0, behavior: 'smooth' })
+	}
 }
 </script>
 

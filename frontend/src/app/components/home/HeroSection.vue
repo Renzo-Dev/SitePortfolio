@@ -78,18 +78,23 @@ const titleWords = ref([
 const heroSection = ref<HTMLElement>()
 const heroContent = ref<HTMLElement>()
 
-// Плавный скролл к секциям
-const scrollToSection = (id: string) => {
-	const element = document.getElementById(id)
-	if (element) {
-		const offset = 80
-		const elementPosition = element.getBoundingClientRect().top + window.scrollY
-		window.scrollTo({
-			top: elementPosition - offset,
-			behavior: 'smooth', // Нативный плавный скролл
-		})
+// Плавный скролл к секциям через Lenis (fallback на нативный)
+const scrollToSection = inject<(id: string, offset?: number) => void>(
+	'scrollToSection',
+	(id: string) => {
+		// Fallback на нативный скролл если Lenis не доступен
+		const element = document.getElementById(id)
+		if (element) {
+			const offset = 80
+			const elementPosition =
+				element.getBoundingClientRect().top + window.scrollY
+			window.scrollTo({
+				top: elementPosition - offset,
+				behavior: 'smooth',
+			})
+		}
 	}
-}
+)
 
 // Ripple effect для кнопок (Google Material Design style)
 const handleButtonHover = (event: MouseEvent) => {

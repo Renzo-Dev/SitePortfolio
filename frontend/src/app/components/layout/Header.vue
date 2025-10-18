@@ -12,15 +12,15 @@
 					class="header__nav"
 					:class="{ 'header__nav--open': isMobileMenuOpen }"
 				>
-					<NuxtLink
+					<a
 						v-for="link in navLinks"
-						:key="link.href"
-						:to="link.href"
+						:key="link.id"
+						:href="link.href"
 						class="header__link"
-						@click="closeMobileMenu"
+						@click.prevent="handleNavClick(link.id)"
 					>
 						{{ link.label }}
-					</NuxtLink>
+					</a>
 
 					<!-- CTA кнопка в меню -->
 					<Button
@@ -77,24 +77,40 @@ const closeMobileMenu = () => {
 
 // Навигация
 const navLinks = [
-	{ label: 'Обо мне', href: '#about' },
-	{ label: 'Портфолио', href: '#portfolio' },
-	{ label: 'Услуги', href: '#services' },
-	{ label: 'Контакты', href: '#contact' },
+	{ id: 'about', label: 'Обо мне', href: '#about' },
+	{ id: 'portfolio', label: 'Портфолио', href: '#portfolio' },
+	{ id: 'services', label: 'Услуги', href: '#services' },
+	{ id: 'contact', label: 'Контакты', href: '#contact' },
 ]
+
+// Плавный скролл через Lenis (fallback на нативный)
+const scrollToSection = inject<(id: string, offset?: number) => void>(
+	'scrollToSection',
+	(id: string) => {
+		// Fallback на нативный скролл
+		const element = document.getElementById(id)
+		if (element) {
+			const offset = 80
+			const elementPosition =
+				element.getBoundingClientRect().top + window.scrollY
+			window.scrollTo({
+				top: elementPosition - offset,
+				behavior: 'smooth',
+			})
+		}
+	}
+)
+
+// Обработчик клика по навигации
+const handleNavClick = (id: string) => {
+	closeMobileMenu()
+	scrollToSection(id, -80)
+}
 
 // Скролл к контактам
 const scrollToContact = () => {
 	closeMobileMenu()
-	const element = document.getElementById('contact')
-	if (element) {
-		const offset = 80
-		const elementPosition = element.getBoundingClientRect().top + window.scrollY
-		window.scrollTo({
-			top: elementPosition - offset,
-			behavior: 'smooth', // Плавный нативный скролл
-		})
-	}
+	scrollToSection('contact', -80)
 }
 
 // Закрываем меню при ресайзе
