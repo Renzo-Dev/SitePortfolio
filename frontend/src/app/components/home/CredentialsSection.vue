@@ -78,7 +78,7 @@
 								:src="cert.image"
 								:alt="cert.title"
 								class="certificate-card__image"
-							>
+							/>
 							<!-- Placeholder -->
 							<div v-else class="certificate-card__placeholder">
 								<Icon name="ph:certificate" size="48" />
@@ -107,7 +107,13 @@
 
 		<!-- Модальное окно для просмотра -->
 		<Teleport to="body">
-			<div v-if="isModalOpen" class="credentials-modal" @click="closeModal">
+			<div
+				v-if="isModalOpen"
+				class="credentials-modal"
+				@click="closeModal"
+				@touchstart="handleTouchStart"
+				@touchend="handleTouchEnd"
+			>
 				<div class="credentials-modal__overlay" />
 				<div class="credentials-modal__content" @click.stop>
 					<button class="credentials-modal__close" @click="closeModal">
@@ -135,19 +141,19 @@
 						</button>
 					</div>
 
-				<!-- PDF или изображение -->
-				<iframe
-					v-if="isPdfFile"
-					:src="currentFile"
-					class="credentials-modal__pdf"
-					frameborder="0"
-				/>
-				<img
-					v-else-if="currentFile"
-					:src="currentFile"
-					:alt="selectedTitle"
-					class="credentials-modal__image"
-				>
+					<!-- PDF или изображение -->
+					<iframe
+						v-if="isPdfFile"
+						:src="currentFile"
+						class="credentials-modal__pdf"
+						frameborder="0"
+					/>
+					<img
+						v-else-if="currentFile"
+						:src="currentFile"
+						:alt="selectedTitle"
+						class="credentials-modal__image"
+					/>
 				</div>
 			</div>
 		</Teleport>
@@ -236,6 +242,34 @@ const prevFile = () => {
 	}
 }
 
+// Обработка свайпов для навигации на мобильных
+let touchStartX = 0
+let touchEndX = 0
+
+const handleTouchStart = (e: TouchEvent) => {
+	touchStartX = e.changedTouches[0]?.screenX ?? 0
+}
+
+const handleTouchEnd = (e: TouchEvent) => {
+	touchEndX = e.changedTouches[0]?.screenX ?? 0
+	handleSwipe()
+}
+
+const handleSwipe = () => {
+	const swipeThreshold = 50
+	const diff = touchStartX - touchEndX
+
+	if (Math.abs(diff) > swipeThreshold) {
+		if (diff > 0) {
+			// Свайп влево - следующий файл
+			nextFile()
+		} else {
+			// Свайп вправо - предыдущий файл
+			prevFile()
+		}
+	}
+}
+
 // Закрытие модалки по Escape и навигация стрелками
 onMounted(() => {
 	const handleKeydown = (e: KeyboardEvent) => {
@@ -249,10 +283,23 @@ onMounted(() => {
 			prevFile()
 		}
 	}
+
 	window.addEventListener('keydown', handleKeydown)
+
 	onUnmounted(() => {
 		window.removeEventListener('keydown', handleKeydown)
 	})
+})
+
+// Добавление touch событий для модального окна
+watch(isModalOpen, (newVal) => {
+	if (newVal) {
+		// Блокировка скролла body при открытом модальном окне
+		document.body.style.overflow = 'hidden'
+	} else {
+		// Разблокировка скролла
+		document.body.style.overflow = ''
+	}
 })
 </script>
 
