@@ -105,6 +105,37 @@
 			</div>
 		</div>
 
+		<!-- Мобильное меню выбора файлов -->
+		<Teleport to="body">
+			<div
+				v-if="isMobileMenuOpen"
+				class="mobile-file-menu"
+				@click="closeMobileMenu"
+			>
+				<div class="mobile-file-menu__overlay" />
+				<div class="mobile-file-menu__content" @click.stop>
+					<div class="mobile-file-menu__header">
+						<h3 class="mobile-file-menu__title">Выберите страницу</h3>
+						<button class="mobile-file-menu__close" @click="closeMobileMenu">
+							<Icon name="ph:x" size="24" />
+						</button>
+					</div>
+					<div class="mobile-file-menu__list">
+						<button
+							v-for="(file, index) in mobileMenuFiles"
+							:key="index"
+							class="mobile-file-menu__item"
+							@click="openMobileFile(file.url)"
+						>
+							<Icon name="ph:file-pdf-duotone" size="32" />
+							<span>{{ file.name }}</span>
+							<Icon name="ph:arrow-up-right" size="20" />
+						</button>
+					</div>
+				</div>
+			</div>
+		</Teleport>
+
 		<!-- Модальное окно для просмотра -->
 		<Teleport to="body">
 			<div
@@ -245,6 +276,10 @@ const selectedTitle = ref('')
 const currentFiles = ref<string[]>([])
 const currentFileIndex = ref(0)
 
+// Мобильное меню выбора файлов
+const isMobileMenuOpen = ref(false)
+const mobileMenuFiles = ref<{ name: string; url: string }[]>([])
+
 // Computed для текущего файла
 const currentFile = computed(() => {
 	return currentFiles.value[currentFileIndex.value] || ''
@@ -262,14 +297,13 @@ const isMobile = () => {
 
 const openDiploma = () => {
 	if (education.diplomaFiles && education.diplomaFiles.length > 0) {
-		// На мобильных открываем все файлы диплома
+		// На мобильных показываем меню выбора
 		if (isMobile()) {
-			// Открываем оба файла в новых вкладках с небольшой задержкой
-			education.diplomaFiles.forEach((file, index) => {
-				setTimeout(() => {
-					window.open(file, '_blank')
-				}, index * 300) // Задержка 300мс между открытиями
-			})
+			mobileMenuFiles.value = education.diplomaFiles.map((file, index) => ({
+				name: `Диплом - страница ${index + 1}`,
+				url: file,
+			}))
+			isMobileMenuOpen.value = true
 			return
 		}
 
@@ -279,6 +313,15 @@ const openDiploma = () => {
 		selectedTitle.value = `Диплом ${education.university}`
 		isModalOpen.value = true
 	}
+}
+
+const openMobileFile = (url: string) => {
+	window.open(url, '_blank')
+}
+
+const closeMobileMenu = () => {
+	isMobileMenuOpen.value = false
+	mobileMenuFiles.value = []
 }
 
 const openCertificate = (cert: (typeof certificates)[0]) => {
