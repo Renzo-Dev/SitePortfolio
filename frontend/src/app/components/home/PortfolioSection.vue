@@ -32,8 +32,7 @@ const projects = [
 			'Веб-платформа медицинской библиотеки с научными публикациями по неврологии',
 		technologies: ['HTML', 'CSS', 'JavaScript', 'Responsive Design'],
 		role: 'Frontend разработчик',
-		image:
-			'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&h=600&fit=crop',
+		image: '/images/kremlin.jpg',
 		link: 'https://www.kremlin-neurology.ru/index1.html',
 	},
 	{
