@@ -27,6 +27,16 @@ import ProjectCard from '~/components/portfolio/ProjectCard.vue'
 const projects = [
 	{
 		id: 1,
+		title: 'Kremlin Neurology',
+		description:
+			'Веб-платформа медицинской библиотеки с научными публикациями по неврологии',
+		technologies: ['HTML', 'CSS', 'JavaScript', 'Responsive Design'],
+		role: 'Frontend разработчик',
+		image: 'https://www.kremlin-neurology.ru/images/logo.png',
+		link: 'https://www.kremlin-neurology.ru/index1.html',
+	},
+	{
+		id: 2,
 		title: 'HouseSeeker',
 		description:
 			'Платформа для поиска и аренды недвижимости с расширенными фильтрами и системой бронирования',
@@ -35,7 +45,7 @@ const projects = [
 		image: '/images/HouseSeeker.jpg',
 	},
 	{
-		id: 2,
+		id: 3,
 		title: 'E-commerce платформа',
 		description:
 			'Современный интернет-магазин с корзиной, оплатой и личным кабинетом',
@@ -45,7 +55,7 @@ const projects = [
 			'https://images.unsplash.com/photo-1557821552-17105176677c?w=800&h=600&fit=crop',
 	},
 	{
-		id: 3,
+		id: 4,
 		title: 'CRM система',
 		description: 'Система управления клиентами с аналитикой и отчётами',
 		technologies: ['Nuxt', 'PostgreSQL', 'Docker'],
@@ -54,7 +64,7 @@ const projects = [
 			'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
 	},
 	{
-		id: 4,
+		id: 5,
 		title: 'Финтех приложение',
 		description: 'Мобильное приложение для управления финансами',
 		technologies: ['Vue', 'Node.js', 'MongoDB'],

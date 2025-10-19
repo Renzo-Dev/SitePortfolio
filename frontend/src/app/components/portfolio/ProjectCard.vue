@@ -1,5 +1,11 @@
 <template>
-	<article class="project-card">
+	<component
+		:is="project.link ? 'a' : 'article'"
+		:href="project.link"
+		:target="project.link ? '_blank' : undefined"
+		:rel="project.link ? 'noopener noreferrer' : undefined"
+		class="project-card"
+	>
 		<div class="project-card__image-wrapper">
 			<img
 				:src="project.image"
@@ -7,6 +13,10 @@
 				class="project-card__image project-img"
 				loading="lazy"
 			/>
+			<!-- Индикатор внешней ссылки -->
+			<div v-if="project.link" class="project-card__link-icon">
+				<Icon name="ph:arrow-up-right" size="20" />
+			</div>
 		</div>
 
 		<div class="project-card__content">
@@ -23,7 +33,7 @@
 				<strong>Роль:</strong> {{ project.role }}
 			</div>
 		</div>
-	</article>
+	</component>
 </template>
 
 <script setup lang="ts">
@@ -35,6 +45,7 @@ interface Project {
 	technologies: string[]
 	role: string
 	image: string
+	link?: string // Опциональная ссылка на проект
 }
 
 const props = defineProps<{
@@ -53,6 +64,9 @@ const props = defineProps<{
 	transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 	cursor: pointer;
 	will-change: transform;
+	display: block;
+	text-decoration: none;
+	color: inherit;
 
 	// Hover эффекты
 	&:hover {
@@ -84,6 +98,29 @@ const props = defineProps<{
 		object-fit: cover;
 		transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 		will-change: transform;
+	}
+
+	&__link-icon {
+		position: absolute;
+		top: $spacing-md;
+		right: $spacing-md;
+		width: 40px;
+		height: 40px;
+		background: rgba(255, 255, 255, 0.15);
+		backdrop-filter: blur(10px);
+		border-radius: $radius-md;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: $text-primary;
+		transition: all 0.3s ease;
+		opacity: 0.7;
+
+		.project-card:hover & {
+			background: rgba(255, 255, 255, 0.25);
+			transform: translateX(4px) translateY(-4px);
+			opacity: 1;
+		}
 	}
 
 	&__content {
