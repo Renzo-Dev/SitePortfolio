@@ -3,6 +3,7 @@ export const useNavigation = () => {
 	// Список навигационных ссылок
 	const navLinks = [
 		{ id: 'about', label: 'Обо мне', href: '#about' },
+		{ id: 'credentials', label: 'Образование', href: '#credentials' },
 		{ id: 'portfolio', label: 'Портфолио', href: '#portfolio' },
 		{ id: 'services', label: 'Услуги', href: '#services' },
 		{ id: 'contact', label: 'Контакты', href: '#contact' },

@@ -133,6 +133,7 @@ const scrollToContact = () => {
 const getLinkIcon = (id: string) => {
 	const icons: Record<string, string> = {
 		about: 'ph:user-circle-duotone',
+		credentials: 'ph:certificate-duotone',
 		portfolio: 'ph:briefcase-duotone',
 		services: 'ph:rocket-duotone',
 		contact: 'ph:envelope-duotone',

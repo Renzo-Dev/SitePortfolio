@@ -89,10 +89,7 @@
 									<Icon name="ph:calendar-blank" size="16" />
 									{{ cert.date }}
 								</span>
-								<span
-									v-if="cert.verifyLink"
-									class="certificate-card__verify"
-								>
+								<span v-if="cert.verifyLink" class="certificate-card__verify">
 									<Icon name="ph:link" size="16" />
 									Верификация
 								</span>
@@ -105,11 +102,7 @@
 
 		<!-- Модальное окно для просмотра -->
 		<Teleport to="body">
-			<div
-				v-if="isModalOpen"
-				class="credentials-modal"
-				@click="closeModal"
-			>
+			<div v-if="isModalOpen" class="credentials-modal" @click="closeModal">
 				<div class="credentials-modal__overlay"></div>
 				<div class="credentials-modal__content" @click.stop>
 					<button class="credentials-modal__close" @click="closeModal">
@@ -206,4 +199,3 @@ onMounted(() => {
 <style scoped lang="scss">
 @use '~/assets/styles/components/credentials-section';
 </style>
-
