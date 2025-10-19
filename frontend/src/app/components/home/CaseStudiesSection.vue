@@ -1,5 +1,5 @@
 <template>
-	<section class="cases section" id="cases">
+	<section id="cases" class="cases section">
 		<div class="container">
 			<h2 class="cases__title text-center">
 				<Icon name="ph:chart-line-duotone" size="32" />
@@ -87,8 +87,13 @@ const cases = [
 
 // Refs для метрик
 const metricRefs = ref<HTMLElement[][]>([])
+const animatedMetrics = ref<Set<string>>(new Set())
 
-const setMetricRef = (el: any, caseIndex: number, metricIndex: number) => {
+const setMetricRef = (
+	el: HTMLElement | null,
+	caseIndex: number,
+	metricIndex: number
+) => {
 	if (el) {
 		if (!metricRefs.value[caseIndex]) {
 			metricRefs.value[caseIndex] = []
@@ -97,124 +102,105 @@ const setMetricRef = (el: any, caseIndex: number, metricIndex: number) => {
 	}
 }
 
-// Count-up анимация
-// Без анимаций - показываем метрики сразу
+// Count-up анимация для метрик
+const animateMetric = (
+	element: HTMLElement,
+	start: number,
+	end: number,
+	suffix: string = '',
+	duration: number = 2000
+) => {
+	const startTime = performance.now()
+	const range = end - start
+
+	// Добавляем класс для анимации
+	element.classList.add('animating')
+
+	const updateValue = (currentTime: number) => {
+		const elapsed = currentTime - startTime
+		const progress = Math.min(elapsed / duration, 1)
+
+		// Easing function для плавности (easeOutExpo)
+		const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress)
+
+		const currentValue = Math.round(start + range * easeProgress)
+		element.textContent = `${currentValue}${suffix}`
+
+		if (progress < 1) {
+			requestAnimationFrame(updateValue)
+		} else {
+			// Убираем класс анимации и добавляем класс завершения
+			element.classList.remove('animating')
+			element.classList.add('animated')
+		}
+	}
+
+	requestAnimationFrame(updateValue)
+}
+
+// Intersection Observer для запуска анимации при появлении в viewport
+onMounted(() => {
+	if (typeof window === 'undefined') return
+
+	const observer = new IntersectionObserver(
+		(entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					const element = entry.target as HTMLElement
+					const key = element.dataset.metricKey
+
+					// Проверяем, не была ли уже анимирована эта метрика
+					if (key && !animatedMetrics.value.has(key)) {
+						animatedMetrics.value.add(key)
+
+						// Добавляем класс для CSS анимации появления
+						element.classList.add('animated')
+
+						// Запускаем count-up анимацию
+						const start = parseInt(element.dataset.start || '0')
+						const end = parseInt(element.dataset.end || '0')
+						const suffix = element.dataset.suffix || ''
+
+						setTimeout(() => {
+							animateMetric(element, start, end, suffix)
+						}, 200) // Небольшая задержка для лучшего эффекта
+					}
+				}
+			})
+		},
+		{
+			threshold: 0.5, // Запускать когда 50% элемента видно
+			rootMargin: '0px',
+		}
+	)
+
+	// Наблюдаем за всеми метриками
+	nextTick(() => {
+		metricRefs.value.forEach((caseMetrics, caseIndex) => {
+			caseMetrics?.forEach((metricEl, metricIndex) => {
+				if (metricEl) {
+					// Добавляем data-атрибуты для анимации
+					const caseItem = cases[caseIndex]
+					const metric = caseItem?.metrics?.[metricIndex]
+					if (metric) {
+						metricEl.dataset.metricKey = `${caseIndex}-${metricIndex}`
+						metricEl.dataset.start = metric.start.toString()
+						metricEl.dataset.end = metric.end.toString()
+						metricEl.dataset.suffix = metric.suffix || ''
+					}
+					observer.observe(metricEl)
+				}
+			})
+		})
+	})
+
+	// Cleanup
+	onUnmounted(() => {
+		observer.disconnect()
+	})
+})
 </script>
 
 <style scoped lang="scss">
-@use '~/assets/styles/variables' as *;
-
-.cases {
-	&__title {
-		font-size: $text-h2;
-		margin-bottom: $spacing-md;
-	}
-
-	&__subtitle {
-		margin-bottom: $spacing-3xl;
-		font-size: $text-body-lg;
-	}
-
-	&__grid {
-		display: flex;
-		flex-direction: column;
-		gap: $spacing-xl;
-		margin-top: $spacing-2xl;
-	}
-}
-
-.case-card {
-	background: $bg-card;
-	border: 1px solid $border;
-	border-radius: $radius-lg;
-	padding: $spacing-xl;
-	position: relative;
-
-	&__number {
-		position: absolute;
-		top: $spacing-lg;
-		right: $spacing-lg;
-		font-size: 48px;
-		font-weight: 800;
-		color: rgba(255, 255, 255, 0.05);
-		line-height: 1;
-	}
-
-	&__title {
-		font-size: $text-h3;
-		margin-bottom: $spacing-lg;
-		max-width: 80%;
-
-		@include mobile {
-			max-width: 100%;
-		}
-	}
-
-	&__content {
-		display: flex;
-		flex-direction: column;
-		gap: $spacing-md;
-	}
-
-	&__row {
-		display: flex;
-		flex-direction: column;
-		gap: $spacing-xs;
-
-		strong {
-			color: $accent;
-			font-size: $text-body-sm;
-			text-transform: uppercase;
-			letter-spacing: 1px;
-		}
-
-		p {
-			color: $text-secondary;
-		}
-
-		&--highlight {
-			margin-top: $spacing-sm;
-			padding: $spacing-md;
-			background: rgba(255, 255, 255, 0.03);
-			border-radius: $radius-sm;
-			border-left: 3px solid $accent;
-
-			p {
-				color: $text-primary;
-				font-weight: 500;
-			}
-		}
-	}
-
-	&__metrics {
-		display: flex;
-		gap: $spacing-xl;
-		margin-top: $spacing-lg;
-		padding-top: $spacing-lg;
-		border-top: 1px solid $border;
-
-		@include mobile {
-			flex-direction: column;
-			gap: $spacing-md;
-		}
-	}
-}
-
-.metric {
-	display: flex;
-	flex-direction: column;
-	gap: $spacing-xs;
-
-	&__value {
-		font-size: 36px;
-		font-weight: 700;
-		color: $success;
-		font-variant-numeric: tabular-nums;
-	}
-
-	&__label {
-		font-size: $text-body-sm;
-		color: $text-muted;
-	}
-}
+@use '~/assets/styles/components/case-studies-section';
 </style>
