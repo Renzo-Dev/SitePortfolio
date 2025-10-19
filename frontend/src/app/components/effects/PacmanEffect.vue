@@ -11,10 +11,10 @@
 		>
 			<!-- Тело пакмана -->
 			<div class="pacman__body">
-				<div class="pacman__mouth"></div>
+				<div class="pacman__mouth" />
 			</div>
 			<!-- Глаз -->
-			<div class="pacman__eye"></div>
+			<div class="pacman__eye" />
 		</div>
 	</div>
 </template>
@@ -26,7 +26,7 @@ const pacmanRef = ref<HTMLElement | null>(null)
 const direction = ref<Direction>('right')
 const positionX = ref(0)
 const positionY = ref(0)
-const speed = ref(2) // Скорость движения (пикселей за кадр)
+const speed = ref(4) // Скорость движения (пикселей за кадр)
 const windowWidth = ref(0)
 const windowHeight = ref(0)
 const viewportTop = ref(0)
@@ -49,9 +49,9 @@ onMounted(() => {
 	updateWindowSize()
 	window.addEventListener('resize', updateWindowSize)
 
-	// Начальная позиция (случайная по Y в пределах viewport)
-	positionX.value = -PACMAN_SIZE
-	positionY.value = Math.random() * (window.innerHeight - PACMAN_SIZE)
+	// Начальная позиция (начинаем с левого края, в центре экрана)
+	positionX.value = 0
+	positionY.value = window.innerHeight / 2 - PACMAN_SIZE / 2
 
 	// Обработчик скролла для отслеживания viewport
 	window.addEventListener('scroll', updateViewport, { passive: true })
@@ -136,8 +136,8 @@ const startAnimation = () => {
 	position: fixed;
 	inset: 0;
 	pointer-events: none;
-	z-index: $z-base;
-	overflow: hidden;
+	z-index: 50;
+	overflow: visible;
 }
 
 .pacman {
@@ -165,6 +165,7 @@ const startAnimation = () => {
 		background: $text-primary;
 		border-radius: 50%;
 		overflow: hidden;
+		box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
 
 		// Рот (треугольный вырез)
 		&::before {
