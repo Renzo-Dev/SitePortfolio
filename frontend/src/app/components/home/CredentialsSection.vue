@@ -32,24 +32,26 @@
 					<div class="education-card__diploma">
 						<div class="diploma-preview">
 							<div
-								v-if="education.diploma"
+								v-if="education.diplomaFiles?.length"
 								class="diploma-preview__pdf"
 								@click="openDiploma"
 							>
 								<Icon name="ph:file-pdf-duotone" size="64" />
-								<span class="diploma-preview__pdf-label">Диплом (PDF)</span>
+								<span class="diploma-preview__pdf-label">
+									Диплом ({{ education.diplomaFiles.length }} стр.)
+								</span>
 							</div>
 							<div v-else class="diploma-preview__placeholder">
 								<Icon name="ph:file-pdf-duotone" size="48" />
 								<span>Диплом</span>
 							</div>
 							<button
-								v-if="education.diploma"
+								v-if="education.diplomaFiles?.length"
 								class="diploma-preview__button"
 								@click="openDiploma"
 							>
 								<Icon name="ph:eye" size="20" />
-								Открыть PDF
+								Посмотреть
 							</button>
 						</div>
 					</div>
@@ -109,9 +111,41 @@
 					<button class="credentials-modal__close" @click="closeModal">
 						<Icon name="ph:x" size="24" />
 					</button>
+
+					<!-- Навигация для нескольких файлов -->
+					<div
+						v-if="currentFiles.length > 1"
+						class="credentials-modal__nav"
+					>
+						<button
+							class="credentials-modal__nav-btn credentials-modal__nav-btn--prev"
+							:disabled="currentFileIndex === 0"
+							@click="prevFile"
+						>
+							<Icon name="ph:caret-left" size="32" />
+						</button>
+						<div class="credentials-modal__counter">
+							{{ currentFileIndex + 1 }} / {{ currentFiles.length }}
+						</div>
+						<button
+							class="credentials-modal__nav-btn credentials-modal__nav-btn--next"
+							:disabled="currentFileIndex === currentFiles.length - 1"
+							@click="nextFile"
+						>
+							<Icon name="ph:caret-right" size="32" />
+						</button>
+					</div>
+
+					<!-- PDF или изображение -->
+					<iframe
+						v-if="isPdfFile"
+						:src="currentFile"
+						class="credentials-modal__pdf"
+						frameborder="0"
+					/>
 					<img
-						v-if="selectedImage"
-						:src="selectedImage"
+						v-else-if="currentFile"
+						:src="currentFile"
 						:alt="selectedTitle"
 						class="credentials-modal__image"
 					>
@@ -128,8 +162,10 @@ const education = {
 	university: 'Название университета', // Замени на свой ВУЗ
 	specialty: 'Специальность / Направление', // Замени
 	years: '2015 - 2019', // Замени
-	diploma: '/images/credentials/Diplom1.pdf', // Путь к PDF диплома
-	diplomaPreview: '', // Опционально: путь к превью JPG
+	diplomaFiles: [
+		'/images/credentials/Diplom1.pdf', // Диплом (лицевая сторона)
+		'/images/credentials/Diplom2.pdf', // Диплом (обратная сторона)
+	],
 }
 
 // Данные сертификатов
@@ -159,26 +195,33 @@ const certificates = [
 
 // Модальное окно
 const isModalOpen = ref(false)
-const selectedImage = ref('')
 const selectedTitle = ref('')
+const currentFiles = ref<string[]>([])
+const currentFileIndex = ref(0)
+
+// Computed для текущего файла
+const currentFile = computed(() => {
+	return currentFiles.value[currentFileIndex.value] || ''
+})
+
+// Проверка, является ли файл PDF
+const isPdfFile = computed(() => {
+	return currentFile.value.endsWith('.pdf')
+})
 
 const openDiploma = () => {
-	if (education.diploma) {
-		// Если это PDF - открываем в новой вкладке
-		if (education.diploma.endsWith('.pdf')) {
-			window.open(education.diploma, '_blank')
-		} else {
-			// Если это изображение - открываем в модалке
-			selectedImage.value = education.diploma
-			selectedTitle.value = `Диплом ${education.university}`
-			isModalOpen.value = true
-		}
+	if (education.diplomaFiles && education.diplomaFiles.length > 0) {
+		currentFiles.value = education.diplomaFiles
+		currentFileIndex.value = 0
+		selectedTitle.value = `Диплом ${education.university}`
+		isModalOpen.value = true
 	}
 }
 
 const openCertificate = (cert: (typeof certificates)[0]) => {
 	if (cert.image) {
-		selectedImage.value = cert.image
+		currentFiles.value = [cert.image]
+		currentFileIndex.value = 0
 		selectedTitle.value = cert.title
 		isModalOpen.value = true
 	} else if (cert.verifyLink) {
@@ -188,18 +231,40 @@ const openCertificate = (cert: (typeof certificates)[0]) => {
 
 const closeModal = () => {
 	isModalOpen.value = false
-	selectedImage.value = ''
+	currentFiles.value = []
+	currentFileIndex.value = 0
 	selectedTitle.value = ''
 }
 
-// Закрытие модалки по Escape
-onMounted(() => {
-	const handleEscape = (e: KeyboardEvent) => {
-		if (e.key === 'Escape') closeModal()
+// Навигация между файлами
+const nextFile = () => {
+	if (currentFileIndex.value < currentFiles.value.length - 1) {
+		currentFileIndex.value++
 	}
-	window.addEventListener('keydown', handleEscape)
+}
+
+const prevFile = () => {
+	if (currentFileIndex.value > 0) {
+		currentFileIndex.value--
+	}
+}
+
+// Закрытие модалки по Escape и навигация стрелками
+onMounted(() => {
+	const handleKeydown = (e: KeyboardEvent) => {
+		if (!isModalOpen.value) return
+
+		if (e.key === 'Escape') {
+			closeModal()
+		} else if (e.key === 'ArrowRight') {
+			nextFile()
+		} else if (e.key === 'ArrowLeft') {
+			prevFile()
+		}
+	}
+	window.addEventListener('keydown', handleKeydown)
 	onUnmounted(() => {
-		window.removeEventListener('keydown', handleEscape)
+		window.removeEventListener('keydown', handleKeydown)
 	})
 })
 </script>
