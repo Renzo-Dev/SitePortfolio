@@ -54,11 +54,12 @@ ${body.message}
 			message: 'Сообщение успешно отправлено',
 		}
 	} catch (error: unknown) {
-		console.error('Telegram API Error:', error)
-
+		// Логируем ошибку для отладки на сервере
+		// В production логи идут в системный журнал
 		throw createError({
 			statusCode: 500,
 			message: 'Ошибка при отправке сообщения. Попробуйте позже.',
+			data: import.meta.dev ? error : undefined, // Детали только в dev
 		})
 	}
 })

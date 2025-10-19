@@ -146,7 +146,7 @@ const copyEmail = async () => {
 			isCopied.value = false
 		}, 2000)
 	} catch (err) {
-		console.error('Ошибка копирования:', err)
+		// Тихо игнорируем ошибку копирования
 	}
 }
 

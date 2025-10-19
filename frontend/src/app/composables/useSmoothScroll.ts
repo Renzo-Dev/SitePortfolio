@@ -28,8 +28,6 @@ export const useSmoothScroll = () => {
 		}
 
 		rafId = requestAnimationFrame(raf)
-
-		console.log('✨ Lenis smooth scroll initialized for all devices')
 	}
 
 	// Уничтожение экземпляра
@@ -42,7 +40,6 @@ export const useSmoothScroll = () => {
 		if (lenis) {
 			lenis.destroy()
 			lenis = null
-			console.log('🗑️ Lenis smooth scroll destroyed')
 		}
 	}
 
@@ -67,22 +64,18 @@ export const useSmoothScroll = () => {
 
 		if (element && lenis) {
 			// Используем Lenis для плавного скролла
-			console.log('🎯 Lenis scroll to:', id, 'offset:', offset)
 			lenis.scrollTo(element, {
 				offset,
 				duration: 1.5,
 			})
 		} else if (element && !lenis) {
 			// Fallback если Lenis не инициализирован
-			console.log('📱 Native scroll to:', id, 'offset:', offset)
 			const elementPosition =
 				element.getBoundingClientRect().top + window.scrollY
 			window.scrollTo({
 				top: elementPosition + offset,
 				behavior: 'smooth',
 			})
-		} else {
-			console.warn('⚠️ Element not found:', id)
 		}
 	}
 

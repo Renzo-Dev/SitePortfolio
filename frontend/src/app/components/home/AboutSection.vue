@@ -115,7 +115,6 @@ const handleImageHover = (event: MouseEvent) => {
 
 	// Отключаем 3D эффект на мобильных устройствах
 	if (isMobile()) {
-		console.log('📱 Mobile detected - 3D effect disabled')
 		return
 	}
 
@@ -132,11 +131,6 @@ const handleImageHover = (event: MouseEvent) => {
 	// Применяем transform к внутреннему контейнеру (не к wrapper с анимацией)
 	imageContainer.value.style.transition = 'transform 0.1s ease-out'
 	imageContainer.value.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`
-
-	console.log('🎯 3D effect active:', {
-		rotateX: rotateX.toFixed(1),
-		rotateY: rotateY.toFixed(1),
-	})
 }
 
 const resetImageHover = () => {
@@ -144,7 +138,6 @@ const resetImageHover = () => {
 
 	// Отключаем сброс 3D эффекта на мобильных устройствах
 	if (isMobile()) {
-		console.log('📱 Mobile detected - 3D reset disabled')
 		return
 	}
 
@@ -153,8 +146,6 @@ const resetImageHover = () => {
 		'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
 	imageContainer.value.style.transform =
 		'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
-
-	console.log('🔄 3D effect reset - фото вернулось в исходное положение')
 }
 
 // Scroll reveal анимации
@@ -169,14 +160,12 @@ onMounted(() => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
 				entry.target.classList.add('is-visible')
-				console.log('✓ Element revealed:', entry.target.className)
 
 				// Для image wrapper - сбрасываем transform после анимации для работы 3D эффекта
 				if (entry.target === imageWrapper.value) {
 					setTimeout(() => {
 						if (imageWrapper.value) {
 							imageWrapper.value.style.transform = 'none'
-							console.log('✓ 3D effect enabled - transform reset')
 						}
 					}, 800) // Длительность анимации fadeInLeft
 				}
@@ -187,7 +176,6 @@ onMounted(() => {
 	// Наблюдаем за элементами
 	if (imageWrapper.value) {
 		observer.observe(imageWrapper.value)
-		console.log('✓ Observing image wrapper')
 	}
 	if (titleRef.value) observer.observe(titleRef.value)
 	if (textRef.value) observer.observe(textRef.value)
