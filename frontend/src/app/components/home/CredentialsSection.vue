@@ -31,13 +31,14 @@
 					</div>
 					<div class="education-card__diploma">
 						<div class="diploma-preview">
-							<img
+							<div
 								v-if="education.diploma"
-								:src="education.diploma"
-								:alt="`Диплом ${education.university}`"
-								class="diploma-preview__image"
+								class="diploma-preview__pdf"
 								@click="openDiploma"
-							/>
+							>
+								<Icon name="ph:file-pdf-duotone" size="64" />
+								<span class="diploma-preview__pdf-label">Диплом (PDF)</span>
+							</div>
 							<div v-else class="diploma-preview__placeholder">
 								<Icon name="ph:file-pdf-duotone" size="48" />
 								<span>Диплом</span>
@@ -48,7 +49,7 @@
 								@click="openDiploma"
 							>
 								<Icon name="ph:eye" size="20" />
-								Посмотреть
+								Открыть PDF
 							</button>
 						</div>
 					</div>
@@ -74,7 +75,7 @@
 								:src="cert.image"
 								:alt="cert.title"
 								class="certificate-card__image"
-							/>
+							>
 							<div v-else class="certificate-card__placeholder">
 								<Icon name="ph:certificate" size="48" />
 							</div>
@@ -103,7 +104,7 @@
 		<!-- Модальное окно для просмотра -->
 		<Teleport to="body">
 			<div v-if="isModalOpen" class="credentials-modal" @click="closeModal">
-				<div class="credentials-modal__overlay"></div>
+				<div class="credentials-modal__overlay" />
 				<div class="credentials-modal__content" @click.stop>
 					<button class="credentials-modal__close" @click="closeModal">
 						<Icon name="ph:x" size="24" />
@@ -113,7 +114,7 @@
 						:src="selectedImage"
 						:alt="selectedTitle"
 						class="credentials-modal__image"
-					/>
+					>
 				</div>
 			</div>
 		</Teleport>
@@ -127,7 +128,8 @@ const education = {
 	university: 'Название университета', // Замени на свой ВУЗ
 	specialty: 'Специальность / Направление', // Замени
 	years: '2015 - 2019', // Замени
-	diploma: '', // Путь к фото диплома (добавишь позже)
+	diploma: '/images/credentials/Diplom1.pdf', // Путь к PDF диплома
+	diplomaPreview: '', // Опционально: путь к превью JPG
 }
 
 // Данные сертификатов
@@ -162,9 +164,15 @@ const selectedTitle = ref('')
 
 const openDiploma = () => {
 	if (education.diploma) {
-		selectedImage.value = education.diploma
-		selectedTitle.value = `Диплом ${education.university}`
-		isModalOpen.value = true
+		// Если это PDF - открываем в новой вкладке
+		if (education.diploma.endsWith('.pdf')) {
+			window.open(education.diploma, '_blank')
+		} else {
+			// Если это изображение - открываем в модалке
+			selectedImage.value = education.diploma
+			selectedTitle.value = `Диплом ${education.university}`
+			isModalOpen.value = true
+		}
 	}
 }
 
