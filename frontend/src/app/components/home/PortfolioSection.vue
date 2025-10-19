@@ -9,20 +9,93 @@
 				Избранные проекты, над которыми я работал
 			</p>
 
-			<!-- Grid проектов -->
-			<div class="portfolio__grid">
-				<ProjectCard
+			<!-- Компактный список проектов -->
+			<div class="portfolio__list">
+				<div
 					v-for="project in projects"
 					:key="project.id"
-					:project="project"
-				/>
+					class="portfolio__item"
+					:class="{ 'portfolio__item--active': activeProject === project.id }"
+				>
+					<!-- Заголовок проекта (всегда виден) -->
+					<button
+						class="portfolio__header"
+						:class="{ 'portfolio__header--external': project.link }"
+						@click="toggleProject(project.id)"
+					>
+						<div class="portfolio__header-left">
+							<Icon
+								name="ph:folder-duotone"
+								size="24"
+								class="portfolio__icon"
+							/>
+							<h3 class="portfolio__item-title">{{ project.title }}</h3>
+						</div>
+						<div class="portfolio__header-right">
+							<a
+								v-if="project.link"
+								:href="project.link"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="portfolio__external-link"
+								@click.stop
+							>
+								<Icon name="ph:arrow-square-out-duotone" size="20" />
+							</a>
+							<Icon
+								:name="
+									activeProject === project.id
+										? 'ph:caret-up-bold'
+										: 'ph:caret-down-bold'
+								"
+								size="20"
+								class="portfolio__chevron"
+							/>
+						</div>
+					</button>
+
+					<!-- Содержимое проекта (раскрывается) -->
+					<transition name="accordion">
+						<div v-show="activeProject === project.id" class="portfolio__content">
+							<!-- Изображение проекта -->
+							<div class="portfolio__image-wrapper">
+								<img
+									:src="project.image"
+									:alt="project.title"
+									class="portfolio__image"
+									loading="lazy"
+								>
+							</div>
+
+							<!-- Описание -->
+							<p class="portfolio__description">{{ project.description }}</p>
+
+							<!-- Роль -->
+							<div class="portfolio__meta">
+								<Icon name="ph:user-duotone" size="18" />
+								<span>{{ project.role }}</span>
+							</div>
+
+							<!-- Технологии -->
+							<div class="portfolio__technologies">
+								<Badge
+									v-for="tech in project.technologies"
+									:key="tech"
+									variant="secondary"
+								>
+									{{ tech }}
+								</Badge>
+							</div>
+						</div>
+					</transition>
+				</div>
 			</div>
 		</div>
 	</section>
 </template>
 
 <script setup lang="ts">
-import ProjectCard from '~/components/portfolio/ProjectCard.vue'
+import Badge from '~/components/ui/Badge.vue'
 
 const projects = [
 	{
@@ -74,7 +147,17 @@ const projects = [
 	},
 ]
 
-// Без анимаций - сразу показываем карточки
+// Активный проект (по умолчанию первый)
+const activeProject = ref<number | null>(1)
+
+// Переключение проекта
+const toggleProject = (projectId: number) => {
+	if (activeProject.value === projectId) {
+		activeProject.value = null // Закрываем, если уже открыт
+	} else {
+		activeProject.value = projectId // Открываем новый
+	}
+}
 </script>
 
 <style scoped lang="scss">

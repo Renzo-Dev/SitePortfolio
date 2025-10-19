@@ -1,7 +1,7 @@
 @use '../variables' as *;
 
 // ============================================
-// Portfolio Section Styles - Modern UX 2025
+// Portfolio Section - Accordion Style
 // ============================================
 
 .portfolio {
@@ -23,7 +23,7 @@
 	}
 
 	&__subtitle {
-		margin-bottom: $spacing-3xl;
+		margin-bottom: $spacing-2xl;
 		font-size: clamp(16px, 2.5vw, $text-body-lg);
 		line-height: 1.6;
 		max-width: 600px;
@@ -31,46 +31,216 @@
 		margin-right: auto;
 	}
 
-	&__grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-		gap: $spacing-2xl;
-		margin-top: $spacing-2xl;
+	// Список проектов
+	&__list {
+		max-width: 900px;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-md;
+	}
+
+	// Элемент проекта
+	&__item {
+		background: rgba($surface-light, 0.03);
+		border: 1px solid $border;
+		border-radius: $radius-md;
+		transition: all $transition-base;
+		overflow: hidden;
+
+		&--active {
+			background: rgba($surface-light, 0.06);
+			border-color: rgba($accent, 0.3);
+			box-shadow: 0 4px 20px rgba($accent, 0.1);
+		}
+
+		&:hover {
+			border-color: rgba($text-primary, 0.2);
+			transform: translateY(-2px);
+		}
+	}
+
+	// Заголовок проекта (кликабельный)
+	&__header {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: $spacing-lg $spacing-xl;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		transition: all $transition-base;
+		color: $text-primary;
+		text-align: left;
+
+		&:hover {
+			background: rgba($surface-light, 0.05);
+		}
+
+		&-left {
+			display: flex;
+			align-items: center;
+			gap: $spacing-md;
+			flex: 1;
+		}
+
+		&-right {
+			display: flex;
+			align-items: center;
+			gap: $spacing-sm;
+		}
+	}
+
+	// Иконка проекта
+	&__icon {
+		color: $accent;
+		flex-shrink: 0;
+		transition: transform $transition-base;
+
+		.portfolio__item--active & {
+			transform: scale(1.1);
+		}
+	}
+
+	// Название проекта
+	&__item-title {
+		font-size: clamp(18px, 2vw, 22px);
+		font-weight: 600;
+		margin: 0;
+		color: $text-primary;
+		transition: color $transition-base;
+
+		.portfolio__header:hover & {
+			color: $accent;
+		}
+	}
+
+	// Внешняя ссылка
+	&__external-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: $spacing-xs;
+		color: $text-secondary;
+		transition: all $transition-base;
+		border-radius: $radius-sm;
+
+		&:hover {
+			color: $accent;
+			background: rgba($accent, 0.1);
+			transform: translateY(-2px);
+		}
+	}
+
+	// Шеврон (стрелка)
+	&__chevron {
+		color: $text-secondary;
+		transition: transform $transition-base;
+
+		.portfolio__item--active & {
+			transform: rotate(180deg);
+		}
+	}
+
+	// Содержимое проекта (раскрывающееся)
+	&__content {
+		padding: 0 $spacing-xl $spacing-xl $spacing-xl;
+		border-top: 1px solid rgba($border, 0.5);
+	}
+
+	// Обертка изображения
+	&__image-wrapper {
+		width: 100%;
+		height: 300px;
+		border-radius: $radius-md;
+		overflow: hidden;
+		margin-bottom: $spacing-lg;
+		background: $bg-secondary;
+		position: relative;
+
+		&::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(
+				180deg,
+				transparent 0%,
+				rgba($bg-primary, 0.3) 100%
+			);
+		}
+	}
+
+	// Изображение проекта
+	&__image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+		&:hover {
+			transform: scale(1.05);
+		}
+	}
+
+	// Описание проекта
+	&__description {
+		font-size: $text-body;
+		line-height: 1.7;
+		color: $text-secondary;
+		margin-bottom: $spacing-lg;
+	}
+
+	// Мета информация (роль)
+	&__meta {
+		display: flex;
+		align-items: center;
+		gap: $spacing-xs;
+		font-size: $text-body-sm;
+		color: $text-muted;
+		margin-bottom: $spacing-md;
+
+		:deep(.icon) {
+			color: $accent;
+		}
+	}
+
+	// Технологии
+	&__technologies {
+		display: flex;
+		flex-wrap: wrap;
+		gap: $spacing-sm;
 	}
 }
 
 // ============================================
-// Адаптивность - Modern UX 2025
+// Анимация аккордеона
 // ============================================
 
-// Large Tablet / iPad Pro (до 1200px)
-@media (max-width: 1200px) {
-	.portfolio {
-		&__title {
-			font-size: clamp(28px, 5vw, 40px);
-			margin-bottom: $spacing-md;
-		}
-
-		&__subtitle {
-			font-size: clamp(15px, 2.5vw, 18px);
-			margin-bottom: $spacing-2xl;
-			max-width: 550px;
-		}
-
-		&__grid {
-			grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-			gap: $spacing-xl;
-			margin-top: $spacing-xl;
-		}
-	}
+.accordion-enter-active,
+.accordion-leave-active {
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	max-height: 1000px;
+	opacity: 1;
 }
+
+.accordion-enter-from,
+.accordion-leave-to {
+	max-height: 0;
+	opacity: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+// ============================================
+// Адаптивность
+// ============================================
 
 // Tablet (до 1024px)
 @media (max-width: 1024px) {
 	.portfolio {
 		&__title {
-			font-size: clamp(26px, 5vw, 36px);
-			margin-bottom: $spacing-sm;
+			font-size: clamp(28px, 5vw, 36px);
 
 			:deep(.icon) {
 				width: 28px;
@@ -81,14 +251,27 @@
 		&__subtitle {
 			font-size: clamp(15px, 2.5vw, 17px);
 			margin-bottom: $spacing-xl;
-			max-width: 500px;
 			padding: 0 $spacing-md;
 		}
 
-		&__grid {
-			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-			gap: $spacing-lg;
-			margin-top: $spacing-lg;
+		&__list {
+			gap: $spacing-sm;
+		}
+
+		&__header {
+			padding: $spacing-md $spacing-lg;
+		}
+
+		&__item-title {
+			font-size: clamp(16px, 2vw, 20px);
+		}
+
+		&__content {
+			padding: 0 $spacing-lg $spacing-lg $spacing-lg;
+		}
+
+		&__image-wrapper {
+			height: 250px;
 		}
 	}
 }
@@ -98,30 +281,78 @@
 	.portfolio {
 		&__title {
 			font-size: clamp(24px, 6vw, 32px);
-			margin-bottom: $spacing-sm;
-			padding: 0 $spacing-md;
 
 			:deep(.icon) {
 				width: 26px;
 				height: 26px;
-				display: inline-block;
-				vertical-align: middle;
 			}
 		}
 
 		&__subtitle {
-			font-size: clamp(14px, 3.5vw, 16px);
-			margin-bottom: $spacing-xl;
-			max-width: 100%;
-			padding: 0 $spacing-md;
-			line-height: 1.7;
+			font-size: clamp(14px, 3vw, 16px);
+			margin-bottom: $spacing-lg;
 		}
 
-		&__grid {
-			grid-template-columns: 1fr;
-			gap: $spacing-lg;
-			margin-top: $spacing-lg;
-			padding: 0 $spacing-md;
+		&__list {
+			gap: $spacing-sm;
+		}
+
+		&__header {
+			padding: $spacing-md;
+
+			&-left {
+				gap: $spacing-sm;
+			}
+
+			&-right {
+				gap: $spacing-xs;
+			}
+		}
+
+		&__icon {
+			width: 20px;
+			height: 20px;
+		}
+
+		&__item-title {
+			font-size: clamp(15px, 3vw, 18px);
+		}
+
+		&__external-link {
+			padding: $spacing-xs;
+
+			:deep(.icon) {
+				width: 18px;
+				height: 18px;
+			}
+		}
+
+		&__chevron {
+			width: 18px;
+			height: 18px;
+		}
+
+		&__content {
+			padding: 0 $spacing-md $spacing-md $spacing-md;
+		}
+
+		&__image-wrapper {
+			height: 200px;
+			margin-bottom: $spacing-md;
+		}
+
+		&__description {
+			font-size: $text-body-sm;
+			margin-bottom: $spacing-md;
+		}
+
+		&__meta {
+			font-size: $text-caption;
+			margin-bottom: $spacing-sm;
+		}
+
+		&__technologies {
+			gap: $spacing-xs;
 		}
 	}
 }
@@ -130,9 +361,7 @@
 @media (max-width: 480px) {
 	.portfolio {
 		&__title {
-			font-size: clamp(22px, 6vw, 28px);
-			margin-bottom: $spacing-xs;
-			padding: 0 $spacing-sm;
+			font-size: clamp(22px, 7vw, 28px);
 
 			:deep(.icon) {
 				width: 24px;
@@ -141,124 +370,31 @@
 		}
 
 		&__subtitle {
-			font-size: clamp(13px, 3.8vw, 15px);
-			margin-bottom: $spacing-lg;
-			padding: 0 $spacing-sm;
-			line-height: 1.65;
-		}
-
-		&__grid {
-			grid-template-columns: 1fr;
-			gap: $spacing-md;
-			margin-top: $spacing-md;
-			padding: 0 $spacing-sm;
-		}
-	}
-}
-
-// Extra Small Mobile (до 375px) - iPhone SE
-@media (max-width: 375px) {
-	.portfolio {
-		&__title {
-			font-size: 20px;
-			margin-bottom: 10px;
-			padding: 0 $spacing-xs;
-
-			:deep(.icon) {
-				width: 22px;
-				height: 22px;
-			}
-		}
-
-		&__subtitle {
-			font-size: 13px;
+			font-size: 14px;
 			margin-bottom: $spacing-md;
-			padding: 0 $spacing-xs;
+		}
+
+		&__header {
+			padding: $spacing-sm $spacing-md;
+		}
+
+		&__item-title {
+			font-size: 16px;
+			line-height: 1.4;
+		}
+
+		&__content {
+			padding: 0 $spacing-sm $spacing-sm $spacing-sm;
+		}
+
+		&__image-wrapper {
+			height: 180px;
+			border-radius: $radius-sm;
+		}
+
+		&__description {
+			font-size: 14px;
 			line-height: 1.6;
-		}
-
-		&__grid {
-			grid-template-columns: 1fr;
-			gap: $spacing-sm;
-			margin-top: $spacing-sm;
-			padding: 0 $spacing-xs;
-		}
-	}
-}
-
-// Large Desktop (от 1440px) - 2K
-@media (min-width: 1440px) {
-	.portfolio {
-		&__title {
-			font-size: clamp(40px, 4vw, 52px);
-			margin-bottom: $spacing-lg;
-
-			:deep(.icon) {
-				width: 36px;
-				height: 36px;
-			}
-		}
-
-		&__subtitle {
-			font-size: clamp(18px, 1.5vw, 22px);
-			margin-bottom: $spacing-4xl;
-			max-width: 700px;
-			line-height: 1.7;
-		}
-
-		&__grid {
-			grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-			gap: $spacing-3xl;
-			margin-top: $spacing-3xl;
-		}
-	}
-}
-
-// Ultra Wide / 4K (от 1920px)
-@media (min-width: 1920px) {
-	.portfolio {
-		&__title {
-			font-size: 56px;
-			margin-bottom: $spacing-xl;
-
-			:deep(.icon) {
-				width: 40px;
-				height: 40px;
-			}
-		}
-
-		&__subtitle {
-			font-size: 24px;
-			margin-bottom: 80px;
-			max-width: 800px;
-			line-height: 1.75;
-		}
-
-		&__grid {
-			grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-			gap: 48px;
-			margin-top: 64px;
-		}
-	}
-}
-
-// ============================================
-// Accessibility
-// ============================================
-
-@media (prefers-reduced-motion: reduce) {
-	.portfolio {
-		&__title,
-		&__subtitle {
-			transition: none !important;
-		}
-
-		&__title :deep(.icon) {
-			transition: none !important;
-
-			&:hover {
-				transform: none !important;
-			}
 		}
 	}
 }
