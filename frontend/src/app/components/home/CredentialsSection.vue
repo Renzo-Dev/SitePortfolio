@@ -113,10 +113,7 @@
 					</button>
 
 					<!-- Навигация для нескольких файлов -->
-					<div
-						v-if="currentFiles.length > 1"
-						class="credentials-modal__nav"
-					>
+					<div v-if="currentFiles.length > 1" class="credentials-modal__nav">
 						<button
 							class="credentials-modal__nav-btn credentials-modal__nav-btn--prev"
 							:disabled="currentFileIndex === 0"
@@ -158,10 +155,10 @@
 <script setup lang="ts">
 // Данные образования
 const education = {
-	degree: 'Бакалавр / Магистр', // Замени на свою степень
-	university: 'Название университета', // Замени на свой ВУЗ
-	specialty: 'Специальность / Направление', // Замени
-	years: '2015 - 2019', // Замени
+	degree: 'Software Development',
+	university: 'STEP Computer Academy',
+	specialty: 'Разработка программного обеспечения',
+	years: '2020 - 2024',
 	diplomaFiles: [
 		'/images/credentials/Diplom1.pdf', // Диплом (лицевая сторона)
 		'/images/credentials/Diplom2.pdf', // Диплом (обратная сторона)
