@@ -16,33 +16,34 @@
 						v-model="form.name"
 						label="Ваше имя"
 						placeholder="Как к вам обращаться?"
-						required
+						:error="validationErrors.name"
 					/>
 					<Input
 						v-model="form.email"
 						type="email"
 						label="Email"
 						placeholder="your@email.com"
-						required
+						:error="validationErrors.email"
 					/>
 					<Input
 						v-model="form.phone"
 						type="tel"
 						label="Телефон"
 						placeholder="+7 (999) 123-45-67"
+						:error="validationErrors.phone"
 					/>
 					<Input
 						v-model="form.telegram"
 						label="Telegram"
 						placeholder="@username или ссылка"
+						:error="validationErrors.telegram"
 					/>
 					<Input
 						v-model="form.message"
 						type="textarea"
-						label="Сообщение"
+						label="Сообщение (необязательно)"
 						placeholder="Расскажите о вашем проекте..."
 						:rows="6"
-						required
 					/>
 
 					<Button type="submit" variant="primary" :disabled="isSubmitting">
@@ -134,6 +135,12 @@ const isSubmitting = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
 const isCopied = ref(false)
+const validationErrors = reactive({
+	name: '',
+	email: '',
+	phone: '',
+	telegram: '',
+})
 
 // Функция копирования email
 const copyEmail = async () => {
@@ -150,7 +157,73 @@ const copyEmail = async () => {
 	}
 }
 
+// Валидация формы
+const validateForm = (): boolean => {
+	// Сброс ошибок
+	validationErrors.name = ''
+	validationErrors.email = ''
+	validationErrors.phone = ''
+	validationErrors.telegram = ''
+
+	let isValid = true
+
+	// Проверка имени
+	if (!form.name.trim()) {
+		validationErrors.name = 'Укажите ваше имя'
+		isValid = false
+	} else if (form.name.trim().length < 2) {
+		validationErrors.name = 'Имя должно быть не менее 2 символов'
+		isValid = false
+	}
+
+	// Проверка email
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+	if (!form.email.trim()) {
+		validationErrors.email = 'Укажите email'
+		isValid = false
+	} else if (!emailRegex.test(form.email)) {
+		validationErrors.email = 'Некорректный email адрес'
+		isValid = false
+	}
+
+	// Проверка телефона
+	const phoneRegex = /^[\d\s+()-]+$/
+	if (!form.phone.trim()) {
+		validationErrors.phone = 'Укажите телефон'
+		isValid = false
+	} else if (form.phone.trim().length < 10) {
+		validationErrors.phone = 'Телефон должен содержать минимум 10 цифр'
+		isValid = false
+	} else if (!phoneRegex.test(form.phone)) {
+		validationErrors.phone = 'Некорректный формат телефона'
+		isValid = false
+	}
+
+	// Проверка Telegram
+	if (!form.telegram.trim()) {
+		validationErrors.telegram = 'Укажите Telegram'
+		isValid = false
+	} else if (
+		!form.telegram.startsWith('@') &&
+		!form.telegram.startsWith('https://t.me/')
+	) {
+		validationErrors.telegram = 'Начните с @ или укажите ссылку t.me'
+		isValid = false
+	}
+
+	return isValid
+}
+
 const handleSubmit = async () => {
+	// Валидация перед отправкой
+	if (!validateForm()) {
+		errorMessage.value = 'Пожалуйста, исправьте ошибки в форме'
+		setTimeout(() => {
+			errorMessage.value = ''
+		}, 3000)
+		return
+	}
+
 	isSubmitting.value = true
 	successMessage.value = ''
 	errorMessage.value = ''

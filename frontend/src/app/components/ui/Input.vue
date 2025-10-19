@@ -10,7 +10,7 @@
 			:value="modelValue"
 			:placeholder="placeholder"
 			:required="required"
-			class="input"
+			:class="['input', { 'input--error': error }]"
 			@input="
 				$emit('update:modelValue', ($event.target as HTMLInputElement).value)
 			"
@@ -22,11 +22,12 @@
 			:placeholder="placeholder"
 			:required="required"
 			:rows="rows"
-			class="input input--textarea"
+			:class="['input', 'input--textarea', { 'input--error': error }]"
 			@input="
 				$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)
 			"
 		/>
+		<span v-if="error" class="input-error">{{ error }}</span>
 	</div>
 </template>
 
@@ -41,10 +42,12 @@ const props = withDefaults(
 		placeholder?: string
 		required?: boolean
 		rows?: number
+		error?: string
 	}>(),
 	{
 		type: 'text',
 		rows: 5,
+		error: '',
 	}
 )
 
@@ -96,5 +99,20 @@ const inputId = useId()
 		resize: vertical;
 		min-height: 120px;
 	}
+
+	&--error {
+		border-color: #ff4444;
+
+		&:focus {
+			border-color: #ff4444;
+			box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.2);
+		}
+	}
+}
+
+.input-error {
+	font-size: 0.875rem;
+	color: #ff4444;
+	margin-top: -4px;
 }
 </style>
