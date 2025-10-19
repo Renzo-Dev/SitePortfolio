@@ -289,13 +289,13 @@
 		display: grid;
 		grid-template-columns: auto 1fr auto;
 		align-items: center;
-		gap: $spacing-md;
-		padding: $spacing-lg $spacing-md;
+		gap: $spacing-sm; // Уменьшен отступ (было $spacing-md)
+		padding: $spacing-md $spacing-sm; // Уменьшен padding (было $spacing-lg $spacing-md)
 		background: rgba(255, 255, 255, 0.03);
 		border: 1px solid rgba(255, 255, 255, 0.05);
-		border-radius: $radius-lg;
+		border-radius: $radius-md; // Уменьшен радиус (было $radius-lg)
 		color: $text-primary;
-		font-size: $text-body-lg;
+		font-size: $text-body; // Уменьшен шрифт (было $text-body-lg)
 		font-weight: 600;
 		transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 		position: relative;
@@ -343,8 +343,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 40px;
-		height: 40px;
+		width: 36px; // Уменьшен размер (было 40px)
+		height: 36px; // Уменьшен размер (было 40px)
 		background: rgba($accent, 0.1);
 		border-radius: $radius-md;
 		color: $accent;
@@ -375,7 +375,7 @@
 		font-weight: 600;
 		justify-content: center;
 		margin-top: auto;
-		margin-bottom: $spacing-xl; // Отступ снизу для поднятия кнопки
+		margin-bottom: $spacing-2xl; // Увеличен отступ снизу (было $spacing-xl)
 	}
 }
 
