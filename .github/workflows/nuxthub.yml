@@ -1,40 +1,38 @@
 name: Deploy to NuxtHub
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
-    name: "Deploy to NuxtHub"
+    name: 'Deploy to NuxtHub'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
     defaults:
       run:
-        working-directory: frontend/src/.output
+        working-directory: frontend/src
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
-          cache-dependency-path: frontend/src/.output/pnpm-lock.yaml
+          cache: 'npm'
+          cache-dependency-path: frontend/src/package-lock.json
 
       - name: Install dependencies
-        run: pnpm install
-
-      - name: Ensure NuxtHub module is installed
-        run: pnpx nuxthub@latest ensure
+        run: npm ci
 
       - name: Build & Deploy to NuxtHub
         uses: nuxt-hub/action@v2
         with:
           project-key: portfolio-89n8
-          directory: frontend/src/.output
+          directory: frontend/src
+        env:
+          NUXT_TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          NUXT_TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

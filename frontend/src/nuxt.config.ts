@@ -1,7 +1,12 @@
 export default defineNuxtConfig({
 	compatibilityDate: '2025-07-15',
 	devtools: { enabled: false },
-	modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/icon', '@vueuse/nuxt'],
+	modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/icon', '@vueuse/nuxt', '@nuxthub/core'],
+
+	// NuxtHub конфигурация для Cloudflare
+	hub: {
+		cache: true, // Кэширование на Cloudflare KV
+	},
 
 	css: ['~/assets/styles/main.scss'],
 
