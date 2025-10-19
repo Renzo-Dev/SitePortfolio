@@ -97,7 +97,7 @@ export const useMobileMenu = () => {
 			},
 			{
 				x: '0%',
-				duration: 0.6,
+				duration: 0.4, // Быстрее (было 0.6)
 				ease: 'power3.out', // Плавный вход
 			}
 		)
@@ -106,17 +106,17 @@ export const useMobileMenu = () => {
 		tl.fromTo(
 			links,
 			{
-				x: 50,
+				x: 40, // Меньше смещение (было 50)
 				opacity: 0,
 			},
 			{
 				x: 0,
 				opacity: 1,
-				duration: 0.4,
-				stagger: 0.06, // Каждая следующая с задержкой
+				duration: 0.3, // Быстрее (было 0.4)
+				stagger: 0.04, // Меньше задержка (было 0.06)
 				ease: 'power2.out',
 			},
-			'-=0.3' // Начинаем до окончания предыдущей анимации
+			'-=0.25' // Больше перекрытие (было -=0.3)
 		)
 
 		// 3. Анимация CTA кнопки
@@ -124,16 +124,16 @@ export const useMobileMenu = () => {
 			tl.fromTo(
 				ctaButton,
 				{
-					y: 20,
+					y: 15, // Меньше смещение (было 20)
 					opacity: 0,
 				},
 				{
 					y: 0,
 					opacity: 1,
-					duration: 0.5,
-					ease: 'back.out(1.4)', // Легкий отскок
+					duration: 0.35, // Быстрее (было 0.5)
+					ease: 'back.out(1.3)', // Меньше отскок (было 1.4)
 				},
-				'-=0.2'
+				'-=0.15' // Больше перекрытие (было -=0.2)
 			)
 		}
 
@@ -154,7 +154,7 @@ export const useMobileMenu = () => {
 
 		tl.to(element, {
 			x: '100%',
-			duration: 0.35,
+			duration: 0.25, // Быстрее (было 0.35)
 			ease: 'power2.in', // Ускорение при выходе
 		})
 
