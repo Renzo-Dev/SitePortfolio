@@ -12,6 +12,12 @@
 		<!-- Section Divider -->
 		<div class="section-divider"></div>
 
+		<!-- Credentials Section -->
+		<CredentialsSection />
+
+		<!-- Section Divider -->
+		<div class="section-divider"></div>
+
 		<!-- Services Section -->
 		<ServicesSection />
 
@@ -36,12 +42,13 @@
 </template>
 
 <script setup lang="ts">
-import HeroSection from '~/components/home/HeroSection.vue'
 import AboutSection from '~/components/home/AboutSection.vue'
-import ServicesSection from '~/components/home/ServicesSection.vue'
-import PortfolioSection from '~/components/home/PortfolioSection.vue'
 import CaseStudiesSection from '~/components/home/CaseStudiesSection.vue'
 import ContactSection from '~/components/home/ContactSection.vue'
+import CredentialsSection from '~/components/home/CredentialsSection.vue'
+import HeroSection from '~/components/home/HeroSection.vue'
+import PortfolioSection from '~/components/home/PortfolioSection.vue'
+import ServicesSection from '~/components/home/ServicesSection.vue'
 
 // SEO метаданные
 useHead({
