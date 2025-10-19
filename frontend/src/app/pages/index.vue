@@ -1,5 +1,8 @@
 <template>
 	<div class="home">
+		<!-- Pacman Effect -->
+		<PacmanEffect />
+
 		<!-- Hero Section -->
 		<HeroSection />
 
@@ -49,6 +52,7 @@ import CredentialsSection from '~/components/home/CredentialsSection.vue'
 import HeroSection from '~/components/home/HeroSection.vue'
 import PortfolioSection from '~/components/home/PortfolioSection.vue'
 import ServicesSection from '~/components/home/ServicesSection.vue'
+import PacmanEffect from '~/components/effects/PacmanEffect.vue'
 
 // SEO метаданные
 useHead({
