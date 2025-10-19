@@ -262,9 +262,14 @@ const isMobile = () => {
 
 const openDiploma = () => {
 	if (education.diplomaFiles && education.diplomaFiles.length > 0) {
-		// На мобильных открываем первый файл напрямую в браузере
+		// На мобильных открываем все файлы диплома
 		if (isMobile()) {
-			window.open(education.diplomaFiles[0], '_blank')
+			// Открываем оба файла в новых вкладках с небольшой задержкой
+			education.diplomaFiles.forEach((file, index) => {
+				setTimeout(() => {
+					window.open(file, '_blank')
+				}, index * 300) // Задержка 300мс между открытиями
+			})
 			return
 		}
 
