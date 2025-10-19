@@ -39,11 +39,21 @@ export default defineNuxtConfig({
 					content:
 						'Создаю современные сайты и веб-приложения. Frontend + Backend разработка на Vue, Laravel, Docker.',
 				},
+				// Google Search Console верификация
+				{
+					name: 'google-site-verification',
+					content: 'WNZiK8uBYj0rVbZN3vjEbqF1lDO57xZOJ0ib8SkzFGU',
+				},
 			],
 			link: [
 				// Favicon
 				{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
-				{ rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon.ico' },
+				{
+					rel: 'icon',
+					type: 'image/png',
+					sizes: '32x32',
+					href: '/favicon.ico',
+				},
 				{ rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon.svg' },
 				// Fonts
 				{
