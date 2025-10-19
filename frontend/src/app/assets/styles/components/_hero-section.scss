@@ -711,7 +711,7 @@
 
 			.word {
 				display: inline-block;
-				margin-right: 0.2em;
+				margin-right: 0.3em; // Увеличен отступ между словами
 			}
 		}
 
@@ -726,7 +726,7 @@
 		&__cta {
 			flex-direction: column;
 			align-items: stretch;
-			gap: $spacing-md;
+			gap: $spacing-lg; // Увеличен отступ по Y между кнопками
 			margin-bottom: $spacing-xl;
 			padding: 0 $spacing-xs;
 
@@ -818,7 +818,7 @@
 			letter-spacing: -0.02em;
 
 			.word {
-				margin-right: 0.15em;
+				margin-right: 0.25em; // Увеличен отступ между словами
 			}
 		}
 
@@ -830,7 +830,7 @@
 		}
 
 		&__cta {
-			gap: $spacing-sm;
+			gap: $spacing-md; // Увеличен отступ по Y между кнопками
 			padding: 0;
 			margin-bottom: $spacing-lg;
 
@@ -876,7 +876,7 @@
 			margin-bottom: 12px;
 
 			.word {
-				margin-right: 0.12em;
+				margin-right: 0.22em; // Увеличен отступ между словами
 			}
 		}
 
@@ -888,7 +888,7 @@
 		}
 
 		&__cta {
-			gap: 12px;
+			gap: 16px; // Увеличен отступ по Y между кнопками
 			margin-bottom: $spacing-md;
 
 			:deep(button) {
