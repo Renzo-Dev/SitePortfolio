@@ -1,10 +1,12 @@
-// Composable для управления full-screen мобильным меню с JS анимацией
+import { gsap } from 'gsap'
+
+// Composable для управления full-screen мобильным меню с GSAP анимацией
 export const useMobileMenu = () => {
 	const isMobileMenuOpen = ref(false)
 	const isClosing = ref(false)
 	const menuElement = ref<HTMLElement | null>(null)
-	let animationFrameId: number | null = null
 	let scrollPosition = 0 // Сохраняем позицию скролла
+	let currentAnimation: gsap.core.Tween | null = null
 
 	// Блокировка скролла с компенсацией скроллбара
 	const lockScroll = () => {
@@ -72,65 +74,91 @@ export const useMobileMenu = () => {
 		}
 	}
 
-	// Анимация открытия меню (JS)
+	// Анимация открытия меню через GSAP
 	const animateOpen = (element: HTMLElement) => {
-		const duration = 500 // 500ms для более плавной анимации
-		const startTime = performance.now()
-		const startPosition = 100 // начинаем с 100% (за экраном)
-
-		const animate = (currentTime: number) => {
-			const elapsed = currentTime - startTime
-			const progress = Math.min(elapsed / duration, 1)
-
-			// Easing функция (easeOutCubic - более плавная без отскока)
-			const easeOutCubic = (t: number) => {
-				return 1 - Math.pow(1 - t, 3)
-			}
-
-			const easedProgress = easeOutCubic(progress)
-			const currentPosition = startPosition * (1 - easedProgress)
-
-			element.style.transform = `translateX(${currentPosition}%)`
-
-			if (progress < 1) {
-				animationFrameId = requestAnimationFrame(animate)
-			} else {
-				element.style.transform = 'translateX(0%)'
-			}
+		// Останавливаем предыдущую анимацию если есть
+		if (currentAnimation) {
+			currentAnimation.kill()
 		}
 
-		animationFrameId = requestAnimationFrame(animate)
+		// Получаем все ссылки для каскадной анимации
+		const links = element.querySelectorAll('.header__mobile-link')
+		const ctaButton = element.querySelector('.header__mobile-cta')
+
+		// Timeline для синхронизации анимаций
+		const tl = gsap.timeline()
+
+		// 1. Анимация самого меню (slide in from right)
+		tl.fromTo(
+			element,
+			{
+				x: '100%',
+				opacity: 1,
+			},
+			{
+				x: '0%',
+				duration: 0.6,
+				ease: 'power3.out', // Плавный вход
+			}
+		)
+
+		// 2. Каскадная анимация ссылок (stagger)
+		tl.fromTo(
+			links,
+			{
+				x: 50,
+				opacity: 0,
+			},
+			{
+				x: 0,
+				opacity: 1,
+				duration: 0.4,
+				stagger: 0.06, // Каждая следующая с задержкой
+				ease: 'power2.out',
+			},
+			'-=0.3' // Начинаем до окончания предыдущей анимации
+		)
+
+		// 3. Анимация CTA кнопки
+		if (ctaButton) {
+			tl.fromTo(
+				ctaButton,
+				{
+					y: 20,
+					opacity: 0,
+				},
+				{
+					y: 0,
+					opacity: 1,
+					duration: 0.5,
+					ease: 'back.out(1.4)', // Легкий отскок
+				},
+				'-=0.2'
+			)
+		}
+
+		currentAnimation = tl
 	}
 
-	// Анимация закрытия меню (JS)
+	// Анимация закрытия меню через GSAP
 	const animateClose = (element: HTMLElement, callback: () => void) => {
-		const duration = 350 // 350ms
-		const startTime = performance.now()
-		const startPosition = 0
-		const endPosition = 100
-
-		const animate = (currentTime: number) => {
-			const elapsed = currentTime - startTime
-			const progress = Math.min(elapsed / duration, 1)
-
-			// Easing функция (easeInCubic - плавное ускорение)
-			const easeInCubic = (t: number) => t * t * t
-
-			const easedProgress = easeInCubic(progress)
-			const currentPosition =
-				startPosition + (endPosition - startPosition) * easedProgress
-
-			element.style.transform = `translateX(${currentPosition}%)`
-
-			if (progress < 1) {
-				animationFrameId = requestAnimationFrame(animate)
-			} else {
-				element.style.transform = 'translateX(100%)'
-				callback()
-			}
+		// Останавливаем предыдущую анимацию если есть
+		if (currentAnimation) {
+			currentAnimation.kill()
 		}
 
-		animationFrameId = requestAnimationFrame(animate)
+		// Простая анимация закрытия (быстрее открытия)
+		const tl = gsap.timeline({
+			onComplete: callback,
+		})
+
+		tl.to(element, {
+			x: '100%',
+			duration: 0.35,
+			ease: 'power2.in', // Ускорение при выходе
+		})
+
+		currentAnimation = tl
 	}
 
 	// Открыть меню
@@ -222,9 +250,9 @@ export const useMobileMenu = () => {
 	onUnmounted(() => {
 		window.removeEventListener('resize', handleResize)
 		window.removeEventListener('keydown', handleEscape)
-		// Отменяем анимацию если есть
-		if (animationFrameId !== null) {
-			cancelAnimationFrame(animationFrameId)
+		// Останавливаем GSAP анимацию если есть
+		if (currentAnimation) {
+			currentAnimation.kill()
 		}
 		unlockScroll()
 	})
