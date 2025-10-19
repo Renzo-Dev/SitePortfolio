@@ -370,8 +370,8 @@
 	// ============================================
 	&__mobile-cta {
 		width: 100%;
-		padding: $spacing-lg;
-		font-size: $text-body-lg;
+		padding: $spacing-md $spacing-lg; // Уменьшен вертикальный padding
+		font-size: $text-body; // Уменьшен шрифт (было $text-body-lg)
 		font-weight: 600;
 		justify-content: center;
 		margin-top: auto;
