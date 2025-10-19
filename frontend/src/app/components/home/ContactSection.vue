@@ -142,6 +142,32 @@ const validationErrors = reactive({
 	telegram: '',
 })
 
+// Очистка ошибок при вводе
+watch(
+	() => form.name,
+	() => {
+		if (validationErrors.name) validationErrors.name = ''
+	}
+)
+watch(
+	() => form.email,
+	() => {
+		if (validationErrors.email) validationErrors.email = ''
+	}
+)
+watch(
+	() => form.phone,
+	() => {
+		if (validationErrors.phone) validationErrors.phone = ''
+	}
+)
+watch(
+	() => form.telegram,
+	() => {
+		if (validationErrors.telegram) validationErrors.telegram = ''
+	}
+)
+
 // Функция копирования email
 const copyEmail = async () => {
 	try {
@@ -167,47 +193,64 @@ const validateForm = (): boolean => {
 
 	let isValid = true
 
-	// Проверка имени
+	// Проверка имени (обязательное)
 	if (!form.name.trim()) {
-		validationErrors.name = 'Укажите ваше имя'
+		validationErrors.name = 'Обязательное поле'
 		isValid = false
 	} else if (form.name.trim().length < 2) {
-		validationErrors.name = 'Имя должно быть не менее 2 символов'
+		validationErrors.name = 'Минимум 2 символа'
+		isValid = false
+	} else if (form.name.trim().length > 50) {
+		validationErrors.name = 'Максимум 50 символов'
 		isValid = false
 	}
 
-	// Проверка email
-	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+	// Проверка email (обязательное)
+	const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 	if (!form.email.trim()) {
-		validationErrors.email = 'Укажите email'
+		validationErrors.email = 'Обязательное поле'
 		isValid = false
-	} else if (!emailRegex.test(form.email)) {
-		validationErrors.email = 'Некорректный email адрес'
+	} else if (!emailRegex.test(form.email.trim())) {
+		validationErrors.email = 'Некорректный email'
 		isValid = false
 	}
 
-	// Проверка телефона
-	const phoneRegex = /^[\d\s+()-]+$/
+	// Проверка телефона (обязательное)
+	const phoneClean = form.phone.replace(/[\s()-]/g, '')
+	const phoneRegex = /^\+?\d{10,15}$/
 	if (!form.phone.trim()) {
-		validationErrors.phone = 'Укажите телефон'
+		validationErrors.phone = 'Обязательное поле'
 		isValid = false
-	} else if (form.phone.trim().length < 10) {
-		validationErrors.phone = 'Телефон должен содержать минимум 10 цифр'
-		isValid = false
-	} else if (!phoneRegex.test(form.phone)) {
-		validationErrors.phone = 'Некорректный формат телефона'
+	} else if (!phoneRegex.test(phoneClean)) {
+		validationErrors.phone = 'Некорректный формат (10-15 цифр)'
 		isValid = false
 	}
 
-	// Проверка Telegram
-	if (!form.telegram.trim()) {
-		validationErrors.telegram = 'Укажите Telegram'
+	// Проверка Telegram (обязательное)
+	const telegramTrimmed = form.telegram.trim()
+	if (!telegramTrimmed) {
+		validationErrors.telegram = 'Обязательное поле'
 		isValid = false
+	} else if (telegramTrimmed.startsWith('@')) {
+		// Формат @username
+		const usernameRegex = /^@[a-zA-Z0-9_]{5,32}$/
+		if (!usernameRegex.test(telegramTrimmed)) {
+			validationErrors.telegram = 'Формат: @username (5-32 символа)'
+			isValid = false
+		}
 	} else if (
-		!form.telegram.startsWith('@') &&
-		!form.telegram.startsWith('https://t.me/')
+		telegramTrimmed.startsWith('https://t.me/') ||
+		telegramTrimmed.startsWith('http://t.me/') ||
+		telegramTrimmed.startsWith('t.me/')
 	) {
-		validationErrors.telegram = 'Начните с @ или укажите ссылку t.me'
+		// Формат ссылки t.me
+		const linkRegex = /^(https?:\/\/)?(t\.me\/)[a-zA-Z0-9_]{5,32}$/
+		if (!linkRegex.test(telegramTrimmed)) {
+			validationErrors.telegram = 'Некорректная ссылка t.me'
+			isValid = false
+		}
+	} else {
+		validationErrors.telegram = 'Начните с @ или укажите ссылку t.me/'
 		isValid = false
 	}
 
@@ -243,12 +286,16 @@ const handleSubmit = async () => {
 		successMessage.value =
 			'Сообщение успешно отправлено! Свяжусь с вами в ближайшее время.'
 
-		// Очистка формы
+		// Очистка формы и ошибок
 		form.name = ''
 		form.email = ''
 		form.phone = ''
 		form.telegram = ''
 		form.message = ''
+		validationErrors.name = ''
+		validationErrors.email = ''
+		validationErrors.phone = ''
+		validationErrors.telegram = ''
 
 		// Скрываем сообщение через 5 секунд
 		setTimeout(() => {
