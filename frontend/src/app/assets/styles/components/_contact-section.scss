@@ -1,0 +1,498 @@
+@use '../variables' as *;
+
+// ============================================
+// Contact Section Styles
+// ============================================
+
+.contact {
+	// Заголовки
+	&__title {
+		font-size: clamp(1.75rem, 5vw, $text-h2);
+		margin-bottom: $spacing-md;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: $spacing-md;
+
+		// Desktop XL
+		@media (min-width: 1920px) {
+			font-size: 3rem;
+			gap: $spacing-lg;
+		}
+
+		// Mobile
+		@media (max-width: 480px) {
+			flex-direction: column;
+			gap: $spacing-xs;
+		}
+	}
+
+	&__subtitle {
+		margin-bottom: $spacing-3xl;
+		font-size: clamp(0.95rem, 2vw, $text-body-lg);
+
+		// Desktop XL
+		@media (min-width: 1920px) {
+			font-size: 1.25rem;
+			margin-bottom: $spacing-4xl;
+		}
+
+		// Laptop
+		@media (max-width: 1024px) {
+			margin-bottom: $spacing-2xl;
+		}
+
+		// Mobile
+		@media (max-width: 480px) {
+			margin-bottom: $spacing-xl;
+			padding: 0 $spacing-sm;
+		}
+	}
+
+	// Grid Layout
+	&__grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: $spacing-3xl;
+		margin-top: $spacing-2xl;
+		align-items: start;
+
+		// Desktop XL
+		@media (min-width: 1920px) {
+			gap: $spacing-4xl;
+			max-width: 1400px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		// Desktop L
+		@media (max-width: 1440px) {
+			gap: $spacing-2xl;
+		}
+
+		// Laptop
+		@media (max-width: 1024px) {
+			gap: $spacing-xl;
+		}
+
+		// Tablet
+		@media (max-width: 768px) {
+			grid-template-columns: 1fr;
+			gap: $spacing-2xl;
+		}
+
+		// Mobile
+		@media (max-width: 480px) {
+			gap: $spacing-xl;
+			margin-top: $spacing-lg;
+		}
+	}
+
+	// Форма
+	&__form {
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-lg;
+
+		// Desktop XL
+		@media (min-width: 1920px) {
+			gap: $spacing-xl;
+		}
+
+		// Mobile
+		@media (max-width: 480px) {
+			gap: $spacing-md;
+		}
+	}
+
+	// Сообщения
+	&__message {
+		padding: $spacing-md;
+		border-radius: $radius-md;
+		font-size: $text-body-sm;
+		animation: fadeInUp 0.4s ease-out;
+
+		// Desktop XL
+		@media (min-width: 1920px) {
+			padding: $spacing-lg;
+			font-size: $text-body;
+			border-radius: $radius-lg;
+		}
+
+		// Mobile
+		@media (max-width: 480px) {
+			padding: $spacing-sm $spacing-md;
+			font-size: 0.85rem;
+		}
+
+		&--success {
+			background: rgba(0, 255, 136, 0.1);
+			border: 1px solid $success;
+			color: $success;
+			display: flex;
+			align-items: center;
+			gap: $spacing-sm;
+
+			&::before {
+				content: '✓';
+				font-size: 1.2em;
+				font-weight: bold;
+			}
+		}
+
+		&--error {
+			background: rgba(255, 0, 0, 0.1);
+			border: 1px solid #ff4444;
+			color: #ff4444;
+			display: flex;
+			align-items: center;
+			gap: $spacing-sm;
+
+			&::before {
+				content: '⚠';
+				font-size: 1.2em;
+			}
+		}
+	}
+
+	// Контактная информация
+	&__info {
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-lg;
+		position: sticky;
+		top: 100px;
+
+		// Desktop XL
+		@media (min-width: 1920px) {
+			gap: $spacing-xl;
+		}
+
+		// Tablet и ниже - убираем sticky
+		@media (max-width: 768px) {
+			position: static;
+		}
+
+		// Mobile
+		@media (max-width: 480px) {
+			gap: $spacing-md;
+		}
+	}
+
+	&__info-title {
+		font-size: clamp(1.25rem, 3vw, $text-h3);
+		font-weight: 700;
+		color: $text-primary;
+
+		// Desktop XL
+		@media (min-width: 1920px) {
+			font-size: 2rem;
+		}
+
+		// Mobile
+		@media (max-width: 480px) {
+			text-align: center;
+		}
+	}
+
+	// Список ссылок
+	&__links {
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-md;
+
+		// Desktop XL
+		@media (min-width: 1920px) {
+			gap: $spacing-lg;
+		}
+
+		// Mobile
+		@media (max-width: 480px) {
+			gap: $spacing-sm;
+		}
+	}
+
+	// Ссылка
+	&__link {
+		display: flex;
+		align-items: center;
+		gap: $spacing-md;
+		padding: $spacing-md $spacing-lg;
+		background: $bg-card;
+		border: 1px solid $border;
+		border-radius: $radius-md;
+		color: $text-secondary;
+		text-decoration: none;
+		transition: all $transition-base;
+		position: relative;
+		overflow: hidden;
+
+		// Эффект подсветки
+		&::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 4px;
+			height: 100%;
+			background: $accent;
+			transform: scaleY(0);
+			transition: transform 0.3s ease;
+		}
+
+		&:hover {
+			border-color: $accent;
+			color: $text-primary;
+			transform: translateX(8px);
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+
+			&::before {
+				transform: scaleY(1);
+			}
+
+			:deep(svg) {
+				color: $accent;
+				transform: scale(1.1);
+			}
+		}
+
+		&:active {
+			transform: translateX(4px);
+		}
+
+		:deep(svg) {
+			color: $text-muted;
+			transition: all $transition-base;
+			flex-shrink: 0;
+		}
+
+		span {
+			font-weight: 500;
+			font-size: $text-body;
+			line-height: 1.4;
+		}
+
+		// Desktop XL
+		@media (min-width: 1920px) {
+			padding: $spacing-lg $spacing-xl;
+			border-radius: $radius-lg;
+
+			span {
+				font-size: $text-body-lg;
+			}
+		}
+
+		// Laptop
+		@media (max-width: 1024px) {
+			padding: $spacing-sm $spacing-md;
+
+			&:hover {
+				transform: translateX(4px);
+			}
+		}
+
+		// Tablet
+		@media (max-width: 768px) {
+			padding: $spacing-md;
+
+			span {
+				font-size: $text-body-sm;
+			}
+		}
+
+		// Mobile
+		@media (max-width: 480px) {
+			padding: $spacing-sm $spacing-md;
+			gap: $spacing-sm;
+
+			&:hover {
+				transform: none;
+			}
+
+			&:active {
+				transform: scale(0.98);
+				background: rgba(255, 255, 255, 0.05);
+			}
+
+			span {
+				font-size: 0.9rem;
+			}
+		}
+
+		// Mobile S
+		@media (max-width: 375px) {
+			padding: $spacing-xs $spacing-sm;
+
+			:deep(svg) {
+				width: 20px;
+				height: 20px;
+			}
+
+			span {
+				font-size: 0.85rem;
+			}
+		}
+	}
+
+	// Email wrapper с кнопкой копирования
+	&__email-wrapper {
+		display: flex;
+		gap: $spacing-sm;
+		align-items: stretch;
+
+		.contact__link {
+			flex: 1;
+			transform: none;
+			min-width: 0; // Для корректного text-overflow
+
+			&:hover {
+				transform: translateX(4px);
+			}
+
+			span {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+		}
+
+		// Mobile
+		@media (max-width: 480px) {
+			flex-direction: column;
+			gap: $spacing-xs;
+
+			.contact__link {
+				&:hover {
+					transform: none;
+				}
+			}
+		}
+	}
+
+	// Кнопка копирования
+	&__copy-btn {
+		display: flex;
+		align-items: center;
+		gap: $spacing-xs;
+		padding: $spacing-md $spacing-lg;
+		background: $bg-card;
+		border: 1px solid $border;
+		border-radius: $radius-md;
+		color: $text-secondary;
+		font-size: $text-body-sm;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all $transition-base;
+		white-space: nowrap;
+		flex-shrink: 0;
+
+		:deep(svg) {
+			transition: transform 0.3s ease;
+		}
+
+		&:hover {
+			border-color: $accent;
+			color: $text-primary;
+			background: rgba(255, 255, 255, 0.05);
+
+			:deep(svg) {
+				transform: scale(1.1);
+			}
+		}
+
+		&:active {
+			transform: scale(0.98);
+		}
+
+		&--copied {
+			border-color: $success;
+			color: $success;
+			background: rgba(0, 255, 136, 0.1);
+			animation: copyPulse 0.4s ease-out;
+
+			:deep(svg) {
+				transform: scale(1.2);
+			}
+		}
+
+		// Desktop XL
+		@media (min-width: 1920px) {
+			padding: $spacing-lg $spacing-xl;
+			font-size: $text-body;
+			border-radius: $radius-lg;
+		}
+
+		// Laptop
+		@media (max-width: 1024px) {
+			padding: $spacing-sm $spacing-md;
+			font-size: 0.85rem;
+		}
+
+		// Mobile
+		@media (max-width: 480px) {
+			width: 100%;
+			justify-content: center;
+			padding: $spacing-sm $spacing-md;
+			font-size: 0.85rem;
+		}
+
+		// Mobile S
+		@media (max-width: 375px) {
+			padding: $spacing-xs $spacing-sm;
+			font-size: 0.8rem;
+			gap: 4px;
+
+			:deep(svg) {
+				width: 16px;
+				height: 16px;
+			}
+		}
+	}
+}
+
+// ============================================
+// Анимации
+// ============================================
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes copyPulse {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.05);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+// ============================================
+// Transitions для сообщений
+// ============================================
+
+.fade-enter-active,
+.fade-leave-active {
+	transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.fade-enter-from {
+	opacity: 0;
+	transform: translateY(-20px) scale(0.95);
+}
+
+.fade-leave-to {
+	opacity: 0;
+	transform: translateY(-10px) scale(0.98);
+}
+

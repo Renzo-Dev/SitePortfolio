@@ -1,5 +1,5 @@
 <template>
-	<section class="contact section" id="contact">
+	<section id="contact" class="contact section">
 		<div class="container">
 			<h2 class="contact__title text-center">
 				<Icon name="ph:chat-circle-duotone" size="32" />
@@ -79,11 +79,11 @@
 								<Icon name="ph:envelope-duotone" size="24" />
 								<span>dankoshevoy@gmail.com</span>
 							</a>
-							<button
-								@click="copyEmail"
-								class="contact__copy-btn"
-								:class="{ 'contact__copy-btn--copied': isCopied }"
-							>
+						<button
+							class="contact__copy-btn"
+							:class="{ 'contact__copy-btn--copied': isCopied }"
+							@click="copyEmail"
+						>
 								<Icon
 									:name="isCopied ? 'ph:check-duotone' : 'ph:copy-duotone'"
 									size="20"
@@ -156,7 +156,7 @@ const handleSubmit = async () => {
 	errorMessage.value = ''
 
 	try {
-		const response = await $fetch('/api/order', {
+		await $fetch('/api/order', {
 			method: 'POST',
 			body: {
 				name: form.name,
@@ -181,9 +181,10 @@ const handleSubmit = async () => {
 		setTimeout(() => {
 			successMessage.value = ''
 		}, 5000)
-	} catch (error: any) {
+	} catch (error: unknown) {
+		const err = error as { data?: { message?: string } }
 		errorMessage.value =
-			error?.data?.message || 'Произошла ошибка при отправке. Попробуйте позже.'
+			err?.data?.message || 'Произошла ошибка при отправке. Попробуйте позже.'
 
 		setTimeout(() => {
 			errorMessage.value = ''
@@ -198,170 +199,5 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped lang="scss">
-@use '~/assets/styles/variables' as *;
-
-.contact {
-	&__title {
-		font-size: $text-h2;
-		margin-bottom: $spacing-md;
-	}
-
-	&__subtitle {
-		margin-bottom: $spacing-3xl;
-		font-size: $text-body-lg;
-	}
-
-	&__grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: $spacing-3xl;
-		margin-top: $spacing-2xl;
-
-		@include mobile {
-			grid-template-columns: 1fr;
-			gap: $spacing-2xl;
-		}
-	}
-
-	&__form {
-		display: flex;
-		flex-direction: column;
-		gap: $spacing-lg;
-	}
-
-	&__message {
-		padding: $spacing-md;
-		border-radius: $radius-sm;
-		font-size: $text-body-sm;
-
-		&--success {
-			background: rgba(0, 255, 136, 0.1);
-			border: 1px solid $success;
-			color: $success;
-		}
-
-		&--error {
-			background: rgba(255, 0, 0, 0.1);
-			border: 1px solid #ff4444;
-			color: #ff4444;
-		}
-	}
-
-	&__info {
-		display: flex;
-		flex-direction: column;
-		gap: $spacing-lg;
-	}
-
-	&__info-title {
-		font-size: $text-h3;
-	}
-
-	&__links {
-		display: flex;
-		flex-direction: column;
-		gap: $spacing-md;
-	}
-
-	&__link {
-		display: flex;
-		align-items: center;
-		gap: $spacing-md;
-		padding: $spacing-md;
-		background: $bg-card;
-		border: 1px solid $border;
-		border-radius: $radius-sm;
-		color: $text-secondary;
-		text-decoration: none;
-		transition: all $transition-base;
-
-		&:hover {
-			border-color: $accent;
-			color: $text-primary;
-			transform: translateX(8px);
-
-			:deep(svg) {
-				color: $accent;
-			}
-		}
-
-		:deep(svg) {
-			color: $text-muted;
-			transition: color $transition-base;
-		}
-
-		span {
-			font-weight: 500;
-		}
-	}
-
-	&__email-wrapper {
-		display: flex;
-		gap: $spacing-sm;
-		align-items: stretch;
-
-		.contact__link {
-			flex: 1;
-			transform: none;
-
-			&:hover {
-				transform: translateX(4px);
-			}
-		}
-	}
-
-	&__copy-btn {
-		display: flex;
-		align-items: center;
-		gap: $spacing-xs;
-		padding: $spacing-md $spacing-lg;
-		background: $bg-card;
-		border: 1px solid $border;
-		border-radius: $radius-sm;
-		color: $text-secondary;
-		font-size: $text-body-sm;
-		cursor: pointer;
-		transition: all $transition-base;
-		white-space: nowrap;
-
-		&:hover {
-			border-color: $accent;
-			color: $text-primary;
-			background: rgba(255, 255, 255, 0.05);
-		}
-
-		&--copied {
-			border-color: $success;
-			color: $success;
-			background: rgba(0, 255, 136, 0.1);
-
-			// Эффект масштабирования при копировании
-			animation: copyPulse 0.4s ease-out;
-		}
-	}
-}
-
-@keyframes copyPulse {
-	0% {
-		transform: scale(1);
-	}
-	50% {
-		transform: scale(1.05);
-	}
-	100% {
-		transform: scale(1);
-	}
-}
-
-// Transition для сообщений
-.fade-enter-active,
-.fade-leave-active {
-	transition: all $transition-base;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-	opacity: 0;
-	transform: translateY(-10px);
-}
+@use '~/assets/styles/components/contact-section';
 </style>
