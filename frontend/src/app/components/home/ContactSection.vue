@@ -79,11 +79,11 @@
 								<Icon name="ph:envelope-duotone" size="24" />
 								<span>dankoshevoy@gmail.com</span>
 							</a>
-						<button
-							class="contact__copy-btn"
-							:class="{ 'contact__copy-btn--copied': isCopied }"
-							@click="copyEmail"
-						>
+							<button
+								class="contact__copy-btn"
+								:class="{ 'contact__copy-btn--copied': isCopied }"
+								@click="copyEmail"
+							>
 								<Icon
 									:name="isCopied ? 'ph:check-duotone' : 'ph:copy-duotone'"
 									size="20"
@@ -119,8 +119,8 @@
 </template>
 
 <script setup lang="ts">
-import Input from '~/components/ui/Input.vue'
 import Button from '~/components/ui/Button.vue'
+import Input from '~/components/ui/Input.vue'
 
 const form = reactive({
 	name: '',
