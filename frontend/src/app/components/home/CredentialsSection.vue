@@ -72,12 +72,22 @@
 						@click="openCertificate(cert)"
 					>
 						<div class="certificate-card__preview">
+							<!-- PDF превью -->
+							<div
+								v-if="cert.image && cert.image.endsWith('.pdf')"
+								class="certificate-card__pdf-preview"
+							>
+								<Icon name="ph:file-pdf-duotone" size="56" />
+								<span class="certificate-card__pdf-label">PDF</span>
+							</div>
+							<!-- Изображение -->
 							<img
-								v-if="cert.image"
+								v-else-if="cert.image"
 								:src="cert.image"
 								:alt="cert.title"
 								class="certificate-card__image"
 							>
+							<!-- Placeholder -->
 							<div v-else class="certificate-card__placeholder">
 								<Icon name="ph:certificate" size="48" />
 							</div>
@@ -168,24 +178,10 @@ const education = {
 // Данные сертификатов
 const certificates = [
 	{
-		title: 'Название сертификата 1',
-		issuer: 'Платформа / Организация',
-		date: 'Месяц Год',
-		image: '', // Путь к фото сертификата
-		verifyLink: '', // Ссылка на верификацию (опционально)
-	},
-	{
-		title: 'Название сертификата 2',
-		issuer: 'Платформа / Организация',
-		date: 'Месяц Год',
-		image: '',
-		verifyLink: '',
-	},
-	{
-		title: 'Название сертификата 3',
-		issuer: 'Платформа / Организация',
-		date: 'Месяц Год',
-		image: '',
+		title: 'IT Essentials: PC Hardware and Software',
+		issuer: 'Cisco Networking Academy',
+		date: 'Декабрь 2020',
+		image: '/images/credentials/IT_Essentials_Sertificat.pdf',
 		verifyLink: '',
 	},
 ]
@@ -217,11 +213,13 @@ const openDiploma = () => {
 
 const openCertificate = (cert: (typeof certificates)[0]) => {
 	if (cert.image) {
+		// Открываем в модалке (поддержка PDF и изображений)
 		currentFiles.value = [cert.image]
 		currentFileIndex.value = 0
 		selectedTitle.value = cert.title
 		isModalOpen.value = true
 	} else if (cert.verifyLink) {
+		// Если только ссылка верификации - открываем в новой вкладке
 		window.open(cert.verifyLink, '_blank')
 	}
 }
