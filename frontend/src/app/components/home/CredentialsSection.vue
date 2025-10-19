@@ -133,19 +133,19 @@
 						</button>
 					</div>
 
-					<!-- PDF или изображение -->
-					<iframe
-						v-if="isPdfFile"
-						:src="currentFile"
-						class="credentials-modal__pdf"
-						frameborder="0"
-					/>
-					<img
-						v-else-if="currentFile"
-						:src="currentFile"
-						:alt="selectedTitle"
-						class="credentials-modal__image"
-					>
+				<!-- PDF или изображение -->
+				<iframe
+					v-if="isPdfFile"
+					:src="currentFile"
+					class="credentials-modal__pdf"
+					frameborder="0"
+				/>
+				<img
+					v-else-if="currentFile"
+					:src="currentFile"
+					:alt="selectedTitle"
+					class="credentials-modal__image"
+				>
 				</div>
 			</div>
 		</Teleport>
