@@ -8,6 +8,9 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    defaults:
+      run:
+        working-directory: frontend/src/.output
 
     steps:
       - uses: actions/checkout@v4
@@ -22,6 +25,7 @@ jobs:
         with:
           node-version: 22
           cache: 'pnpm'
+          cache-dependency-path: frontend/src/.output/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install
@@ -32,4 +36,5 @@ jobs:
       - name: Build & Deploy to NuxtHub
         uses: nuxt-hub/action@v2
         with:
-          project-key: site-portfolio-210m
+          project-key: portfolio-89n8
+          directory: frontend/src/.output
