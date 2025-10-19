@@ -31,7 +31,7 @@ data/
 
 # Build outputs
 dist/
-.output/
+# .output/ - добавлен в репозиторий для деплоя
 .nuxt/
 
 # IDE

@@ -1,6 +1,6 @@
 # Nuxt
 .nuxt
-.output
+# .output - добавлен в репозиторий для деплоя
 .data
 .env
 .env.*
