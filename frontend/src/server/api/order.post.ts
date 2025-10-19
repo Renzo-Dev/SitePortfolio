@@ -4,11 +4,11 @@ export default defineEventHandler(async (event) => {
 	const config = useRuntimeConfig()
 	const body = await readBody(event)
 
-	// Валидация данных
-	if (!body.name || !body.email || !body.message) {
+	// Валидация данных (сообщение необязательно)
+	if (!body.name || !body.email || !body.phone || !body.telegram) {
 		throw createError({
 			statusCode: 400,
-			message: 'Все поля обязательны для заполнения',
+			message: 'Заполните все обязательные поля',
 		})
 	}
 
@@ -22,16 +22,16 @@ export default defineEventHandler(async (event) => {
 	}
 
 	// Формирование сообщения для Telegram
-	const phoneInfo = body.phone ? `\n📞 Телефон: ${body.phone}` : ''
-	const telegramInfo = body.telegram ? `\n📱 Telegram: ${body.telegram}` : ''
+	const messageText = body.message?.trim()
+		? `\n\n💬 Сообщение:\n${body.message}`
+		: ''
 	const message = `
 🔔 Новый заказ с сайта!
 
 👤 Имя: ${body.name}
-📧 Email: ${body.email}${phoneInfo}${telegramInfo}
-
-💬 Сообщение:
-${body.message}
+📧 Email: ${body.email}
+📞 Телефон: ${body.phone}
+📱 Telegram: ${body.telegram}${messageText}
 
 ⏰ Время: ${new Date().toLocaleString('ru-RU')}
 	`.trim()
