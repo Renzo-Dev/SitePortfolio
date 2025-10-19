@@ -30,12 +30,6 @@
 		<!-- Section Divider -->
 		<div class="section-divider"></div>
 
-		<!-- Testimonials Section -->
-		<TestimonialsSection />
-
-		<!-- Section Divider -->
-		<div class="section-divider"></div>
-
 		<!-- Contact Section -->
 		<ContactSection />
 	</div>
@@ -47,7 +41,6 @@ import AboutSection from '~/components/home/AboutSection.vue'
 import ServicesSection from '~/components/home/ServicesSection.vue'
 import PortfolioSection from '~/components/home/PortfolioSection.vue'
 import CaseStudiesSection from '~/components/home/CaseStudiesSection.vue'
-import TestimonialsSection from '~/components/home/TestimonialsSection.vue'
 import ContactSection from '~/components/home/ContactSection.vue'
 
 // SEO метаданные
