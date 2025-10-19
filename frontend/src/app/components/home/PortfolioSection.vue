@@ -56,7 +56,10 @@
 
 					<!-- Содержимое проекта (раскрывается) -->
 					<transition name="accordion">
-						<div v-show="activeProject === project.id" class="portfolio__content">
+						<div
+							v-show="activeProject === project.id"
+							class="portfolio__content"
+						>
 							<!-- Изображение проекта -->
 							<div class="portfolio__image-wrapper">
 								<img
@@ -64,7 +67,7 @@
 									:alt="project.title"
 									class="portfolio__image"
 									loading="lazy"
-								>
+								/>
 							</div>
 
 							<!-- Описание -->
