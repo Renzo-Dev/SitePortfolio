@@ -3,9 +3,13 @@ export default defineNuxtConfig({
 	devtools: { enabled: false },
 	modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/icon', '@vueuse/nuxt', '@nuxthub/core'],
 
-	// NuxtHub конфигурация для Cloudflare
+	// NuxtHub конфигурация для Cloudflare Pages
 	hub: {
 		cache: true, // Кэширование на Cloudflare KV
+	},
+
+	nitro: {
+		preset: 'cloudflare-pages',
 	},
 
 	css: ['~/assets/styles/main.scss'],
