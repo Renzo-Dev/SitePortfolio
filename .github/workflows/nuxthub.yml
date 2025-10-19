@@ -34,5 +34,5 @@ jobs:
       - name: Build & Deploy to NuxtHub
         uses: nuxt-hub/action@v2
         with:
-          project-key: portfolio-pke5
+          project-key: myportfolio-new-kow9
           directory: frontend/src
