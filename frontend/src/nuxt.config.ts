@@ -44,6 +44,11 @@ export default defineNuxtConfig({
 					name: 'google-site-verification',
 					content: 'WNZiK8uBYj0rVbZN3vjEbqF1lDO57xZOJ0ib8SkzFGU',
 				},
+				// Яндекс.Вебмастер верификация
+				{
+					name: 'yandex-verification',
+					content: '91e10ccbbda52de8',
+				},
 			],
 			link: [
 				// Favicon
