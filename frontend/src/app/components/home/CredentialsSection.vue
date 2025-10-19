@@ -116,44 +116,99 @@
 			>
 				<div class="credentials-modal__overlay" />
 				<div class="credentials-modal__content" @click.stop>
-					<button class="credentials-modal__close" @click="closeModal">
-						<Icon name="ph:x" size="24" />
-					</button>
+					<!-- Десктопная версия -->
+					<div class="credentials-modal__desktop-wrapper">
+						<button class="credentials-modal__close" @click="closeModal">
+							<Icon name="ph:x" size="24" />
+						</button>
 
-					<!-- Навигация для нескольких файлов -->
-					<div v-if="currentFiles.length > 1" class="credentials-modal__nav">
-						<button
-							class="credentials-modal__nav-btn credentials-modal__nav-btn--prev"
-							:disabled="currentFileIndex === 0"
-							@click="prevFile"
-						>
-							<Icon name="ph:caret-left" size="32" />
-						</button>
-						<div class="credentials-modal__counter">
-							{{ currentFileIndex + 1 }} / {{ currentFiles.length }}
+						<!-- Навигация для нескольких файлов (десктоп) -->
+						<div v-if="currentFiles.length > 1" class="credentials-modal__nav">
+							<button
+								class="credentials-modal__nav-btn credentials-modal__nav-btn--prev"
+								:disabled="currentFileIndex === 0"
+								@click="prevFile"
+							>
+								<Icon name="ph:caret-left" size="32" />
+							</button>
+							<div class="credentials-modal__counter">
+								{{ currentFileIndex + 1 }} / {{ currentFiles.length }}
+							</div>
+							<button
+								class="credentials-modal__nav-btn credentials-modal__nav-btn--next"
+								:disabled="currentFileIndex === currentFiles.length - 1"
+								@click="nextFile"
+							>
+								<Icon name="ph:caret-right" size="32" />
+							</button>
 						</div>
-						<button
-							class="credentials-modal__nav-btn credentials-modal__nav-btn--next"
-							:disabled="currentFileIndex === currentFiles.length - 1"
-							@click="nextFile"
-						>
-							<Icon name="ph:caret-right" size="32" />
-						</button>
+
+						<!-- PDF или изображение (десктоп) -->
+						<iframe
+							v-if="isPdfFile"
+							:src="currentFile"
+							class="credentials-modal__pdf"
+							frameborder="0"
+						/>
+						<img
+							v-else-if="currentFile"
+							:src="currentFile"
+							:alt="selectedTitle"
+							class="credentials-modal__image"
+						/>
 					</div>
 
-					<!-- PDF или изображение -->
-					<iframe
-						v-if="isPdfFile"
-						:src="currentFile"
-						class="credentials-modal__pdf"
-						frameborder="0"
-					/>
-					<img
-						v-else-if="currentFile"
-						:src="currentFile"
-						:alt="selectedTitle"
-						class="credentials-modal__image"
-					/>
+					<!-- Мобильная версия -->
+					<div class="credentials-modal__mobile-wrapper">
+						<!-- Header с кнопкой закрытия -->
+						<div class="credentials-modal__mobile-header">
+							<button class="credentials-modal__close" @click="closeModal">
+								<Icon name="ph:x" size="24" />
+							</button>
+							<div class="credentials-modal__mobile-title">
+								{{ selectedTitle }}
+							</div>
+							<div style="width: 40px" />
+							<!-- Spacer для центрирования -->
+						</div>
+
+						<!-- Область просмотра -->
+						<div class="credentials-modal__viewer">
+							<iframe
+								v-if="isPdfFile"
+								:src="currentFile"
+								class="credentials-modal__pdf"
+								frameborder="0"
+							/>
+							<img
+								v-else-if="currentFile"
+								:src="currentFile"
+								:alt="selectedTitle"
+								class="credentials-modal__image"
+							/>
+						</div>
+
+						<!-- Навигация внизу (мобильная) -->
+						<div v-if="currentFiles.length > 1" class="credentials-modal__nav">
+							<button
+								class="credentials-modal__nav-btn credentials-modal__nav-btn--prev"
+								:disabled="currentFileIndex === 0"
+								@click="prevFile"
+							>
+								<Icon name="ph:caret-left" size="32" />
+							</button>
+							<div class="credentials-modal__counter">
+								{{ currentFileIndex + 1 }} / {{ currentFiles.length }}
+							</div>
+							<button
+								class="credentials-modal__nav-btn credentials-modal__nav-btn--next"
+								:disabled="currentFileIndex === currentFiles.length - 1"
+								@click="nextFile"
+							>
+								<Icon name="ph:caret-right" size="32" />
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</Teleport>
