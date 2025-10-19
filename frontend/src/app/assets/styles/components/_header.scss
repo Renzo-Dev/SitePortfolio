@@ -375,6 +375,7 @@
 		font-weight: 600;
 		justify-content: center;
 		margin-top: auto;
+		margin-bottom: $spacing-xl; // Отступ снизу для поднятия кнопки
 	}
 }
 
