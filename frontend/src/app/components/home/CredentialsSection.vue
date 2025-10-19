@@ -255,8 +255,20 @@ const isPdfFile = computed(() => {
 	return currentFile.value.endsWith('.pdf')
 })
 
+// Определение мобильного устройства
+const isMobile = () => {
+	return window.innerWidth <= 480
+}
+
 const openDiploma = () => {
 	if (education.diplomaFiles && education.diplomaFiles.length > 0) {
+		// На мобильных открываем первый файл напрямую в браузере
+		if (isMobile()) {
+			window.open(education.diplomaFiles[0], '_blank')
+			return
+		}
+
+		// На десктопе открываем в модалке
 		currentFiles.value = education.diplomaFiles
 		currentFileIndex.value = 0
 		selectedTitle.value = `Диплом ${education.university}`
@@ -266,7 +278,13 @@ const openDiploma = () => {
 
 const openCertificate = (cert: (typeof certificates)[0]) => {
 	if (cert.image) {
-		// Открываем в модалке (поддержка PDF и изображений)
+		// На мобильных открываем напрямую в браузере
+		if (isMobile()) {
+			window.open(cert.image, '_blank')
+			return
+		}
+
+		// На десктопе открываем в модалке
 		currentFiles.value = [cert.image]
 		currentFileIndex.value = 0
 		selectedTitle.value = cert.title
