@@ -6,7 +6,7 @@ Disallow: /yandex_*.html
 Disallow: /google*.html
 
 # Sitemap
-Sitemap: https://portfolio.dankoshevoy.workers.dev/sitemap.xml
+Sitemap: https://dan-koshevoy.pages.dev/sitemap.xml
 
 # Crawl-delay for bots
 Crawl-delay: 1
