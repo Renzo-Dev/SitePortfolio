@@ -5,6 +5,14 @@ export default defineNuxtConfig({
 
 	css: ['~/assets/styles/main.scss'],
 
+	// Явно указываем что используем pages
+	pages: true,
+
+	// Отключаем избыточные логи в dev режиме
+	features: {
+		devLogs: false,
+	},
+
 	app: {
 		head: {
 			title: 'Dan Koshevoy - Full Stack Developer',
