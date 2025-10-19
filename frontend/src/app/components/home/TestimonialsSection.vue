@@ -9,7 +9,7 @@
 				Что говорят о работе со мной
 			</p>
 
-			<div class="testimonials__grid grid grid--2">
+			<div class="testimonials__grid">
 				<div
 					v-for="(testimonial, index) in testimonials"
 					:key="index"
@@ -57,76 +57,5 @@ const testimonials = [
 </script>
 
 <style scoped lang="scss">
-@use '~/assets/styles/variables' as *;
-
-.testimonials {
-	&__title {
-		font-size: $text-h2;
-		margin-bottom: $spacing-md;
-	}
-
-	&__subtitle {
-		margin-bottom: $spacing-3xl;
-		font-size: $text-body-lg;
-	}
-
-	&__grid {
-		margin-top: $spacing-2xl;
-	}
-}
-
-.testimonial-card {
-	background: $bg-secondary;
-	border-left: 3px solid $accent;
-	border-radius: $radius-lg;
-	padding: $spacing-xl;
-	position: relative;
-	transition: all $transition-base;
-
-	&:hover {
-		transform: translateX(8px);
-		box-shadow: $shadow-lg;
-	}
-
-	&__quote {
-		position: absolute;
-		top: $spacing-lg;
-		right: $spacing-lg;
-		opacity: 0.1;
-
-		:deep(svg) {
-			color: $accent;
-		}
-	}
-
-	&__text {
-		font-size: $text-body-lg;
-		font-style: italic;
-		color: $text-secondary;
-		line-height: $line-body;
-		margin-bottom: $spacing-lg;
-		position: relative;
-	}
-
-	&__author {
-		display: flex;
-		flex-direction: column;
-		gap: $spacing-xs;
-	}
-
-	&__author-name {
-		font-weight: 600;
-		color: $text-primary;
-	}
-
-	&__author-role {
-		font-size: $text-body-sm;
-		color: $text-muted;
-	}
-
-	&__author-company {
-		color: $text-secondary;
-		font-weight: 500;
-	}
-}
+@use '~/assets/styles/components/testimonials-section';
 </style>
