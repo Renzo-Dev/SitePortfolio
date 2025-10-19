@@ -45,14 +45,6 @@
 								<Icon name="ph:file-pdf-duotone" size="48" />
 								<span>Диплом</span>
 							</div>
-							<button
-								v-if="education.diplomaFiles?.length"
-								class="diploma-preview__button"
-								@click="openDiploma"
-							>
-								<Icon name="ph:eye" size="20" />
-								Посмотреть
-							</button>
 						</div>
 					</div>
 				</div>
