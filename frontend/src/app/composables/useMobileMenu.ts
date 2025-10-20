@@ -88,7 +88,7 @@ export const useMobileMenu = () => {
 		// Timeline для синхронизации анимаций
 		const tl = gsap.timeline()
 
-		// 1. Анимация самого меню (slide in from right)
+		// 1. Анимация самого меню (slide in from right) - мгновенная
 		tl.fromTo(
 			element,
 			{
@@ -97,43 +97,43 @@ export const useMobileMenu = () => {
 			},
 			{
 				x: '0%',
-				duration: 0.4, // Быстрее (было 0.6)
-				ease: 'power3.out', // Плавный вход
+				duration: 0.25, // Очень быстрое открытие
+				ease: 'power2.out', // Легкая плавность
 			}
 		)
 
-		// 2. Каскадная анимация ссылок (stagger)
+		// 2. Каскадная анимация ссылок (stagger) - одновременно
 		tl.fromTo(
 			links,
 			{
-				x: 40, // Меньше смещение (было 50)
+				x: 20, // Минимальное смещение
 				opacity: 0,
 			},
 			{
 				x: 0,
 				opacity: 1,
-				duration: 0.3, // Быстрее (было 0.4)
-				stagger: 0.04, // Меньше задержка (было 0.06)
+				duration: 0.2, // Быстрое появление
+				stagger: 0.02, // Минимальная задержка
 				ease: 'power2.out',
 			},
-			'-=0.25' // Больше перекрытие (было -=0.3)
+			'-=0.2' // Начинаем сразу с меню
 		)
 
-		// 3. Анимация CTA кнопки
+		// 3. Анимация CTA кнопки - появляется вместе со ссылками
 		if (ctaButton) {
 			tl.fromTo(
 				ctaButton,
 				{
-					y: 15, // Меньше смещение (было 20)
+					y: 10,
 					opacity: 0,
 				},
 				{
 					y: 0,
 					opacity: 1,
-					duration: 0.35, // Быстрее (было 0.5)
-					ease: 'back.out(1.3)', // Меньше отскок (было 1.4)
+					duration: 0.2,
+					ease: 'power2.out', // Без bounce для скорости
 				},
-				'-=0.15' // Больше перекрытие (было -=0.2)
+				'-=0.15' // Почти одновременно
 			)
 		}
 
@@ -147,48 +147,30 @@ export const useMobileMenu = () => {
 			currentAnimation.kill()
 		}
 
-		// Простая анимация закрытия (быстрее открытия)
+		// Мгновенное закрытие
 		const tl = gsap.timeline({
 			onComplete: callback,
 		})
 
 		tl.to(element, {
 			x: '100%',
-			duration: 0.25, // Быстрее (было 0.35)
+			duration: 0.2, // Очень быстрое закрытие
 			ease: 'power2.in', // Ускорение при выходе
 		})
 
 		currentAnimation = tl
 	}
 
-	// Открыть меню
+	// Открыть меню - мгновенно
 	const openMenu = () => {
 		isMobileMenuOpen.value = true
 		isClosing.value = false
 		lockScroll()
 
-		// Первый nextTick - элемент рендерится
+		// Один nextTick для рендеринга, затем сразу анимация
 		nextTick(() => {
 			if (menuElement.value) {
-				// Устанавливаем начальную позицию БЕЗ transition
-				menuElement.value.style.transition = 'none'
-				menuElement.value.style.transform = 'translateX(100%)'
-				menuElement.value.style.opacity = '1'
-
-				// Форсируем reflow
-				void menuElement.value.offsetHeight
-
-				// Второй nextTick - гарантируем применение стилей
-				nextTick(() => {
-					if (menuElement.value) {
-						// Небольшая задержка для стабильности
-						requestAnimationFrame(() => {
-							if (menuElement.value) {
-								animateOpen(menuElement.value)
-							}
-						})
-					}
-				})
+				animateOpen(menuElement.value)
 			}
 		})
 	}
