@@ -88,11 +88,13 @@ const technologies = [
 	'Nuxt 4',
 	'Laravel',
 	'TypeScript',
+	'Golang',
+	'Node.js',
 	'Docker',
 	'Redis',
-	'MySQL',
+	'PostgreSQL',
+	'RabbitMQ',
 	'Nginx',
-	'TailwindCSS',
 	'Pinia',
 ]
 
