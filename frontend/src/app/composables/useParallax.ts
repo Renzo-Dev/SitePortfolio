@@ -61,6 +61,12 @@ export const useParallax = (
 	const init = () => {
 		if (!import.meta.client) return
 
+		// Отключаем parallax на мобильных устройствах (производительность)
+		const isMobile = window.innerWidth <= 768
+		if (isMobile) {
+			return
+		}
+
 		// Устанавливаем начальные CSS-переменные и стили для плавности
 		if (element.value) {
 			element.value.style.setProperty('--parallax-y', '0px')
