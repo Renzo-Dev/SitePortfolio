@@ -91,5 +91,9 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		telegramBotToken: '',
 		telegramChatId: '',
+		turnstileSecretKey: '',
+		public: {
+			turnstileSiteKey: '',
+		},
 	},
 })

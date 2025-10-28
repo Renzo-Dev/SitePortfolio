@@ -4,6 +4,40 @@ export default defineEventHandler(async (event) => {
 	const config = useRuntimeConfig()
 	const body = await readBody(event)
 
+	// Проверка Turnstile токена
+	if (!body.turnstileToken) {
+		throw createError({
+			statusCode: 400,
+			message: 'Капча не пройдена',
+		})
+	}
+
+	// Валидация Turnstile токена на стороне Cloudflare
+	try {
+		const turnstileResponse = await $fetch(
+			'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+			{
+				method: 'POST',
+				body: {
+					secret: config.turnstileSecretKey,
+					response: body.turnstileToken,
+				},
+			}
+		)
+
+		if (!turnstileResponse.success) {
+			throw createError({
+				statusCode: 403,
+				message: 'Проверка капчи не пройдена',
+			})
+		}
+	} catch (error) {
+		throw createError({
+			statusCode: 403,
+			message: 'Ошибка проверки капчи',
+		})
+	}
+
 	// Валидация данных (сообщение необязательно)
 	if (!body.name || !body.email || !body.phone || !body.telegram) {
 		throw createError({

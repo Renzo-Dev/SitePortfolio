@@ -1,28 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    <linearGradient id="yellowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
     </linearGradient>
-    <filter id="shadow">
-      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.3"/>
+    <linearGradient id="whiteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e5e5e5;stop-opacity:1" />
+    </linearGradient>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
     </filter>
   </defs>
   
-  <!-- Фон -->
-  <rect width="512" height="512" rx="110" fill="#0a0e27"/>
+  <!-- Черный фон -->
+  <rect width="512" height="512" rx="120" fill="#0c0c0c"/>
   
-  <!-- Внутренний контейнер с градиентом -->
-  <g filter="url(#shadow)">
-    <!-- Буква D с современным дизайном -->
-    <path d="M 140 140 L 240 140 Q 372 140 372 256 Q 372 372 240 372 L 140 372 Z M 200 200 L 200 312 L 240 312 Q 312 312 312 256 Q 312 200 240 200 Z" 
-          fill="url(#grad1)"/>
+  <!-- Главный элемент -->
+  <g filter="url(#softGlow)">
+    <!-- Стилизованная буква D -->
+    <path d="M 100 100 L 260 100 Q 412 100 412 256 Q 412 412 260 412 L 100 412 Z M 150 150 L 150 362 L 260 362 Q 362 362 362 256 Q 362 150 260 150 Z" 
+          fill="url(#whiteGrad)"/>
     
-    <!-- Акцентный элемент - точка -->
-    <circle cx="350" cy="340" r="28" fill="#3b82f6" opacity="0.8"/>
-    
-    <!-- Декоративная линия -->
-    <rect x="140" y="390" width="140" height="8" rx="4" fill="url(#grad1)" opacity="0.6"/>
+    <!-- Желтый акцент - горизонтальная полоса в центре -->
+    <rect x="150" y="236" width="212" height="40" rx="20" fill="url(#yellowGrad)"/>
   </g>
+  
+  <!-- Декоративная желтая линия -->
+  <path d="M 100 440 L 412 440" stroke="url(#yellowGrad)" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
 </svg>
 

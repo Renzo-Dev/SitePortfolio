@@ -46,7 +46,17 @@
 						:rows="6"
 					/>
 
-					<Button type="submit" variant="primary" :disabled="isSubmitting">
+					<!-- Cloudflare Turnstile капча -->
+					<TurnstileWidget
+						ref="turnstileWidget"
+						:site-key="turnstileSiteKey"
+						theme="dark"
+						@verified="onTurnstileVerified"
+						@error="onTurnstileError"
+						@expired="onTurnstileExpired"
+					/>
+
+					<Button type="submit" variant="primary" :disabled="isSubmitting || !isCaptchaVerified">
 						{{ isSubmitting ? 'Отправка...' : 'Отправить' }}
 					</Button>
 
@@ -122,6 +132,10 @@
 <script setup lang="ts">
 import Button from '~/components/ui/Button.vue'
 import Input from '~/components/ui/Input.vue'
+import TurnstileWidget from '~/components/ui/TurnstileWidget.vue'
+
+const config = useRuntimeConfig()
+const turnstileSiteKey = config.public.turnstileSiteKey || '1x00000000000000000000AA'
 
 const form = reactive({
 	name: '',
@@ -135,12 +149,31 @@ const isSubmitting = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
 const isCopied = ref(false)
+const isCaptchaVerified = ref(false)
+const turnstileToken = ref('')
+const turnstileWidget = ref<InstanceType<typeof TurnstileWidget> | null>(null)
 const validationErrors = reactive({
 	name: '',
 	email: '',
 	phone: '',
 	telegram: '',
 })
+
+// Обработчики Turnstile
+const onTurnstileVerified = (token: string) => {
+	turnstileToken.value = token
+	isCaptchaVerified.value = true
+}
+
+const onTurnstileError = () => {
+	turnstileToken.value = ''
+	isCaptchaVerified.value = false
+}
+
+const onTurnstileExpired = () => {
+	turnstileToken.value = ''
+	isCaptchaVerified.value = false
+}
 
 // Очистка ошибок при вводе
 watch(
@@ -258,6 +291,15 @@ const validateForm = (): boolean => {
 }
 
 const handleSubmit = async () => {
+	// Проверка капчи
+	if (!isCaptchaVerified.value || !turnstileToken.value) {
+		errorMessage.value = 'Пожалуйста, пройдите проверку капчи'
+		setTimeout(() => {
+			errorMessage.value = ''
+		}, 3000)
+		return
+	}
+
 	// Валидация перед отправкой
 	if (!validateForm()) {
 		errorMessage.value = 'Пожалуйста, исправьте ошибки в форме'
@@ -280,6 +322,7 @@ const handleSubmit = async () => {
 				phone: form.phone,
 				telegram: form.telegram,
 				message: form.message,
+				turnstileToken: turnstileToken.value,
 			},
 		})
 
@@ -297,6 +340,11 @@ const handleSubmit = async () => {
 		validationErrors.phone = ''
 		validationErrors.telegram = ''
 
+		// Сброс капчи
+		turnstileWidget.value?.reset()
+		isCaptchaVerified.value = false
+		turnstileToken.value = ''
+
 		// Скрываем сообщение через 5 секунд
 		setTimeout(() => {
 			successMessage.value = ''
@@ -305,6 +353,11 @@ const handleSubmit = async () => {
 		const err = error as { data?: { message?: string } }
 		errorMessage.value =
 			err?.data?.message || 'Произошла ошибка при отправке. Попробуйте позже.'
+
+		// Сброс капчи при ошибке
+		turnstileWidget.value?.reset()
+		isCaptchaVerified.value = false
+		turnstileToken.value = ''
 
 		setTimeout(() => {
 			errorMessage.value = ''
